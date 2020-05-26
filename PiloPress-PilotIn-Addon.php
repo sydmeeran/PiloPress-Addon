@@ -50,13 +50,11 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
             $this->define( 'PIP_PI_BASENAME', plugin_basename( __FILE__ ) );
 
             // Init
-            include_once( PIP_PI_PATH . 'init.php' );
+            include_once PIP_PI_PATH . 'init.php';
 
             // Load
             add_action( 'acf/include_field_types', array( $this, 'load' ) );
 
-            // Load textdomain file.
-            pip_load_textdomain( 'pip-pi-addon' );
         }
 
         /**
@@ -136,7 +134,6 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
          * @return bool
          */
         public function has_pip() {
-
             // If PiloPress already available, return
             if ( $this->pip ) {
                 return true;
