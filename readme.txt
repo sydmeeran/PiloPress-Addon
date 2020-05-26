@@ -1,4 +1,4 @@
-=== Pilo'Press - Pilot'In Pack ===
+=== Pilo'Press - Pilot'In Addon ===
 Contributors: pilotin
 Donate link: https://www.pilot-in.com
 Tags: acf, page builder, tailwindcss
