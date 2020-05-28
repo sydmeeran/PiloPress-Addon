@@ -72,10 +72,10 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
         public function includes() {
 
             // Main
-            pip_include( 'includes/class-main.php' );
+            pip_pi_include( 'includes/class-main.php' );
 
             // Helpers
-            pip_include( 'includes/helpers.php' );
+            pip_pi_include( 'includes/helpers.php' );
 
         }
 

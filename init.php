@@ -2,6 +2,27 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Get Pilo'Press - Pilot'in Addon path
+ *
+ * @return mixed
+ */
+function pip_pi_path() {
+    return PIP_PI_PATH;
+}
+
+/**
+ * Include if file exists
+ *
+ * @param string $filename
+ */
+function pip_pi_include( $filename = '' ) {
+    $file_path = pip_pi_path() . ltrim( $filename, '/' );
+    if ( file_exists( $file_path ) ) {
+        include_once( $file_path );
+    }
+}
+
+/**
  * Check if ACF Pro and ACFE are activated
  */
 add_action( 'after_plugin_row_' . PIP_PI_BASENAME, 'pip_pi_plugin_row', 5, 3 );
