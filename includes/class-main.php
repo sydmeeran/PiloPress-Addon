@@ -20,6 +20,11 @@ if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
          * Customize admin
          */
         public function customize_admin() {
+            // Yoast not activated
+            if ( !class_exists( 'WPSEO_Post_Type' ) ) {
+                return;
+            }
+
             // Get all post types
             $post_types = WPSEO_Post_Type::get_accessible_post_types();
 
