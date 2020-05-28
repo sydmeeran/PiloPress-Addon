@@ -2,7 +2,7 @@
 /**
  * Plugin Name:         Pilo'Press - Pilot'in Addon
  * Plugin URI:          https://www.pilot-in.com
- * Description:         Quick start config we use at Pilot'in for WordPress & PiloPress
+ * Description:         Quick start config we use at Pilot'in for WordPress & Pilo'Press
  * Version:             0.1
  * Author:              Pilot'in
  * Author URI:          https://www.pilot-in.com
@@ -22,17 +22,11 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
         // Plugin version
         var $version = '0.1';
 
-        // ACF
-        var $acf = false;
-
-        // ACFE
-        var $acfe = false;
-
         // PiloPress
         var $pip = false;
 
         /**
-         * Pilo'Press constructor.
+         * Pilo'Press - Pilot'in Addon constructor.
          */
         public function __construct() {
             // Do nothing.
@@ -62,8 +56,8 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
          */
         public function load() {
 
-            // Check if ACF Pro, ACFE & PiloPress are activated
-            if ( !$this->has_acf() || !$this->has_acfe() || !$this->has_pip() ) {
+            // Check if Pilo'Press is activated
+            if ( !$this->has_pip() ) {
                 return;
             }
 
@@ -76,6 +70,9 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
          * Include files
          */
         public function includes() {
+
+            // Main
+            pip_include( 'includes/class-main.php' );
 
             // Helpers
             pip_include( 'includes/helpers.php' );
@@ -95,62 +92,27 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
         }
 
         /**
-         * Check if ACF Pro is activated
-         *
-         * @return bool
-         */
-        public function has_acf() {
-            // If ACF already available, return
-            if ( $this->acf ) {
-                return true;
-            }
-
-            // Check if ACF Pro is activated
-            $this->acf = class_exists( 'ACF' ) && defined( 'ACF_PRO' ) && defined( 'ACF_VERSION' ) && version_compare( ACF_VERSION, '5.7.13', '>=' );
-
-            return $this->acf;
-        }
-
-        /**
-         * Check if ACFE is activated
-         *
-         * @return bool
-         */
-        public function has_acfe() {
-            // If ACFE already available, return
-            if ( $this->acfe ) {
-                return true;
-            }
-
-            // Check if ACFE activated
-            $this->acfe = class_exists( 'ACFE' );
-
-            return $this->acfe;
-        }
-
-        /**
-         * Check if PiloPress is activated
+         * Check if Pilo'Press is activated
          *
          * @return bool
          */
         public function has_pip() {
-            // If PiloPress already available, return
+            // If Pilo'Press already available, return
             if ( $this->pip ) {
                 return true;
             }
 
-            // Check if PiloPress activated
+            // Check if Pilo'Press activated
             $this->pip = class_exists( 'PiloPress' );
 
             return $this->pip;
         }
 
-
     }
 }
 
 /**
- * Instantiate Pilo'Press - Pilot'In Addon
+ * Instantiate Pilo'Press - Pilot'in Addon
  *
  * @return PIP_PI_Addon
  */
