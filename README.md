@@ -1,10 +1,6 @@
 # Pilo'Press - Pilot'In Addon
 
-Quick start config we use at Pilot'in for WordPress & PiloPress
-
-## Description
-
-Quick start config we use at Pilot'in for WordPress & Pilo'Press
+Quick start config and helpers we use at Pilot'in for WordPress & Pilo'Press.
 
 ## Requirements
 
