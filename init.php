@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get Pilo'Press - Pilot'in Addon path
+ * Get Pilo'Press - Addon path
  *
  * @return mixed
  */
@@ -23,12 +23,12 @@ function pip_addon_include( $filename = '' ) {
 }
 
 /**
- * Check if ACF Pro and ACFE are activated
+ * Check if Pilo'Press is activated
  */
-add_action( 'after_plugin_row_' . PIP_ADDON_BASENAME, 'pip_pi_plugin_row', 5, 3 );
-function pip_pi_plugin_row( $plugin_file, $plugin_data, $status ) {
+add_action( 'after_plugin_row_' . PIP_ADDON_BASENAME, 'pip_addon_plugin_row', 5, 3 );
+function pip_addon_plugin_row( $plugin_file, $plugin_data, $status ) {
 
-    // If ACF Pro, ACFE & PiloPress are activated, return
+    // If PiloPress is activated, return
     if ( pip_addon()->has_pip() ) {
         return;
     }

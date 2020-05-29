@@ -47,10 +47,13 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             include_once PIP_ADDON_PATH . 'init.php';
 
             // Load
-            add_action( 'acf/include_field_types', array( $this, 'load' ) );
+            add_action( 'plugins_loaded', array( $this, 'load' ) );
 
             // Hide login
             pip_addon_include( 'includes/class-hide-login.php' );
+
+            // Classic Editor
+            pip_addon_include( 'includes/class-classic-editor.php' );
         }
 
         /**
