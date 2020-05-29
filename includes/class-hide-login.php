@@ -4,9 +4,9 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( !class_exists( 'PIP_PI_Hide_Login' ) ) {
+if ( !class_exists( 'PIP_Addon_Hide_Login' ) ) {
 
-    class PIP_PI_Hide_Login {
+    class PIP_Addon_Hide_Login {
 
         private $wp_login_php;
 
@@ -417,5 +417,5 @@ if ( !class_exists( 'PIP_PI_Hide_Login' ) ) {
     }
 
     // Instantiate
-    new PIP_PI_Hide_Login();
+    new PIP_Addon_Hide_Login();
 }

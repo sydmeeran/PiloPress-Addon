@@ -1,7 +1,7 @@
 <?php
-$BottomAdminBar = new BottomAdminBar();
+$BottomAdminBar = new PIP_Addon_Bottom_Admin_Bar();
 
-class BottomAdminBar {
+class PIP_Addon_Bottom_Admin_Bar {
     public function __construct() {
         add_action( 'after_setup_theme', array( &$this, 'show_toolbar_check' ) );
         add_action( 'plugins_loaded', array( &$this, 'myplugin_init' ) );
@@ -33,7 +33,7 @@ class BottomAdminBar {
      */
     public function admin_bar_script_init() {
         if ( is_user_logged_in() ) {
-            wp_register_style( 'adminBarStyleSheet', PIP_PI_URL . 'assets/css/view.css' );
+            wp_register_style( 'adminBarStyleSheet', PIP_ADDON_URL . 'assets/css/view.css' );
             wp_enqueue_style( 'adminBarStyleSheet' );
             wp_enqueue_script( 'jquery' );
         }

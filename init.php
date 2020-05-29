@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
  * @return mixed
  */
 function pip_pi_path() {
-    return PIP_PI_PATH;
+    return PIP_ADDON_PATH;
 }
 
 /**
@@ -15,7 +15,7 @@ function pip_pi_path() {
  *
  * @param string $filename
  */
-function pip_pi_include( $filename = '' ) {
+function pip_addon_include( $filename = '' ) {
     $file_path = pip_pi_path() . ltrim( $filename, '/' );
     if ( file_exists( $file_path ) ) {
         include_once( $file_path );
@@ -29,7 +29,7 @@ add_action( 'after_plugin_row_' . PIP_PI_BASENAME, 'pip_pi_plugin_row', 5, 3 );
 function pip_pi_plugin_row( $plugin_file, $plugin_data, $status ) {
 
     // If ACF Pro, ACFE & PiloPress are activated, return
-    if ( pip_pi_addon()->has_pip() ) {
+    if ( pip_addon()->has_pip() ) {
         return;
     }
 

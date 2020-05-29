@@ -4,9 +4,9 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
+if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
-    class PIP_PI_Addon_Main {
+    class PIP_Addon_Main {
 
         public function __construct() {
             // WP hooks
@@ -165,5 +165,5 @@ if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
     }
 
     // Instantiate
-    new PIP_PI_Addon_Main();
+    new PIP_Addon_Main();
 }

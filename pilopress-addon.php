@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:         Pilo'Press - Pilot'in Addon
+ * Plugin Name:         Pilo'Press - Addon
  * Plugin URI:          https://www.pilot-in.com
  * Description:         Quick start config we use at Pilot'in for WordPress & Pilo'Press
  * Version:             0.1
@@ -10,14 +10,14 @@
  * License URI:         http://www.gnu.org/licenses/gpl-2.0.html
  * Requires PHP:        5.6 or higher
  * Requires at least:   4.9 or higher
- * Text Domain:         pip-pi-addon
+ * Text Domain:         pip-addon
  * Domain Path:         /lang
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( !class_exists( 'PIP_PI_Addon' ) ) {
-    class PIP_PI_Addon {
+if ( !class_exists( 'PIP_Addon' ) ) {
+    class PIP_Addon {
 
         // Plugin version
         var $version = '0.1';
@@ -26,7 +26,7 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
         var $pip = false;
 
         /**
-         * Pilo'Press - Pilot'in Addon constructor.
+         * Pilo'Press - Addon constructor.
          */
         public function __construct() {
             // Do nothing.
@@ -38,19 +38,19 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
         public function initialize() {
 
             // Constants
-            $this->define( 'PIP_PI_FILE', __FILE__ );
-            $this->define( 'PIP_PI_PATH', plugin_dir_path( __FILE__ ) );
-            $this->define( 'PIP_PI_URL', plugin_dir_url( __FILE__ ) );
-            $this->define( 'PIP_PI_BASENAME', plugin_basename( __FILE__ ) );
+            $this->define( 'PIP_ADDON_FILE', __FILE__ );
+            $this->define( 'PIP_ADDON_PATH', plugin_dir_path( __FILE__ ) );
+            $this->define( 'PIP_ADDON_URL', plugin_dir_url( __FILE__ ) );
+            $this->define( 'PIP_ADDON_BASENAME', plugin_basename( __FILE__ ) );
 
             // Init
-            include_once PIP_PI_PATH . 'init.php';
+            include_once PIP_ADDON_PATH . 'init.php';
 
             // Load
             add_action( 'acf/include_field_types', array( $this, 'load' ) );
 
             // Hide login
-            pip_pi_include( 'includes/class-hide-login.php' );
+            pip_addon_include( 'includes/class-hide-login.php' );
         }
 
         /**
@@ -73,10 +73,10 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
          */
         public function includes() {
 
-            pip_pi_include( 'includes/bottom-admin-bar.php' );
-            pip_pi_include( 'includes/class-main.php' );
-            pip_pi_include( 'includes/helpers.php' );
-            pip_pi_include( 'includes/field-group-configuration.php' );
+            pip_addon_include( 'includes/class-bottom-admin-bar.php' );
+            pip_addon_include( 'includes/class-main.php' );
+            pip_addon_include( 'includes/helpers.php' );
+            pip_addon_include( 'includes/field-group-configuration.php' );
 
         }
 
@@ -115,13 +115,13 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
 /**
  * Instantiate Pilo'Press - Pilot'in Addon
  *
- * @return PIP_PI_Addon
+ * @return PIP_Addon
  */
-function pip_pi_addon() {
+function pip_addon() {
     global $pip_pi_addon;
 
     if ( !isset( $pip_pi_addon ) ) {
-        $pip_pi_addon = new PIP_PI_Addon();
+        $pip_pi_addon = new PIP_Addon();
         $pip_pi_addon->initialize();
     }
 
@@ -129,4 +129,4 @@ function pip_pi_addon() {
 }
 
 // Instantiate
-pip_pi_addon();
+pip_addon();

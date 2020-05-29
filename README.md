@@ -1,4 +1,4 @@
-# Pilo'Press - Pilot'In Addon
+# Pilo'Press - Addon
 
 Quick start config and helpers we use at Pilot'in for WordPress & Pilo'Press.
 
