@@ -10,10 +10,63 @@ if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
 
         public function __construct() {
             // WP hooks
+            add_action( 'init', array( $this, 'theme_supports' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
+            add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
+            add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
+            add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
 
             // ACF hooks
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+        }
+
+        /**
+         * Add theme supports
+         */
+        public function theme_supports() {
+            add_theme_support( 'custom-logo' );
+            add_theme_support( 'post-thumbnails' );
+            add_post_type_support( 'post', 'excerpt' );
+        }
+
+        /**
+         * Change login logo
+         */
+        public function login_logo_style() {
+            $logo_id = get_theme_mod( 'custom_logo' );
+            $logo    = wp_get_attachment_image_src( $logo_id, 'full' );
+
+            if ( $logo ):
+                ?>
+                <style type="text/css">
+                    #login h1 a, .login h1 a {
+                        background-image: url('<?php echo reset($logo); ?>');
+                        height: 80px;
+                        width: 320px;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                    }
+                </style>
+            <?php
+            endif;
+        }
+
+        /**
+         * Change login URL
+         *
+         * @return string|void
+         */
+        public function login_header_url() {
+            return home_url();
+        }
+
+        /**
+         * Change login title
+         *
+         * @return string|void
+         */
+        public function login_header_title() {
+            return get_bloginfo( 'name' );
         }
 
         /**
@@ -109,7 +162,6 @@ if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
 
             return $field;
         }
-
     }
 
     // Instantiate

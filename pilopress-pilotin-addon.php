@@ -49,6 +49,8 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
             // Load
             add_action( 'acf/include_field_types', array( $this, 'load' ) );
 
+            // Hide login
+            pip_pi_include( 'includes/class-hide-login.php' );
         }
 
         /**
@@ -71,11 +73,10 @@ if ( !class_exists( 'PIP_PI_Addon' ) ) {
          */
         public function includes() {
 
-            // Main
+            pip_pi_include( 'includes/bottom-admin-bar.php' );
             pip_pi_include( 'includes/class-main.php' );
-
-            // Helpers
             pip_pi_include( 'includes/helpers.php' );
+            pip_pi_include( 'includes/field-group-configuration.php' );
 
         }
 
