@@ -103,9 +103,7 @@ if ( !class_exists( 'PIP_PI_Addon_Main' ) ) {
 
             if ( is_array( $new_colors ) ) {
                 foreach ( $new_colors as $color ) {
-                    $value                      = $color['classes'];
-                    $label                      = $color['name'];
-                    $field['choices'][ $value ] = $label;
+                    $field['choices'][ $color['classes'] ] = $color['name'];
                 }
             }
 
