@@ -48,7 +48,7 @@ function pip_addon_plugin_row( $plugin_file, $plugin_data, $status ) {
     <tr class="plugin-update-tr active pilopress-pilotin-addon-plugin-tr">
         <td colspan="3" class="plugin-update colspanchange">
             <div class="update-message notice inline notice-error notice-alt">
-                <p><?php _e( "Pilo'Press - Pilot'in Addon requires Pilo'Press.", 'pip-pi-addon' ); ?></p>
+                <p><?php _e( "Pilo'Press - Pilot'in Addon requires Pilo'Press.", 'pip-addon' ); ?></p>
             </div>
         </td>
     </tr>

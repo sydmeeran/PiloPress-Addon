@@ -154,7 +154,7 @@ if ( !class_exists( 'PIP_Addon_Hide_Login' ) ) {
                  && ( strpos( rawurldecode( $_SERVER['REQUEST_URI'] ), 'wp-signup' ) !== false
                       || strpos( rawurldecode( $_SERVER['REQUEST_URI'] ), 'wp-activate' ) !== false ) ) {
 
-                wp_die( __( 'This feature is not enabled.', 'pip-pi-addon' ) );
+                wp_die( __( 'This feature is not enabled.', 'pip-addon' ) );
 
             }
 
@@ -197,7 +197,7 @@ if ( !class_exists( 'PIP_Addon_Hide_Login' ) ) {
             global $pagenow;
 
             if ( !is_user_logged_in() && 'customize.php' === $pagenow ) {
-                wp_die( __( 'This has been disabled', 'pip-pi-addon' ), 403 );
+                wp_die( __( 'This has been disabled', 'pip-addon' ), 403 );
             }
         }
 
