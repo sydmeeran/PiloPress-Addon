@@ -121,14 +121,14 @@ if ( !class_exists( 'PIP_Addon' ) ) {
  * @return PIP_Addon
  */
 function pip_addon() {
-    global $pip_pi_addon;
+    global $pip_addon;
 
-    if ( !isset( $pip_pi_addon ) ) {
-        $pip_pi_addon = new PIP_Addon();
-        $pip_pi_addon->initialize();
+    if ( !isset( $pip_addon ) ) {
+        $pip_addon = new PIP_Addon();
+        $pip_addon->initialize();
     }
 
-    return $pip_pi_addon;
+    return $pip_addon;
 }
 
 // Instantiate

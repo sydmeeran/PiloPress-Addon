@@ -2,21 +2,12 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get Pilo'Press - Addon path
- *
- * @return mixed
- */
-function pip_pi_path() {
-    return PIP_ADDON_PATH;
-}
-
-/**
  * Include if file exists
  *
  * @param string $filename
  */
 function pip_addon_include( $filename = '' ) {
-    $file_path = pip_pi_path() . ltrim( $filename, '/' );
+    $file_path = PIP_ADDON_PATH . ltrim( $filename, '/' );
     if ( file_exists( $file_path ) ) {
         include_once( $file_path );
     }
