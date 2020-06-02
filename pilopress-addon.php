@@ -42,6 +42,8 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             $this->define( 'PIP_ADDON_PATH', plugin_dir_path( __FILE__ ) );
             $this->define( 'PIP_ADDON_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'PIP_ADDON_BASENAME', plugin_basename( __FILE__ ) );
+            $this->define( 'PIP_THEME_PATH', get_stylesheet_directory() );
+            $this->define( 'PIP_THEME_URL', get_stylesheet_directory_uri() );
 
             // Init
             include_once PIP_ADDON_PATH . 'init.php';
