@@ -13,6 +13,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'init', array( $this, 'theme_supports' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
+            add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
+            add_action( 'after_body_open_tag', array( $this, 'enqueue_gtm_noscript' ) );
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
 
@@ -161,6 +163,39 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field;
+        }
+
+        /**
+         * Enqueue Gtag script in head
+         */
+        public function enqueue_gtm() {
+            $gtm = get_field('gtm', 'pip_addon_options');
+            if (isset($gtm) && !empty($gtm)):
+                ?>
+                <!-- Google Tag Manager -->
+                <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','<?php echo $gtm; ?>');</script>
+                <!-- End Google Tag Manager -->
+                <?php
+            endif;
+        }
+
+        /**
+         * Enqueue Gtag no-script after body open tag
+         */
+        public function enqueue_gtm_noscript() {
+            $gtm = get_field('gtm', 'pip_addon_options');
+            if (isset($gtm) && !empty($gtm)):
+                ?>
+                <!-- Google Tag Manager (noscript) -->
+                <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+                <!-- End Google Tag Manager (noscript) -->
+                <?php
+            endif;
         }
     }
 
