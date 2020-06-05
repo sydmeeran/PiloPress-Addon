@@ -12,8 +12,8 @@ if ( function_exists( 'acf_add_options_page' ) ) {
         'redirect' => true,
         'post_id' => 'options',
         'autoload' => false,
-        'update_button' => 'Mettre à jour',
-        'updated_message' => 'Options mise à jour',
+        'update_button' => __( 'Mettre à jour', 'pip-addon' ),
+        'updated_message' => __( 'Options mises à jour', 'pip-addon' ),
     ));
     
 }
