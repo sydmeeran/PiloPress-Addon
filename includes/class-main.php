@@ -30,6 +30,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // Theme support
             add_theme_support( 'custom-logo' );
             add_theme_support( 'post-thumbnails' );
+            add_theme_support( 'title-tag' );
             add_post_type_support( 'post', 'excerpt' );
 
             // Capability
