@@ -10,7 +10,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         public function __construct() {
             // WP hooks
-            add_action( 'init', array( $this, 'theme_supports' ) );
+            add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
@@ -25,10 +25,31 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          * Add theme supports
          */
-        public function theme_supports() {
+        public function init_hook() {
+            // Theme support
             add_theme_support( 'custom-logo' );
             add_theme_support( 'post-thumbnails' );
             add_post_type_support( 'post', 'excerpt' );
+
+            // Capability
+            $capability = apply_filters( 'pip/options/capability', acf_get_setting( 'capability' ) );
+            if ( !current_user_can( $capability ) ) {
+                return;
+            }
+
+            // Add option page
+            acf_add_options_page( array(
+                'page_title'  => __( 'Settings', 'pip-addon' ),
+                'menu_title'  => __( 'Settings', 'pip-addon' ),
+                'menu_slug'   => 'pip_addon_settings',
+                'capability'  => $capability,
+                'position'    => '',
+                'parent_slug' => 'pilopress',
+                'icon_url'    => '',
+                'redirect'    => true,
+                'post_id'     => 'pip_addon_settings',
+                'autoload'    => false,
+            ) );
         }
 
         /**
@@ -169,8 +190,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * Enqueue GTM script in head
          */
         public function enqueue_gtm() {
-            $gtm = get_field( 'gtm', 'pip_addon_options' );
-            if ( isset( $gtm ) && !empty( $gtm ) ):
+            $gtm = get_field( 'gtm', 'pip_addon_settings' );
+            if ( $gtm ):
                 ?>
                 <script>(function (w, d, s, l, i) {
                         w[l] = w[l] || [];
@@ -191,8 +212,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * Enqueue GTM no-script after body open tag
          */
         public function enqueue_gtm_noscript() {
-            $gtm = get_field( 'gtm', 'pip_addon_options' );
-            if ( isset( $gtm ) && !empty( $gtm ) ):
+            $gtm = get_field( 'gtm', 'pip_addon_settings' );
+            if ( $gtm ):
                 ?>
                 <noscript>
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"

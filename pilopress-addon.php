@@ -78,10 +78,16 @@ if ( !class_exists( 'PIP_Addon' ) ) {
          */
         public function includes() {
 
+            // Field groups
+            pip_addon_include( 'includes/field-groups/pip-configuration.php' );
+            pip_addon_include( 'includes/field-groups/pip-addon-settings.php' );
+
+            // Other
+            pip_addon_include( 'includes/helpers.php' );
+
+            // Classes
             pip_addon_include( 'includes/class-bottom-admin-bar.php' );
             pip_addon_include( 'includes/class-main.php' );
-            pip_addon_include( 'includes/helpers.php' );
-            pip_addon_include( 'includes/field-group-configuration.php' );
 
         }
 
