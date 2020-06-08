@@ -166,35 +166,39 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         * Enqueue Gtag script in head
+         * Enqueue GTM script in head
          */
         public function enqueue_gtm() {
-            $gtm = get_field('gtm', 'pip_addon_options');
-            if (isset($gtm) && !empty($gtm)):
+            $gtm = get_field( 'gtm', 'pip_addon_options' );
+            if ( isset( $gtm ) && !empty( $gtm ) ):
                 ?>
-                <!-- Google Tag Manager -->
-                <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','<?php echo $gtm; ?>');</script>
-                <!-- End Google Tag Manager -->
-                <?php
+                <script>(function (w, d, s, l, i) {
+                        w[l] = w[l] || [];
+                        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                        var f                          = d.getElementsByTagName(s)[0],
+                            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+                        j.async                        = true;
+                        j.src                          =
+                            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                        f.parentNode.insertBefore(j, f);
+                    })(window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>');
+                </script>
+            <?php
             endif;
         }
 
         /**
-         * Enqueue Gtag no-script after body open tag
+         * Enqueue GTM no-script after body open tag
          */
         public function enqueue_gtm_noscript() {
-            $gtm = get_field('gtm', 'pip_addon_options');
-            if (isset($gtm) && !empty($gtm)):
+            $gtm = get_field( 'gtm', 'pip_addon_options' );
+            if ( isset( $gtm ) && !empty( $gtm ) ):
                 ?>
-                <!-- Google Tag Manager (noscript) -->
-                <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-                <!-- End Google Tag Manager (noscript) -->
-                <?php
+                <noscript>
+                    <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
+                            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+                </noscript>
+            <?php
             endif;
         }
     }
