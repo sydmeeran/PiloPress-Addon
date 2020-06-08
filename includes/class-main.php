@@ -17,6 +17,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'after_body_open_tag', array( $this, 'enqueue_gtm_noscript' ) );
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
+            add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
 
             // ACF hooks
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
@@ -221,6 +222,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 </noscript>
             <?php
             endif;
+        }
+
+        /**
+         * Register Gmap Api Key for ACF Pro
+         */
+        public function acf_register_map_api( $api ) {
+            $api['key'] = get_field( 'gmap', 'pip_addon_settings' );
+            return $api;
         }
     }
 
