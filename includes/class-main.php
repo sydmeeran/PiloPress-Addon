@@ -17,9 +17,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'after_body_open_tag', array( $this, 'enqueue_gtm_noscript' ) );
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
-            add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
+            add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
 
             // ACF hooks
+            add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
         }
 
@@ -186,6 +187,25 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field;
+        }
+
+        /**
+         *  WordPress - Admin
+         *  - Hide Admin notices mess
+         */
+        public function remove_admin_notices() {
+            global $wp_filter;
+            if ( is_user_admin() ) {
+                if ( isset( $wp_filter['user_admin_notices'] ) ) {
+                    unset( $wp_filter['user_admin_notices'] );
+                }
+            } elseif ( isset( $wp_filter['admin_notices'] ) ) {
+                unset( $wp_filter['admin_notices'] );
+            }
+
+            if ( isset( $wp_filter['all_admin_notices'] ) ) {
+                unset( $wp_filter['all_admin_notices'] );
+            }
         }
 
         /**
