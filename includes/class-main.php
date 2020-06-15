@@ -22,6 +22,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+
         }
 
         /**
@@ -53,6 +54,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 'post_id'     => 'pip_addon_settings',
                 'autoload'    => false,
             ) );
+
+            // Add default menu
+            register_nav_menus( 
+                array(
+                    'header-menu' => __( 'Header', 'text_domain' ),
+                    'footer-menu'  => __( 'Footer', 'text_domain' ),
+                ) 
+            );       
         }
 
         /**
