@@ -21,7 +21,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
-            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+//            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
 
         }
 
@@ -56,12 +56,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             ) );
 
             // Add default menu
-            register_nav_menus( 
+            register_nav_menus(
                 array(
                     'header-menu' => __( 'Header', 'text_domain' ),
-                    'footer-menu'  => __( 'Footer', 'text_domain' ),
-                ) 
-            );       
+                    'footer-menu' => __( 'Footer', 'text_domain' ),
+                )
+            );
         }
 
         /**
@@ -224,16 +224,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $gtm = get_field( 'gtm', 'pip_addon_settings' );
             if ( $gtm ):
                 ?>
-                <script>(function (w, d, s, l, i) {
-                        w[l] = w[l] || [];
-                        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-                        var f                          = d.getElementsByTagName(s)[0],
-                            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-                        j.async                        = true;
-                        j.src                          =
-                            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-                        f.parentNode.insertBefore(j, f);
-                    })(window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>');
+                <script>(
+                        function ( w, d, s, l, i ) {
+                            w[l] = w[l] || []
+                            w[l].push( { 'gtm.start': new Date().getTime(), event: 'gtm.js' } )
+                            var f                            = d.getElementsByTagName( s )[0],
+                                j = d.createElement( s ), dl = l != 'dataLayer' ? '&l=' + l : ''
+                            j.async                          = true
+                            j.src                            =
+                                'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+                            f.parentNode.insertBefore( j, f )
+                        }
+                    )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
                 </script>
             <?php
             endif;
@@ -259,6 +261,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function acf_register_map_api( $api ) {
             $api['key'] = get_field( 'gmap', 'pip_addon_settings' );
+
             return $api;
         }
     }
