@@ -9,6 +9,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
     class PIP_Addon_Main {
 
         public function __construct() {
+
             // WP hooks
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
@@ -18,6 +19,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
+            add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -56,12 +58,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             ) );
 
             // Add default menu
-            register_nav_menus( 
+            register_nav_menus(
                 array(
                     'header-menu' => __( 'Header', 'text_domain' ),
                     'footer-menu'  => __( 'Footer', 'text_domain' ),
-                ) 
-            );       
+                )
+            );
         }
 
         /**
@@ -260,6 +262,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function acf_register_map_api( $api ) {
             $api['key'] = get_field( 'gmap', 'pip_addon_settings' );
             return $api;
+        }
+
+        /**
+         * Image upload sanitize
+         */
+        public function sanitize_file_name( $input ) {
+            $path      = pathinfo( $input );
+            $extension = ( isset( $path['extension'] ) && !empty( $path['extension'] ) ) ? $path['extension'] : '';
+            $file      = ( !empty( $extension ) ) ? preg_replace( '/.' . $extension . '$/', '', $input ) : $input;
+            return sanitize_title( str_replace( '_', '-', $file ) ) . ( ( !empty( $extension ) ) ? '.' . $extension : '' );
         }
     }
 
