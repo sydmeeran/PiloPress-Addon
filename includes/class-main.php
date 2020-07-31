@@ -20,6 +20,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
+            add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -275,6 +276,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $extension = ( isset( $path['extension'] ) && !empty( $path['extension'] ) ) ? $path['extension'] : '';
             $file      = ( !empty( $extension ) ) ? preg_replace( '/.' . $extension . '$/', '', $input ) : $input;
             return sanitize_title( str_replace( '_', '-', $file ) ) . ( ( !empty( $extension ) ) ? '.' . $extension : '' );
+        }
+
+        /**
+         * Allow more file types upload
+         */
+        public function upload_mime_types( $mimes ) {
+            $mimes['svg'] = 'image/svg+xml';
+            $mimes['woff'] = 'application/font-woff';
+            $mimes['woff2'] = 'application/font-woff2';
+            return $mimes;
         }
     }
 
