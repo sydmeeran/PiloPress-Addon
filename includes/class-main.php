@@ -18,6 +18,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
+            add_action( 'admin_menu', array( $this, 'remove_useless_menus' ) );
+            add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -263,6 +265,21 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $api['key'] = get_field( 'gmap', 'pip_addon_settings' );
 
             return $api;
+        }
+
+        /**
+         * Remove some menus
+         */
+        public function remove_useless_menus() {
+            remove_menu_page( 'edit-comments.php' );
+        }
+
+        /**
+         * Remove some menus
+         */
+        public function remove_useless_bar_menus() {
+            global $wp_admin_bar;
+            $wp_admin_bar->remove_menu( 'comments' );
         }
     }
 
