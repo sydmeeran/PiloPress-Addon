@@ -38,6 +38,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_theme_support( 'title-tag' );
             add_post_type_support( 'post', 'excerpt' );
 
+            // Remove tags
+            unregister_taxonomy_for_object_type( 'post_tag', 'post' );
+
             // Capability
             $capability = apply_filters( 'pip/options/capability', acf_get_setting( 'capability' ) );
             if ( !current_user_can( $capability ) ) {
