@@ -9,7 +9,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
     class PIP_Addon_Main {
 
         public function __construct() {
-
             // WP hooks
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
@@ -27,7 +26,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
 //            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
-
         }
 
         /**
@@ -272,21 +270,31 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          * Image upload sanitize
+         *
+         * @param $input
+         *
+         * @return string
          */
         public function sanitize_file_name( $input ) {
             $path      = pathinfo( $input );
             $extension = ( isset( $path['extension'] ) && !empty( $path['extension'] ) ) ? $path['extension'] : '';
             $file      = ( !empty( $extension ) ) ? preg_replace( '/.' . $extension . '$/', '', $input ) : $input;
+
             return sanitize_title( str_replace( '_', '-', $file ) ) . ( ( !empty( $extension ) ) ? '.' . $extension : '' );
         }
 
         /**
          * Allow more file types upload
+         *
+         * @param $mimes
+         *
+         * @return mixed
          */
         public function upload_mime_types( $mimes ) {
-            $mimes['svg'] = 'image/svg+xml';
-            $mimes['woff'] = 'application/font-woff';
+            $mimes['svg']   = 'image/svg+xml';
+            $mimes['woff']  = 'application/font-woff';
             $mimes['woff2'] = 'application/font-woff2';
+
             return $mimes;
         }
 
