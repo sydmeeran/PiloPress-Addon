@@ -25,7 +25,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
-//            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
         }
 
         /**
@@ -48,18 +48,20 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             // Add option page
-            acf_add_options_page( array(
-                'page_title'  => __( 'Settings', 'pip-addon' ),
-                'menu_title'  => __( 'Settings', 'pip-addon' ),
-                'menu_slug'   => 'pip_addon_settings',
-                'capability'  => $capability,
-                'position'    => '',
-                'parent_slug' => 'pilopress',
-                'icon_url'    => '',
-                'redirect'    => true,
-                'post_id'     => 'pip_addon_settings',
-                'autoload'    => false,
-            ) );
+            acf_add_options_page(
+                array(
+                    'page_title'  => __( 'Settings', 'pip-addon' ),
+                    'menu_title'  => __( 'Settings', 'pip-addon' ),
+                    'menu_slug'   => 'pip_addon_settings',
+                    'capability'  => $capability,
+                    'position'    => '',
+                    'parent_slug' => 'pilopress',
+                    'icon_url'    => '',
+                    'redirect'    => true,
+                    'post_id'     => 'pip_addon_settings',
+                    'autoload'    => false,
+                )
+            );
 
             // Add default menu
             register_nav_menus(
@@ -77,18 +79,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $logo_id = get_theme_mod( 'custom_logo' );
             $logo    = wp_get_attachment_image_src( $logo_id, 'full' );
 
-            if ( $logo ):
+            if ( $logo ) :
                 ?>
                 <style type="text/css">
                     #login h1 a, .login h1 a {
-                        background-image: url('<?php echo reset($logo); ?>');
+                        background-image: url('<?php echo reset( $logo ); ?>');
                         height: 80px;
                         width: 320px;
                         background-repeat: no-repeat;
                         background-size: contain;
                     }
                 </style>
-            <?php
+                <?php
             endif;
         }
 
@@ -123,14 +125,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $post_types = WPSEO_Post_Type::get_accessible_post_types();
 
             // If no post types, return
-            if ( !is_array( $post_types ) || $post_types === [] ) {
+            if ( !is_array( $post_types ) || $post_types === array() ) {
                 return;
             }
 
             // Browse post types
             foreach ( $post_types as $post_type ) {
                 $filter = sprintf( 'get_user_option_%s', sprintf( 'manage%scolumnshidden', 'edit-' . $post_type ) );
-                add_filter( $filter, [ $this, 'column_hidden' ], 10, 3 );
+                add_filter( $filter, array( $this, 'column_hidden' ), 10, 3 );
             }
         }
 
@@ -153,18 +155,21 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             // If not array, set it to array
             if ( !is_array( $result ) ) {
-                $result = [];
+                $result = array();
             }
 
             // Add Yoast columns
-            $result = array_merge( $result, array(
-                'wpseo-links',
-                'wpseo-score',
-                'wpseo-score-readability',
-                'wpseo-title',
-                'wpseo-metadesc',
-                'wpseo-focuskw',
-            ) );
+            $result = array_merge(
+                $result,
+                array(
+                    'wpseo-links',
+                    'wpseo-score',
+                    'wpseo-score-readability',
+                    'wpseo-title',
+                    'wpseo-metadesc',
+                    'wpseo-focuskw',
+                )
+            );
 
             // Remove duplicated values
             $result = array_unique( $result );
@@ -228,7 +233,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function enqueue_gtm() {
             $gtm = get_field( 'gtm', 'pip_addon_settings' );
-            if ( $gtm ):
+            if ( $gtm ) :
                 ?>
                 <script>(
                         function ( w, d, s, l, i ) {
@@ -243,7 +248,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
                 </script>
-            <?php
+                <?php
             endif;
         }
 
@@ -252,13 +257,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function enqueue_gtm_noscript() {
             $gtm = get_field( 'gtm', 'pip_addon_settings' );
-            if ( $gtm ):
+            if ( $gtm ) :
                 ?>
                 <noscript>
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-            <?php
+                <?php
             endif;
         }
 
