@@ -200,6 +200,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 }
             }
 
+            // Add default empty value (to avoid saving some color by mistake)
+            $field['choices'][] = __('- Choisir -', 'pilot-in');
+
             if ( is_array( $new_colors ) ) {
                 foreach ( $new_colors as $color ) {
                     $field['choices'][ $color['classes'] ] = $color['name'];
