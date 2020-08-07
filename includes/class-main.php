@@ -332,7 +332,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_flexible_args( $field_group ) {
 
             $field_group_key = acf_maybe_get( $field_group, 'key' );
-            if ( mb_stripos( $field_group_key, 'pip_flexible' ) === false ) {
+            if ( mb_stripos( $field_group_key, PIP_Flexible::get_flexible_field_name() ) === false ) {
                 return $field_group;
             }
 
