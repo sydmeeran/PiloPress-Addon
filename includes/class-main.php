@@ -10,6 +10,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         public function __construct() {
             // WP hooks
+            add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
@@ -27,6 +28,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
+
+        }
+
+        /**
+         * Load admin assets
+         */
+        public function admin_assets() {
+
+            wp_enqueue_script( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/js/pip-addon-layouts.js', array('jquery'), '', true );
 
         }
 
