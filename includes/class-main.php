@@ -26,6 +26,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+            add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
+
         }
 
         /**
@@ -323,6 +325,35 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             global $wp_admin_bar;
             $wp_admin_bar->remove_menu( 'comments' );
         }
+
+        /**
+         *  Edit PIP Flexible args
+         */
+        public function pip_flexible_args( $field_group ) {
+
+            $field_group_key = acf_maybe_get( $field_group, 'key' );
+            if ( mb_stripos( $field_group_key, 'pip_flexible' ) === false ) {
+                return $field_group;
+            }
+
+            $fields = acf_maybe_get( $field_group, 'fields' );
+            if ( empty( $fields ) ) {
+                return $field_group;
+            }
+
+            $flexible_args       = reset( $fields );
+            $acfe_flexible_modal = acf_maybe_get( $flexible_args, 'acfe_flexible_modal' );
+            if ( !$acfe_flexible_modal ) {
+                return $field_group;
+            }
+
+            // Set 4 layouts per row in layouts modal
+            $field_group['fields'][0]['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
+
+            return $field_group;
+
+        }
+
     }
 
     // Instantiate
