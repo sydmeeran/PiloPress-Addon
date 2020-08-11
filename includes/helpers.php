@@ -45,3 +45,49 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
     // Display pagination links
     echo '<div class="pagination flex items-center justify-between w-full">' . $paginate_links . '</div>';
 }
+
+/**
+ *  PIP - Helper
+ *  - Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
+ *
+ *  @param mixed $layouts, string or array of strings of the layouts' "acf_fc_layout"
+ *  @param integer $post_id
+ *  @return mixed false if no layouts were found, if found an array of layouts
+ */
+
+function pip_get_flexible_layout( $layouts, $post_id = '' ) {
+
+    $response = false;
+
+    if ( !$layouts ) {
+        return $response;
+    }
+
+    $pip_flexible_name = (string) PIP_Flexible::get_flexible_field_name();
+    $post_id           = $post_id ?? get_the_ID();
+    $pip_flexible      = get_field( $pip_flexible_name, $post_id );
+
+    if ( !$pip_flexible ) {
+        return $response;
+    }
+
+    if ( !is_array( $layouts ) ) {
+        $layouts = array( $layouts );
+    }
+
+    $found_layouts = array();
+    foreach ( $pip_flexible as $position => $layout ) {
+        $layout_name = pip_maybe_get( $layout, 'acf_fc_layout' );
+
+        if ( in_array( $layout_name, $layouts ) ) {
+            $found_layouts[ $position ] = pip_maybe_get( $pip_flexible, $position );
+        }
+    }
+
+    if ( !empty( $found_layouts ) ) {
+        $response = $found_layouts;
+    }
+
+    return $response;
+
+}
