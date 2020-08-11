@@ -18,7 +18,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
 
     // Set num_pages
     global $wp_query;
-    $num_pages = $num_pages ? $num_pages : $wp_query->max_num_pages ? $wp_query->max_num_pages : 1;
+    $num_pages = ( $num_pages ? $num_pages : $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
 
     // Get paginate links
     $paginate_links = paginate_links(
