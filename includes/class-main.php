@@ -29,6 +29,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
+            add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
 
         }
 
@@ -360,6 +361,67 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $field_group['fields'][0]['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
 
             return $field_group;
+
+        }
+
+        /**
+         *  Change tailwind config default value
+         */
+        public function pip_tailwind_config_default( $field ) {
+
+            ob_start(); ?>
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+    'theme': {
+        'colors': {
+            'primary-500': '#575756',
+            'primary': '#575756',
+            'secondary-500': '#E2101B',
+            'secondary': '#E2101B',
+            'black': '#2E2B28',
+            'white': '#FFFFFF',
+            'grey': defaultTheme.colors.grey,
+        },
+        'fontFamily': {
+            'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
+            'secondary': ['NomDeLaFont', ...defaultTheme.fontFamily.serif],
+        },
+        'extend': {
+            'colors': {
+                'grey': '#D2D2D2',
+            },
+            'spacing': {
+                '75': '18.75rem',
+                '84': '21rem',
+                '88': '22rem',
+                '96': '24rem',
+                '100': '25rem',
+                '112': '28rem',
+                '120': '30rem',
+                '124': '31rem',
+                '136': '34rem',
+                '138': '34.5rem',
+                '140': '35rem',
+                '150': '37.5rem',
+                '152': '38rem',
+                '162': '40.5rem',
+                '176': '44rem',
+                '186': '46.5rem',
+                '192': '48rem',
+                '200': '50rem',
+            },
+        }
+    },
+    'variants': {
+
+    },
+    'plugins': [
+
+    ],
+};<?php
+            $field['default_value'] = ob_get_clean();
+            return $field;
 
         }
 
