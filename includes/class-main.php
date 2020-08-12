@@ -30,6 +30,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
+            add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
 
         }
 
@@ -419,7 +420,54 @@ module.exports = {
     'plugins': [
 
     ],
-};<?php
+};
+            <?php
+            $field['default_value'] = ob_get_clean();
+            return $field;
+
+        }
+
+        /**
+         *  Change tailwind style default value
+         */
+        public function pip_tailwind_style_default( $field ) {
+
+            ob_start(); ?>
+@tailwind base;
+@tailwind components;
+
+h1,
+.h1 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
+}
+
+h2,
+.h2 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
+}
+
+h3,
+.h3 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+}
+
+h4,
+.h4 {
+    @apply font-primary leading-tight font-semibold text-black text-xl;
+}
+
+h5,
+.h5 {
+    @apply font-primary leading-tight font-semibold text-black text-lg;
+}
+
+h6,
+.h6 {
+    @apply font-primary leading-tight font-semibold text-black text-base;
+}
+
+@tailwind utilities;
+            <?php
             $field['default_value'] = ob_get_clean();
             return $field;
 
