@@ -30,46 +30,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
 
-            // ACFE hooks
-            add_action( 'acf/init', array( $this, 'acfe_super_dev_mode' ), 5 );
-
         }
-
-        /**
-         *  Enable ACFE "Super Dev mode" to have specific features (like show post metas...etc)
-         */
-        function acfe_super_dev_mode() {
-
-            $current_user = wp_get_current_user();
-            if ( !$current_user ) {
-                return;
-            }
-
-            /** Check if user logged-in */
-            if (
-                !is_a( $current_user, 'WP_User' ) ||
-                !isset( $current_user->data ) ||
-                !isset( $current_user->data->user_login )
-            ) {
-                return;
-            }
-
-            $current_user_login = $current_user->data->user_login ?? '';
-            if ( $current_user_login !== 'cabin' ) {
-                return;
-            }
-
-            define( 'ACFE_super_dev', true );
-        }
-
 
         /**
          * Load admin assets
          */
         public function admin_assets() {
-
             wp_enqueue_script( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/js/pip-addon-layouts.js', array( 'jquery' ), '', true );
-
         }
 
         /**

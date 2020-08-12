@@ -69,6 +69,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             }
 
             // Includes
+            add_action( 'acf/init', array( $this, 'acfe_super_dev_mode' ), 5 );
             add_action( 'acf/init', array( $this, 'includes' ) );
 
         }
@@ -89,6 +90,33 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             pip_addon_include( 'includes/class-bottom-admin-bar.php' );
             pip_addon_include( 'includes/class-main.php' );
 
+        }
+
+        /**
+         *  Enable ACFE "Super Dev mode" to have specific features (like show post metas...etc)
+         */
+        public function acfe_super_dev_mode() {
+
+            $current_user = wp_get_current_user();
+            if ( !$current_user ) {
+                return;
+            }
+
+            /** Check if user logged-in */
+            if (
+                !is_a( $current_user, 'WP_User' ) ||
+                !isset( $current_user->data ) ||
+                !isset( $current_user->data->user_login )
+            ) {
+                return;
+            }
+
+            $current_user_login = $current_user->data->user_login ?? '';
+            if ( $current_user_login !== 'cabin' ) {
+                return;
+            }
+
+            define( 'ACFE_super_dev', true );
         }
 
         /**
