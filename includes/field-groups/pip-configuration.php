@@ -87,7 +87,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'py-32' => 'Moyen',
                     'py-64' => 'Grand',
                 ),
-                'default_value'     => false,
+                'default_value'     => 'py-16',
                 'allow_null'        => 0,
                 'multiple'          => 0,
                 'ui'                => 0,
