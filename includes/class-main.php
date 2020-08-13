@@ -33,7 +33,17 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
+            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
+        }
+
+        /**
+         *  ACF field "Font Awesome" plugin
+         *  - Force Pro mode (to have pro icons in select in the back-office)
+         */
+        public function acf_field_fa_pro_activation( $acf_fa_params ) {
+            $acf_fa_params['acffa_pro_cdn'] = true;
+            return $acf_fa_params;
         }
 
         /**
