@@ -26,6 +26,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_menu', array( $this, 'move_comments_menu' ) );
             add_action( 'admin_menu', array( $this, 'move_page_menu' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
+            add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -35,6 +36,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
             add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
+        }
+
+        /**
+         *  Enqueue Font Awesome Pro CSS
+         */
+        public function enqueue_font_awesome_pro() {
+            if ( is_admin() ) {
+                return;
+            }
+
+            $fa_url = apply_filters( 'ACFFA_get_fa_url', '//pro.fontawesome.com/releases/v5.14.0/css/all.css' );
+            wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
         }
 
         /**
