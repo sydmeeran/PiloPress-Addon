@@ -24,6 +24,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_action( 'admin_menu', array( $this, 'remove_useless_menus' ) );
             add_action( 'admin_menu', array( $this, 'move_comments_menu' ) );
+            add_action( 'admin_menu', array( $this, 'move_page_menu' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
 
             // ACF hooks
@@ -124,6 +125,26 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function login_header_title() {
             return get_bloginfo( 'name' );
+        }
+
+        /**
+         *  Move post_type "Page" to top + Add separator after "post_types"
+         */
+        public function move_page_menu() {
+            global $menu;
+
+            // Page
+            $menu['4.5'] = $menu[20];
+            unset( $menu[20] );
+
+            // Separator
+            $menu['8.5'] = array(
+                '',
+                'read',
+                'separator8.5',
+                '',
+                'wp-menu-separator',
+            );
         }
 
         /**
