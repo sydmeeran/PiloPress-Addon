@@ -39,6 +39,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function admin_assets() {
             wp_enqueue_script( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/js/pip-addon-layouts.js', array( 'jquery' ), '', true );
+            wp_enqueue_style( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/css/admin-layouts.css' );
         }
 
         /**

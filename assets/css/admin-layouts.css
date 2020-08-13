@@ -1,0 +1,27 @@
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout[data-layout],
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout[data-layout]:first-child {
+    margin-top: 0 !important;
+}
+
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout[data-layout].-collapsed > .acf-fc-layout-handle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.acfe-layout-title-text,
+.acfe-layout-title-text:hover {
+    color: #23282d;
+    background: #F5F5F5;
+}
+
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout[data-layout] > .acf-fc-layout-controls {
+    padding: 8px 10px;
+    z-index: 2;
+}
+
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout > .acfe-fc-placeholder {
+    padding: 0 !important;
+}
