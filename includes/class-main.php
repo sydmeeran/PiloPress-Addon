@@ -23,6 +23,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_action( 'admin_menu', array( $this, 'remove_useless_menus' ) );
+            add_action( 'admin_menu', array( $this, 'move_comments_menu' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
 
             // ACF hooks
@@ -123,6 +124,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function login_header_title() {
             return get_bloginfo( 'name' );
+        }
+
+        /**
+         *  Move comments into post_type post submenu
+         */
+        public function move_comments_menu() {
+            add_submenu_page( 'edit.php', 'Commentaires', 'Commentaires', 'manage_options', 'edit-comments.php' );
+            remove_menu_page( 'edit-comments.php' );
         }
 
         /**
