@@ -31,6 +31,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
+            add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
+            add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
@@ -251,6 +253,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return mixed
          */
         public function pip_load_color_to_config( $field ) {
+
             $field['choices'] = array();
             $new_colors       = array();
             $colors           = PIP_TinyMCE::get_custom_colors();
@@ -267,7 +270,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             // Add default empty value (to avoid saving some color by mistake)
-            $field['choices'][] = __( '- Choisir -', 'pilot-in' );
+            $field['choices'][] = '- Choisir -';
 
             if ( is_array( $new_colors ) ) {
                 foreach ( $new_colors as $color ) {
@@ -276,6 +279,75 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field;
+        }
+
+        /**
+         * Add a render field setting to change class output in value
+         */
+        public function pip_font_color_settings( $field ) {
+
+            // Select: Class output
+            acf_render_field_setting(
+                $field,
+                array(
+                    'label'             => __( 'Return Value', 'acf' ),
+                    'instructions'      => __( 'Classe retournée dans le champ', 'pilot-in' ),
+                    'name'              => 'class_output',
+                    'type'              => 'select',
+                    'required'          => 0,
+                    'conditional_logic' => 0,
+                    'wrapper'           => array(
+                        'width' => '',
+                        'class' => '',
+                        'id'    => '',
+                    ),
+                    'acfe_permissions'  => '',
+                    'choices'           => array(
+                        'text'       => 'Classe de texte',
+                        'background' => 'Classe de fond',
+                        'border'     => 'Classe de bordure',
+                    ),
+                    'default_value'     => 'text',
+                    'allow_null'        => 1,
+                    'multiple'          => 0,
+                    'ui'                => 1,
+                    'return_format'     => 'value',
+                    'acfe_settings'     => '',
+                    'acfe_validate'     => '',
+                    'ajax'              => 0,
+                    'placeholder'       => '',
+                )
+            );
+
+        }
+
+        /**
+         * Change class output in format value
+         */
+        public function pip_font_color_format_value( $value, $post_id, $field ) {
+
+            $class_output = acf_maybe_get( $field, 'class_output' );
+            if ( !$class_output || $class_output === 'text' ) {
+                return $value;
+            }
+
+            if ( $class_output === 'background' ) {
+                if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                    $value = str_replace( 'text-', 'bg-', $value );
+                } else {
+                    $value = 'bg-' . $value;
+                }
+            }
+
+            if ( $class_output === 'border' ) {
+                if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                    $value = str_replace( 'text-', 'border-', $value );
+                } else {
+                    $value = 'border-' . $value;
+                }
+            }
+
+            return $value;
         }
 
         /**
