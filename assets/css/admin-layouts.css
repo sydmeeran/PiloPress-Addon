@@ -26,4 +26,22 @@
 
 .acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout > .acfe-fc-placeholder {
     padding: 0 !important;
+    border-color: transparent !important;
+}
+
+.acf-field.acf-field-flexible-content[data-acfe-flexible-stylised-button="1"] > .acf-input > .acf-flexible-content:not(.empty) > .values {
+    opacity: 1;
+}
+
+.acf-field.acf-field-flexible-content[data-acfe-flexible-stylised-button="1"] > .acf-input > .acf-flexible-content:not(.empty) > .values:hover > .layout {
+    opacity: 0.65;
+}
+
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout:hover {
+    outline: 2px solid #444;
+    opacity: 1 !important;
+}
+
+.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout > .acf-fields {
+    border-color: transparent !important;
 }
