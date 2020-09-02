@@ -48,10 +48,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function pip_flexible_locations( $locations ) {
 
-            $locations['location'][] = array(
-                'param'    => 'post_type_archive',
-                'operator' => '==',
-                'value'    => 'all',
+            $locations[] = array(
+                array(
+                    'param'    => 'post_type_archive',
+                    'operator' => '==',
+                    'value'    => 'all',
+                ),
             );
 
             return $locations;
