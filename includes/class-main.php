@@ -34,6 +34,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
             add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
+            add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
             add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
@@ -57,6 +58,55 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             );
 
             return $locations;
+        }
+
+        /**
+         *  Merge "Layouts" location with "Main flexible" location
+         *  (so we doesn't have to set manually same location everytime on layouts)
+         */
+        public function pip_flexible_layouts_locations( $field_groups ) {
+
+            foreach ( $field_groups as &$field_group ) {
+
+                // Exclude non-layouts field groups
+                if ( acf_maybe_get( $field_group, '_pip_is_layout' ) !== 1 ) {
+                    continue;
+                }
+
+                // Exclude layout model
+                $fg_title = acf_maybe_get( $field_group, 'title' );
+                if ( $fg_title === '_layout_model' ) {
+                    continue;
+                }
+
+                // Add defaut locations (like pip-pattern...)
+                $flexible_locations   = apply_filters( 'pip/builder/locations', array() );
+                $flexible_locations[] = array(
+                    array(
+                        'param'    => 'pip-pattern',
+                        'operator' => '==',
+                        'value'    => 'all',
+                    ),
+                );
+
+                $flexible_locations_flat = !empty( $flexible_locations ) ? array_flatten_recursive( $flexible_locations ) : array();
+
+                $layout_locations = acf_maybe_get( $field_group, 'location' );
+                foreach ( $layout_locations as $layout_location ) {
+
+                    $layout_param = wp_list_pluck( $layout_location, 'param' );
+                    $layout_param = reset( $layout_param );
+
+                    // Add only new location
+                    if ( !in_array( $layout_param, $flexible_locations_flat ) ) {
+                        $flexible_locations[] = $layout_location;
+                    }
+                }
+
+                $field_group['location'] = $flexible_locations;
+            }
+
+            return $field_groups;
         }
 
         /**
