@@ -38,6 +38,23 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
             add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
+            // PIP hooks
+            add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
+
+        }
+
+        /**
+         *  Add more locations to the main flexible (archives...)
+         */
+        public function pip_flexible_locations( $locations ) {
+
+            $locations['location'][] = array(
+                'param'    => 'post_type_archive',
+                'operator' => '==',
+                'value'    => 'all',
+            );
+
+            return $locations;
         }
 
         /**
