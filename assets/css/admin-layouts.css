@@ -19,6 +19,13 @@
     border-radius: 5px;
 }
 
+/* Fix collection label display */
+.acfe-layout-title-text .pip_collection {
+    display: inline-block;
+    width: auto;
+    margin: auto 5px auto auto;
+}
+
 .acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content > .values > .layout[data-layout] > .acf-fc-layout-controls {
     padding: 8px 10px;
     z-index: 2;
