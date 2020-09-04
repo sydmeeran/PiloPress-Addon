@@ -49,9 +49,28 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function pip_flexible_locations( $locations ) {
 
+            // Post type archive (ACFE)
             $locations[] = array(
                 array(
                     'param'    => 'post_type_archive',
+                    'operator' => '==',
+                    'value'    => 'all',
+                ),
+            );
+
+            // Menu items
+            $locations[] = array(
+                array(
+                    'param'    => 'nav_menu_item',
+                    'operator' => '==',
+                    'value'    => 'all',
+                ),
+            );
+
+            // Taxonomies
+            $locations[] = array(
+                array(
+                    'param'    => 'taxonomy',
                     'operator' => '==',
                     'value'    => 'all',
                 ),
