@@ -83,9 +83,10 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 'acfe_permissions'  => '',
                 'choices'           => array(
                     'py-0'  => 'Aucun',
-                    'py-16' => 'Petit',
-                    'py-32' => 'Moyen',
-                    'py-64' => 'Grand',
+                    'py-4' => 'Petit',
+                    'py-8' => 'Moyen',
+                    'py-16' => 'Moyen grand',
+                    'py-32' => 'Grand',
                 ),
                 'default_value'     => 'py-16',
                 'allow_null'        => 0,
