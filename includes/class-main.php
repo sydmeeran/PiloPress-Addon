@@ -12,6 +12,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             // WP hooks
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
+            add_action( 'wp_enqueue_scripts', array( $this, 'front_assets' ) );
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
@@ -126,6 +127,21 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field_groups;
+        }
+
+        /**
+         *  Assets to load on front-end
+         */
+        public function front_assets() {
+
+            // Variables to pass to front-end JavaScript context
+            $pip_js_object = array(
+                'ajax'    => admin_url( 'admin-ajax.php' ),
+                'theme'   => PIP_THEME_URL,
+                'layouts' => PIP_THEME_URL . '/pilopress/layouts',
+            );
+            wp_localize_script( 'jquery', 'pip', $pip_js_object );
+
         }
 
         /**
