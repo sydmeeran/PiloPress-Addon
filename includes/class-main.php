@@ -140,7 +140,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 'theme'   => PIP_THEME_URL,
                 'layouts' => PIP_THEME_URL . '/pilopress/layouts',
             );
-            wp_localize_script( 'jquery', 'pip', $pip_js_object );
+            wp_localize_script( 'jquery', 'pipAddon', $pip_js_object );
 
         }
 
