@@ -47,14 +47,13 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
 }
 
 /**
- *  PIP - Helper
- *  - Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
+ *  Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
  *
- *  @param mixed $layouts, string or array of strings of the layouts' "acf_fc_layout"
- *  @param integer $post_id
- *  @return mixed false if no layouts were found, if found an array of layouts
+ * @param mixed  $layouts , string or array of strings of the layouts' "acf_fc_layout"
+ * @param string $post_id
+ *
+ * @return mixed false if no layouts were found, if found an array of layouts
  */
-
 function pip_get_flexible_layout( $layouts, $post_id = '' ) {
 
     $response = false;
@@ -64,7 +63,7 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
     }
 
     $pip_flexible_name = (string) PIP_Flexible::get_flexible_field_name();
-    $post_id           = $post_id ?? get_the_ID();
+    $post_id           = $post_id ? $post_id : get_the_ID();
     $pip_flexible      = get_field( $pip_flexible_name, $post_id );
 
     if ( !$pip_flexible ) {
@@ -94,6 +93,10 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
 
 /**
  *  Flatten a multidimensional array
+ *
+ * @param $array
+ *
+ * @return array|false
  */
 function array_flatten_recursive( $array ) {
 
