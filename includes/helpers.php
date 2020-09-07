@@ -91,3 +91,22 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
     return $response;
 
 }
+
+/**
+ *  Flatten a multidimensional array
+ */
+function array_flatten_recursive( $array ) {
+
+    if ( !$array ) {
+        return false;
+    }
+
+    $flat = array();
+    $RII  = new RecursiveIteratorIterator( new RecursiveArrayIterator( $array ) );
+
+    foreach ( $RII as $value ) {
+        $flat[] = $value;
+    }
+
+    return $flat;
+}
