@@ -35,7 +35,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
             add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
             add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
-            add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
+//            add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
             add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
