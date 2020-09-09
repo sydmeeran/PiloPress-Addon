@@ -185,13 +185,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * Add theme supports
          */
         public function init_hook() {
+
             // Theme support
             add_theme_support( 'custom-logo' );
             add_theme_support( 'post-thumbnails' );
             add_theme_support( 'title-tag' );
-            add_post_type_support( 'post', 'excerpt' );
+            add_theme_support( 'menus' );
 
-            // Remove tags
+            // Edit post
+            add_post_type_support( 'post', 'excerpt' );
             unregister_taxonomy_for_object_type( 'post_tag', 'post' );
 
             // Capability
@@ -213,14 +215,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     'redirect'    => true,
                     'post_id'     => 'pip_addon_settings',
                     'autoload'    => false,
-                )
-            );
-
-            // Add default menu
-            register_nav_menus(
-                array(
-                    'header-menu' => __( 'Header', 'text_domain' ),
-                    'footer-menu' => __( 'Footer', 'text_domain' ),
                 )
             );
         }
