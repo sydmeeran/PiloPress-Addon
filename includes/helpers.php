@@ -6,8 +6,9 @@
  * @param string $num_pages
  * @param string $page_range
  * @param string $paged
+ * @param string $query
  */
-function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
+function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query = '' ) {
 
     // Set page_range if empty
     $page_range = $page_range ? $page_range : 2;
@@ -18,10 +19,14 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
 
     // Set num_pages
     global $wp_query;
+    if ( $query ) {
+        $wp_query = $query;
+    }
+
     $num_pages = ( $num_pages ? $num_pages : $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
 
     // Get paginate links
-    $paginate_links = paginate_links(
+    $pagination_numbers = paginate_links(
         array(
             'base'         => get_pagenum_link( 1 ) . '%_%',
             'format'       => 'page/%#%',
@@ -38,12 +43,47 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '' ) {
     );
 
     // If no paginate links, return
-    if ( !$paginate_links ) {
+    if ( !$pagination_numbers ) {
         return;
     }
 
     // Display pagination links
-    echo '<div class="pagination flex items-center justify-between w-full">' . $paginate_links . '</div>';
+    ob_start(); ?>
+    <div class="pagination relative flex items-center justify-center w-full">
+
+        <?php
+        // Page précédente
+        if ( $paged > 1 ) : ?>
+        <a
+            class="pagination-previous mr-auto"
+            href="<?php echo get_pagenum_link( $paged - 1 ); ?>"
+            >
+            <span class="far fa-sm fa-arrow-left mr-1"></span>
+            <?php _e( 'Page précédente', 'pilot-in' ); ?>
+        </a>
+        <?php endif; ?>
+
+        <?php
+        // Pages numérotées ?>
+        <div class="pagination-numbers absolute inset-auto">
+            <?php echo $pagination_numbers; ?>
+        </div>
+
+        <?php
+        // Page suivante
+        if ( $paged < $num_pages ) : ?>
+        <a
+            class="pagination-next ml-auto"
+            href="<?php echo get_pagenum_link( $paged + 1 ); ?>"
+            >
+            <?php _e( 'Page suivante', 'pilot-in' ); ?>
+            <span class="far fa-sm fa-arrow-right ml-1"></span>
+        </a>
+        <?php endif; ?>
+
+    </div>
+    <?php
+    echo ob_get_clean();
 }
 
 /**
