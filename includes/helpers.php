@@ -28,7 +28,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
     // Get paginate links
     $pagination_numbers = paginate_links(
         array(
-            'base'         => get_pagenum_link( 1 ) . '%_%',
+            'base'         => trailingslashit( get_pagenum_link( 1 ) ) . '%_%',
             'format'       => 'page/%#%',
             'total'        => $num_pages,
             'current'      => $paged,
