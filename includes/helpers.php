@@ -55,7 +55,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         // Page précédente
         if ( $paged > 1 ) : ?>
         <a
-            class="pagination-previous mr-auto"
+            class="pagination-previous mr-auto hidden md:block"
             href="<?php echo get_pagenum_link( $paged - 1 ); ?>"
             >
             <span class="far fa-sm fa-arrow-left mr-1"></span>
@@ -73,7 +73,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         // Page suivante
         if ( $paged < $num_pages ) : ?>
         <a
-            class="pagination-next ml-auto"
+            class="pagination-next ml-auto hidden md:block"
             href="<?php echo get_pagenum_link( $paged + 1 ); ?>"
             >
             <?php _e( 'Page suivante', 'pilot-in' ); ?>
