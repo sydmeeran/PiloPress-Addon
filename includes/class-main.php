@@ -636,7 +636,7 @@ module.exports = {
             'secondary': '#E2101B',
             'black': '#2E2B28',
             'white': '#FFFFFF',
-            'grey': defaultTheme.colors.grey,
+            'gray': defaultTheme.colors.gray,
         },
         'fontFamily': {
             'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
