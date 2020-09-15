@@ -365,15 +365,20 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             $field['choices'] = array();
             $new_colors       = array();
-            $colors           = PIP_TinyMCE::get_custom_colors();
+            if ( function_exists( 'pip_get_colors' ) ) {
+                $colors = pip_get_colors();
+            } else {
+                $colors = PIP_TinyMCE::get_custom_colors();
+            }
 
             if ( $colors ) {
                 foreach ( $colors as $color ) {
-                    $new_class    = str_replace( 'text-', '', $color['classes'] );
+                    $classes      = acf_maybe_get( $color, 'classes' );
+                    $classes      = $classes ? str_replace( 'text-', '', $classes ) : acf_maybe_get( $color, 'class_name' );
                     $new_colors[] = array(
                         'name'    => $color['name'],
                         'font'    => $color['name'],
-                        'classes' => 'bg-' . $new_class,
+                        'classes' => 'bg-' . $classes,
                     );
                 }
             }
@@ -444,23 +449,46 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_font_color_format_value( $value, $post_id, $field ) {
 
             $class_output = acf_maybe_get( $field, 'class_output' );
-            if ( !$class_output || $class_output === 'text' ) {
+            if ( !$class_output ) {
                 return $value;
             }
 
-            if ( $class_output === 'background' ) {
-                if ( mb_stripos( $value, 'text-' ) === 0 ) {
-                    $value = str_replace( 'text-', 'bg-', $value );
-                } else {
-                    $value = 'bg-' . $value;
-                }
-            }
+            if ( version_compare( PiloPress::$version, '0.4.0', '<' ) ) {
 
-            if ( $class_output === 'border' ) {
-                if ( mb_stripos( $value, 'text-' ) === 0 ) {
-                    $value = str_replace( 'text-', 'border-', $value );
-                } else {
-                    $value = 'border-' . $value;
+                switch ( $class_output ) {
+                    case 'background':
+                        if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                            $value = str_replace( 'text-', 'bg-', $value );
+                        } else {
+                            $value = 'bg-' . $value;
+                        }
+                        break;
+
+                    case 'border':
+                        if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                            $value = str_replace( 'text-', 'border-', $value );
+                        } else {
+                            $value = 'border-' . $value;
+                        }
+                        break;
+
+                    case 'text':
+                    default:
+                        // Don't change value
+                        break;
+                }
+            } else {
+
+                switch ( $class_output ) {
+                    case 'text':
+                        $value = 'text-' . $value;
+                        break;
+                    case 'background':
+                        $value = 'bg-' . $value;
+                        break;
+                    case 'border':
+                        $value = 'border-' . $value;
+                        break;
                 }
             }
 
@@ -625,11 +653,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-const defaultTheme = require('tailwindcss/defaultTheme')
+            const defaultTheme = require('tailwindcss/defaultTheme')
 
-module.exports = {
-    'theme': {
-        'colors': {
+            module.exports = {
+            'theme': {
+            'colors': {
             'primary-500': '#575756',
             'primary': '#575756',
             'secondary-500': '#E2101B',
@@ -637,44 +665,44 @@ module.exports = {
             'black': '#2E2B28',
             'white': '#FFFFFF',
             'gray': defaultTheme.colors.gray,
-        },
-        'fontFamily': {
+            },
+            'fontFamily': {
             'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
             'secondary': ['NomDeLaFont', ...defaultTheme.fontFamily.serif],
-        },
-        'extend': {
+            },
+            'extend': {
             'colors': {
-                'grey': '#D2D2D2',
+            'grey': '#D2D2D2',
             },
             'spacing': {
-                '75': '18.75rem',
-                '84': '21rem',
-                '88': '22rem',
-                '96': '24rem',
-                '100': '25rem',
-                '112': '28rem',
-                '120': '30rem',
-                '124': '31rem',
-                '136': '34rem',
-                '138': '34.5rem',
-                '140': '35rem',
-                '150': '37.5rem',
-                '152': '38rem',
-                '162': '40.5rem',
-                '176': '44rem',
-                '186': '46.5rem',
-                '192': '48rem',
-                '200': '50rem',
+            '75': '18.75rem',
+            '84': '21rem',
+            '88': '22rem',
+            '96': '24rem',
+            '100': '25rem',
+            '112': '28rem',
+            '120': '30rem',
+            '124': '31rem',
+            '136': '34rem',
+            '138': '34.5rem',
+            '140': '35rem',
+            '150': '37.5rem',
+            '152': '38rem',
+            '162': '40.5rem',
+            '176': '44rem',
+            '186': '46.5rem',
+            '192': '48rem',
+            '200': '50rem',
             },
-        }
-    },
-    'variants': {
+            }
+            },
+            'variants': {
 
-    },
-    'plugins': [
+            },
+            'plugins': [
 
-    ],
-};
+            ],
+            };
             <?php
             $field['default_value'] = ob_get_clean();
 
@@ -692,40 +720,40 @@ module.exports = {
         public function pip_tailwind_style_default( $field ) {
 
             ob_start(); ?>
-@tailwind base;
-@tailwind components;
+            @tailwind base;
+            @tailwind components;
 
-h1,
-.h1 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
-}
+            h1,
+            .h1 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
+            }
 
-h2,
-.h2 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
-}
+            h2,
+            .h2 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
+            }
 
-h3,
-.h3 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
-}
+            h3,
+            .h3 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+            }
 
-h4,
-.h4 {
-    @apply font-primary leading-tight font-semibold text-black text-xl;
-}
+            h4,
+            .h4 {
+            @apply font-primary leading-tight font-semibold text-black text-xl;
+            }
 
-h5,
-.h5 {
-    @apply font-primary leading-tight font-semibold text-black text-lg;
-}
+            h5,
+            .h5 {
+            @apply font-primary leading-tight font-semibold text-black text-lg;
+            }
 
-h6,
-.h6 {
-    @apply font-primary leading-tight font-semibold text-black text-base;
-}
+            h6,
+            .h6 {
+            @apply font-primary leading-tight font-semibold text-black text-base;
+            }
 
-@tailwind utilities;
+            @tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
 
