@@ -28,6 +28,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_menu', array( $this, 'move_page_menu' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_filter( 'template_include', array( $this, 'search_template' ), 20 );
+            add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -609,6 +611,36 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function remove_useless_bar_menus() {
             global $wp_admin_bar;
             $wp_admin_bar->remove_menu( 'comments' );
+        }
+
+        /**
+         *  Template: Use "search.php" template inside the PiloPress-Addon
+         */
+        public function search_template( $template ) {
+
+            if ( !is_search() ) {
+                return $template;
+            }
+
+            // In plugin
+            $template = PIP_ADDON_PATH . 'templates/search.php';
+
+            return $template;
+        }
+
+        /**
+         *  Template: Use "taxonomy.php" template inside the PiloPress-Addon
+         */
+        public function taxonomy_template( $template ) {
+
+            if ( !is_tax() ) {
+                return $template;
+            }
+
+            // In plugin
+            $template = PIP_ADDON_PATH . 'templates/taxonomy.php';
+
+            return $template;
         }
 
         /**
