@@ -42,6 +42,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
             add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
+            // ACFE hooks
+            acfe_update_setting( 'modules/single_meta', true );
+
             // PIP hooks
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
