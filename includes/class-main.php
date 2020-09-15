@@ -688,11 +688,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-            const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
-            module.exports = {
-            'theme': {
-            'colors': {
+module.exports = {
+    'theme': {
+        'colors': {
             'primary-500': '#575756',
             'primary': '#575756',
             'secondary-500': '#E2101B',
@@ -700,44 +700,41 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             'black': '#2E2B28',
             'white': '#FFFFFF',
             'gray': defaultTheme.colors.gray,
-            },
-            'fontFamily': {
+        },
+        'fontFamily': {
             'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
             'secondary': ['NomDeLaFont', ...defaultTheme.fontFamily.serif],
-            },
-            'extend': {
-            'colors': {
-            'grey': '#D2D2D2',
-            },
+        },
+        'extend': {
             'spacing': {
-            '75': '18.75rem',
-            '84': '21rem',
-            '88': '22rem',
-            '96': '24rem',
-            '100': '25rem',
-            '112': '28rem',
-            '120': '30rem',
-            '124': '31rem',
-            '136': '34rem',
-            '138': '34.5rem',
-            '140': '35rem',
-            '150': '37.5rem',
-            '152': '38rem',
-            '162': '40.5rem',
-            '176': '44rem',
-            '186': '46.5rem',
-            '192': '48rem',
-            '200': '50rem',
+                '75': '18.75rem',
+                '84': '21rem',
+                '88': '22rem',
+                '96': '24rem',
+                '100': '25rem',
+                '112': '28rem',
+                '120': '30rem',
+                '124': '31rem',
+                '136': '34rem',
+                '138': '34.5rem',
+                '140': '35rem',
+                '150': '37.5rem',
+                '152': '38rem',
+                '162': '40.5rem',
+                '176': '44rem',
+                '186': '46.5rem',
+                '192': '48rem',
+                '200': '50rem',
             },
-            }
-            },
-            'variants': {
+        }
+    },
+    'variants': {
 
-            },
-            'plugins': [
+    },
+    'plugins': [
 
-            ],
-            };
+    ],
+};
             <?php
             $field['default_value'] = ob_get_clean();
 
@@ -755,40 +752,40 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_style_default( $field ) {
 
             ob_start(); ?>
-            @tailwind base;
-            @tailwind components;
+@tailwind base;
+@tailwind components;
 
-            h1,
-            .h1 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
-            }
+h1,
+.h1 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
+}
 
-            h2,
-            .h2 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
-            }
+h2,
+.h2 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
+}
 
-            h3,
-            .h3 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
-            }
+h3,
+.h3 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+}
 
-            h4,
-            .h4 {
-            @apply font-primary leading-tight font-semibold text-black text-xl;
-            }
+h4,
+.h4 {
+    @apply font-primary leading-tight font-semibold text-black text-xl;
+}
 
-            h5,
-            .h5 {
-            @apply font-primary leading-tight font-semibold text-black text-lg;
-            }
+h5,
+.h5 {
+    @apply font-primary leading-tight font-semibold text-black text-lg;
+}
 
-            h6,
-            .h6 {
-            @apply font-primary leading-tight font-semibold text-black text-base;
-            }
+h6,
+.h6 {
+    @apply font-primary leading-tight font-semibold text-black text-base;
+}
 
-            @tailwind utilities;
+@tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
 
