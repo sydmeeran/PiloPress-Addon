@@ -30,6 +30,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
             add_filter( 'template_include', array( $this, 'search_template' ), 20 );
             add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
+            add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -141,6 +142,27 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field_groups;
+        }
+
+        /**
+         *  Extend "cabin" logged in duration
+         */
+        public function auth_cookie_extend_expiration( $expiration, $user_id, $remember ) {
+
+            // Get current user object
+            $current_user = get_user_by( 'ID', $user_id );
+            if ( !$current_user ) {
+                return $expiration;
+            }
+
+            // Check if it's "cabin"
+            $current_user_login = $current_user->data->user_login ?? '';
+            if ( $current_user_login !== 'cabin' ) {
+                return $expiration;
+            }
+
+            // Stay logged for a year
+            return YEAR_IN_SECONDS;
         }
 
         /**
