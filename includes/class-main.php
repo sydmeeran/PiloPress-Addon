@@ -715,13 +715,16 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
     'theme': {
         'colors': {
-            'primary-500': '#575756',
-            'primary': '#575756',
-            'secondary-500': '#E2101B',
-            'secondary': '#E2101B',
+            'transparent': 'transparent',
+            'current': 'currentColor',
             'black': '#2E2B28',
             'white': '#FFFFFF',
             'gray': defaultTheme.colors.gray,
+            'primary': '#575756',
+            'primary': '#575756',
+            'primary-500': '#575756',
+            'secondary': '#E2101B',
+            'secondary-500': '#E2101B',
         },
         'fontFamily': {
             'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
