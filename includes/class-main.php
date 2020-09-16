@@ -31,6 +31,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'template_include', array( $this, 'search_template' ), 20 );
             add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
+            add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -142,6 +143,26 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $field_groups;
+        }
+
+        /**
+         *  Allow display of native WYSIWYG in product edition (needed for native WooCommerce display)
+         */
+        public function pip_display_wysiwyg_on_product( $style, $field_group ) {
+
+            $current_screen   = get_current_screen();
+            $screen_base      = pip_maybe_get( $current_screen, 'base' );
+            $screen_post_type = pip_maybe_get( $current_screen, 'post_type' );
+
+            if (
+                !$current_screen ||
+                $screen_base !== 'post' ||
+                $screen_post_type !== 'product'
+            ) {
+                return $style;
+            }
+
+            return '';
         }
 
         /**
