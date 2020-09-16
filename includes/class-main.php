@@ -242,6 +242,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_theme_support( 'title-tag' );
             add_theme_support( 'menus' );
 
+            // 3rd party theme support
+            add_theme_support( 'woocommerce' );
+
             // Edit post
             add_post_type_support( 'post', 'excerpt' );
             unregister_taxonomy_for_object_type( 'post_tag', 'post' );
