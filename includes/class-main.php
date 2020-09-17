@@ -32,6 +32,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
+            add_filter( 'nav_menu_css_class', array( $this, 'menu_item_parent_css_class' ), 10, 4 );
+            add_filter( 'nav_menu_submenu_css_class', array( $this, 'menu_item_submenu_css_class' ), 10, 4 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_folder_path' ), 20, 3 );
@@ -54,6 +56,35 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // PIP hooks
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
+        }
+
+        /**
+         *  Menu - Submenu
+         *  - Add "tailwind" classes on parent menu items
+         */
+        public function menu_item_parent_css_class( $classes, $item, $args, $depth ) {
+
+            $menu = $args->menu ?? '';
+            if ( !$menu ) {
+                return $classes;
+            }
+
+            /** Skip non-parent menu items */
+            if ( !array_search( 'menu-item-has-children', $classes ) ) {
+                return $classes;
+            }
+
+            $classes[] = 'relative group';
+            return $classes;
+        }
+
+        /**
+         *  Menu - Submenu
+         *  - Add "tailwind" classes on parent menu items
+         */
+        public function menu_item_submenu_css_class( $classes, $args, $depth ) {
+            $classes[] = 'absolute hidden group-hover:block top-full p-4 shadow bg-white';
+            return $classes;
         }
 
         /**
@@ -778,7 +809,6 @@ module.exports = {
             'white': '#FFFFFF',
             'gray': defaultTheme.colors.gray,
             'primary': '#575756',
-            'primary': '#575756',
             'primary-500': '#575756',
             'secondary': '#E2101B',
             'secondary-500': '#E2101B',
@@ -786,6 +816,12 @@ module.exports = {
         'fontFamily': {
             'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
             'secondary': ['NomDeLaFont', ...defaultTheme.fontFamily.serif],
+        },
+        'inset': {
+            '0': 0,
+            auto: 'auto',
+            '1/2': '50%',
+            'full': '100%',
         },
         'extend': {
             'spacing': {
@@ -811,7 +847,7 @@ module.exports = {
         }
     },
     'variants': {
-
+        'display': ['responsive', 'group-hover'],
     },
     'plugins': [
 
