@@ -33,6 +33,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
 
+            // WC hooks
+            add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_folder_path' ), 20, 3 );
+            add_filter( 'woocommerce_template_path', array( $this, 'wc_template_path' ), 20 );
+
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
@@ -50,6 +54,35 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // PIP hooks
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
+        }
+
+        /**
+         *  Load WooCommerce templates from PiloPress WooCommerce folder
+         */
+        public function wc_template_folder_path( $template, $template_name, $template_path ) {
+
+            $default_template = $template;
+
+            // Look within passed path within the plugin - this is priority.
+            $template = trailingslashit( $template_path ) . $template_name;
+
+            // Get default template
+            if ( !file_exists( $template ) || WC_TEMPLATE_DEBUG_MODE ) {
+                return $default_template;
+            }
+
+            return $template;
+        }
+
+        /**
+         *  Set PiloPress WooCommerce folder as priority folder
+         */
+        public function wc_template_path( $template_path ) {
+
+            // WooCommerce folder inside PiloPress-Addon
+            $pip_wc_template_path = trailingslashit( PIP_ADDON_PATH ) . 'templates/woocommerce/';
+
+            return $pip_wc_template_path;
         }
 
         /**
