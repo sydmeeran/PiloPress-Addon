@@ -64,17 +64,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function menu_item_parent_css_class( $classes, $item, $args, $depth ) {
 
-            $menu = $args->menu ?? '';
-            if ( !$menu ) {
-                return $classes;
-            }
-
             /** Skip non-parent menu items */
-            if ( !array_search( 'menu-item-has-children', $classes ) ) {
+            if ( !array_search( 'menu-item-has-children', $classes, true ) ) {
                 return $classes;
             }
 
-            $classes[] = 'relative group';
+            $new_classes = 'relative group';
+            $new_classes = explode( ' ', $new_classes );
+            $classes     = array_merge( $classes, $new_classes );
+
             return $classes;
         }
 
@@ -83,7 +81,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          *  - Add "tailwind" classes on parent menu items
          */
         public function menu_item_submenu_css_class( $classes, $args, $depth ) {
-            $classes[] = 'absolute hidden group-hover:block top-full p-4 shadow bg-white';
+
+            $new_classes = 'absolute hidden group-hover:block top-full p-4 shadow bg-white';
+            $new_classes = explode( ' ', $new_classes );
+            $classes     = array_merge( $classes, $new_classes );
+
             return $classes;
         }
 
