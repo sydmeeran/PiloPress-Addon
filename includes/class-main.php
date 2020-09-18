@@ -928,6 +928,11 @@ module.exports = {
 @tailwind base;
 @tailwind components;
 
+body {
+    @apply font-primary;
+}
+
+/** Headings */
 h1,
 .h1 {
     @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
@@ -956,6 +961,17 @@ h5,
 h6,
 .h6 {
     @apply font-primary leading-tight font-semibold text-black text-base;
+}
+
+/* Inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+    @apply text-sm border-2 border-gray rounded p-2;
 }
 
 @tailwind utilities;
