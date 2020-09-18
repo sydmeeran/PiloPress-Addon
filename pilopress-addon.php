@@ -82,6 +82,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             // Field groups
             pip_addon_include( 'includes/field-groups/pip-configuration.php' );
             pip_addon_include( 'includes/field-groups/pip-addon-settings.php' );
+            pip_addon_include( 'includes/field-groups/pip-menu-items-icons.php' );
 
             // Other
             pip_addon_include( 'includes/helpers.php' );

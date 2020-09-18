@@ -34,6 +34,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
             add_filter( 'nav_menu_css_class', array( $this, 'menu_item_parent_css_class' ), 10, 4 );
             add_filter( 'nav_menu_submenu_css_class', array( $this, 'menu_item_submenu_css_class' ), 10, 4 );
+            add_filter( 'wp_nav_menu_objects', array( $this, 'menu_items_fa_icons' ), 9, 2 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_folder_path' ), 20, 3 );
@@ -56,6 +57,58 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // PIP hooks
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
+        }
+
+        /**
+         *  Menu item - Add "Font Awesome" icon to "text"
+         */
+        public function menu_items_fa_icons( $items, $args ) {
+
+            if ( !$items ) {
+                return $items;
+            }
+
+            foreach ( $items as &$item ) {
+
+                $show_menu_icon = get_field( 'menu_icon_switch', $item );
+                if ( !$show_menu_icon ) {
+                    continue;
+                }
+
+                $menu_icon           = get_field( 'menu_icon', $item );
+                $menu_icon_style     = get_field( 'menu_icon_style', $item );
+                $menu_icon_position  = get_field( 'menu_icon_placement', $item );
+                $menu_icon_hide_text = get_field( 'menu_icon_hide_text', $item );
+                $old_item_title      = pip_maybe_get( $item, 'title' );
+
+                /** Font Awesome style */
+                if ( $menu_icon_style ) {
+                    $menu_icon = str_replace( 'fas', $menu_icon_style, $menu_icon );
+                }
+
+                /** Hide text */
+                if ( $menu_icon_hide_text ) {
+
+                    $item->title = $menu_icon;
+
+                } else {
+
+                    /** Menu icon position */
+                    if ( $menu_icon_position === 'gauche' ) {
+
+                        $menu_icon   = str_replace( 'class="', 'class="mr-1 ', $menu_icon );
+                        $item->title = $menu_icon . $old_item_title;
+
+                    } elseif ( $menu_icon_position === 'droite' ) {
+
+                        $menu_icon   = str_replace( 'class="', 'class="ml-1 ', $menu_icon );
+                        $item->title = $old_item_title . $menu_icon;
+
+                    }
+                }
+            }
+
+            return $items;
         }
 
         /**
