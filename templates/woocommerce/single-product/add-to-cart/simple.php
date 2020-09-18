@@ -28,7 +28,7 @@ if ( $product->is_in_stock() ) :
 
     do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
-    <form class="_pit-form-cart cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data'>
+    <form class="pip-form-cart cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data'>
         <?php
         do_action( 'woocommerce_before_add_to_cart_button' );
         do_action( 'woocommerce_before_add_to_cart_quantity' );
@@ -45,7 +45,7 @@ if ( $product->is_in_stock() ) :
 
         <button
             type="submit"
-            class="btn-primary-icon icon-shopping inline-block text-xs font-semibold bg-secondary uppercase pl-3 text-white hover:bg-secondary-600 single_add_to_cart_button"
+            class="single_add_to_cart_button"
             name="add-to-cart"
             value="<?php echo esc_attr( $product->get_id() ); ?>">
             <?php echo esc_html( $product->single_add_to_cart_text() ); ?>

@@ -17,7 +17,7 @@
  */
 
 defined( 'ABSPATH' ) || exit; ?>
-<h1 class="h3 text-secondary">
+<h1 class="h3">
     <?php echo esc_html( get_the_title() ); ?>
 </h1>
 <?php
