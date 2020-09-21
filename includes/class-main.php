@@ -987,10 +987,22 @@ textarea {
     transform: translateY(-50%);
 }
 
+/* Select2 - Fix clear icon position */
+.select2 > .selection .select2-selection__clear {
+    padding: 0 .5em;
+    margin-right: calc(1% + 1em);
+}
+
 /* Select2 - Fix select style */
 .select2 > .selection > .select2-selection > .select2-selection__rendered {
     padding: 0;
     line-height: inherit;
+}
+
+/** Select2 - Dropdown - Option selected - Hover */
+.select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
+.select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
+    @apply bg-secondary;
 }
 
 @tailwind utilities;
