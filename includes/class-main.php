@@ -964,6 +964,7 @@ h6,
 }
 
 /* Inputs */
+.select2 > .selection > .select2-selection,
 input[type="email"],
 input[type="password"],
 input[type="text"],
@@ -972,6 +973,24 @@ input[type="number"],
 select,
 textarea {
     @apply text-sm border-2 border-gray rounded p-2;
+}
+
+/* Select2 - Fix margin */
+.select2 > .selection > .select2-selection {
+    margin: 0;
+}
+
+/* Select2 - Fix arrow position */
+.select2 > .selection > .select2-selection > .select2-selection__arrow {
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+}
+
+/* Select2 - Fix select style */
+.select2 > .selection > .select2-selection > .select2-selection__rendered {
+    padding: 0;
+    line-height: inherit;
 }
 
 @tailwind utilities;
