@@ -135,7 +135,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function menu_item_submenu_css_class( $classes, $args, $depth ) {
 
-            $new_classes = 'absolute hidden group-hover:block top-full p-4 shadow bg-white';
+            $new_classes = 'absolute hidden group-hover:block top-full right-0 p-4 shadow bg-white';
             $new_classes = explode( ' ', $new_classes );
             $classes     = array_merge( $classes, $new_classes );
 
