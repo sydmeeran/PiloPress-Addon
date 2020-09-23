@@ -878,6 +878,13 @@ module.exports = {
             '1/2': '50%',
             'full': '100%',
         },
+        'container': {
+            'center': 'true',
+            'padding': {
+                default: '2rem',
+                'lg': 0,
+            },
+        },
         'extend': {
             'spacing': {
                 '75': '18.75rem',
