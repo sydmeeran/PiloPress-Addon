@@ -920,6 +920,8 @@ module.exports = {
         }
     },
     'variants': {
+        'backgroundColor': ['group-hover', 'hover', 'focus'],
+        'textColor': ['group-hover', 'hover', 'focus'],
         'display': ['responsive', 'group-hover'],
     },
     'plugins': [
