@@ -37,8 +37,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'wp_nav_menu_objects', array( $this, 'menu_items_fa_icons' ), 9, 2 );
 
             // WC hooks
-            add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_folder_path' ), 20, 3 );
-            add_filter( 'woocommerce_template_path', array( $this, 'wc_template_path' ), 20 );
+            add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
@@ -161,14 +160,26 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         *  Set PiloPress WooCommerce folder as priority folder
+         *  Load WooCommerce templates from PiloPress WooCommerce folder
          */
-        public function wc_template_path( $template_path ) {
+        public function wc_template_path( $template, $template_name, $template_path ) {
 
-            // WooCommerce folder inside PiloPress-Addon
-            $pip_wc_template_path = trailingslashit( PIP_ADDON_PATH ) . 'templates/woocommerce/';
+            // 1. If WooCommerce template in theme (default)
+            $theme_folder_path = get_stylesheet_directory() . '/woocommerce';
+            $theme_template    = trailingslashit( $theme_folder_path ) . $template_name;
+            if ( file_exists( $theme_template ) ) {
+                return $theme_template;
+            }
 
-            return $pip_wc_template_path;
+            // 2. If WooCommerce template in addon
+            $addon_folder_path = trailingslashit( PIP_ADDON_PATH ) . 'templates/woocommerce/';
+            $addon_template    = trailingslashit( $addon_folder_path ) . $template_name;
+            if ( file_exists( $addon_template ) ) {
+                return $addon_template;
+            }
+
+            // 3. Default template folder
+            return $template;
         }
 
         /**
