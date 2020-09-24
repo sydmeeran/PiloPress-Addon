@@ -865,6 +865,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             ob_start(); ?>
 const defaultTheme = require('tailwindcss/defaultTheme')
+const plugin = require('tailwindcss/plugin')
+const selectorParser = require("postcss-selector-parser")
 
 module.exports = {
     'theme': {
@@ -896,6 +898,7 @@ module.exports = {
                 'lg': 0,
             },
         },
+        'namedGroups': ["1", "2"],
         'extend': {
             'spacing': {
                 '75': '18.75rem',
@@ -925,6 +928,67 @@ module.exports = {
         'display': ['responsive', 'group-hover'],
     },
     'plugins': [
+
+        /** "Tailwind Named Groups" plugin */
+        plugin(({ theme, addVariant, prefix, e }) => {
+            const namedGroups = theme("namedGroups") || [];
+
+            addVariant(`group-hover`, ({ modifySelectors, separator }) => {
+                return modifySelectors(({ selector }) => {
+                    return selectorParser((root) => {
+                        root.walkClasses((node) => {
+                            // Regular group
+                            const value = node.value;
+                            node.value = `group-hover${separator}${value}`;
+
+                            node.parent.insertBefore(
+                                node,
+                                selectorParser().astSync(prefix(`.group:hover `))
+                            );
+
+                            // Named groups
+                            namedGroups.forEach((namedGroup) => {
+                                node.parent.parent.insertAfter(
+                                    node.parent,
+                                    selectorParser().astSync(
+                                        prefix(`.group-${namedGroup}:hover .`) +
+                                        e(`group-${namedGroup}-hover${separator}${value}`)
+                                    )
+                                );
+                            });
+                        });
+                    }).processSync(selector);
+                });
+            });
+
+            addVariant(`group-focus`, ({ modifySelectors, separator }) => {
+                return modifySelectors(({ selector }) => {
+                    return selectorParser((root) => {
+                        root.walkClasses((node) => {
+                            // Regular group
+                            const value = node.value;
+                            node.value = `group-focus${separator}${value}`;
+
+                            node.parent.insertBefore(
+                                node,
+                                selectorParser().astSync(prefix(`.group:focus `))
+                            );
+
+                            // Named groups
+                            namedGroups.forEach((namedGroup) => {
+                                node.parent.parent.insertAfter(
+                                    node.parent,
+                                    selectorParser().astSync(
+                                        prefix(`.group-${namedGroup}:focus .`) +
+                                        e(`group-${namedGroup}-focus${separator}${value}`)
+                                    )
+                                );
+                            });
+                        });
+                    }).processSync(selector);
+                });
+            });
+        })
 
     ],
 };
