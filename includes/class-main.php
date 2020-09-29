@@ -1013,7 +1013,21 @@ module.exports = {
 @tailwind components;
 
 body {
-    @apply font-primary;
+    @apply font-primary overflow-x-hidden;
+    max-width: 100vw;
+}
+
+ul {
+    @apply list-disc list-inside;
+}
+
+ol {
+    @apply list-decimal list-inside;
+}
+
+ul[class],
+ol[class] {
+    @apply list-none;
 }
 
 /** Headings */
