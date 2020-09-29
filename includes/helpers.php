@@ -173,5 +173,7 @@ function pip_get_sized_image_url( $img, $size = 'thumbnail' ) {
         $img = pip_maybe_get( $img, 'ID' );
     }
 
-    return $sized_image_url = reset( wp_get_attachment_image_src( $img, $size ) );
+    $attachment = wp_get_attachment_image_src( $img, $size );
+
+    return reset( $attachment );
 }
