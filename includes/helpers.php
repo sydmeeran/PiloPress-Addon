@@ -153,3 +153,25 @@ function array_flatten_recursive( $array ) {
 
     return $flat;
 }
+
+/**
+ *  PIP - Get Sized Image URL - Usefull for getting sized URL in one line (most usefull case with ACF Image)
+ *
+ *  @param mixed $img image array or image ID
+ *  @param string $size image size
+ *
+ *	@return string URL of the sized image
+ *
+ *  Example of use case : echo pip_get_sized_image_url( get_sub_field('img'), 'full' )
+ */
+function pip_get_sized_image_url( $img, $size = 'thumbnail' ) {
+    if ( empty( $img ) ) {
+        return;
+    }
+
+    if ( is_array( $img ) ) {
+        $img = pip_maybe_get( $img, 'ID' );
+    }
+
+    return $sized_image_url = reset( wp_get_attachment_image_src( $img, $size ) );
+}
