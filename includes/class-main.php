@@ -35,6 +35,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'nav_menu_css_class', array( $this, 'menu_item_parent_css_class' ), 10, 4 );
             add_filter( 'nav_menu_submenu_css_class', array( $this, 'menu_item_submenu_css_class' ), 10, 4 );
             add_filter( 'wp_nav_menu_objects', array( $this, 'menu_items_fa_icons' ), 9, 2 );
+            add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -193,13 +194,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             // Post type archive (ACFE)
             // TODO: Uncomment after ACFE fix
-//            $locations[] = array(
-//                array(
-//                    'param'    => 'post_type_archive',
-//                    'operator' => '==',
-//                    'value'    => 'all',
-//                ),
-//            );
+            // $locations[] = array(
+            //     array(
+            //         'param'    => 'post_type_archive',
+            //         'operator' => '==',
+            //         'value'    => 'all',
+            //     ),
+            // );
 
             // Menu items
             $locations[] = array(
@@ -420,7 +421,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         background-size: contain;
                     }
                 </style>
-            <?php
+                <?php
             endif;
         }
 
@@ -715,7 +716,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
                 </script>
-            <?php
+                <?php
             endif;
         }
 
@@ -730,7 +731,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-            <?php
+                <?php
             endif;
         }
 
@@ -745,6 +746,29 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $api['key'] = get_field( 'gmap', 'pip_addon_settings' );
 
             return $api;
+        }
+
+        /**
+         *  Admin footer - CSS
+         *  - Display "menu items" full-width in the admin
+         */
+        public function nav_menu_items_display() {
+
+            // validate screen
+            if ( !acf_is_screen( 'nav-menus' ) ) {
+                return;
+            } ?>
+        <style>
+            .menu-item-bar .menu-item-handle {
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            .menu-item .menu-item-settings {
+                width: auto;
+            }
+        </style>
+            <?php
         }
 
         /**
