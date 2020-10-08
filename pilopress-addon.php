@@ -84,6 +84,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             pip_addon_include( 'includes/field-groups/pip-addon-settings.php' );
             pip_addon_include( 'includes/field-groups/pip-menu-items-icons.php' );
             pip_addon_include( 'includes/field-groups/pip-contact-form.php' );
+            pip_addon_include( 'includes/field-groups/pip-term-image.php' );
 
             // Other
             pip_addon_include( 'includes/helpers.php' );
