@@ -28,6 +28,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_menu', array( $this, 'move_page_menu' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_filter( 'template_include', array( $this, 'error_template' ), 20 );
             add_filter( 'template_include', array( $this, 'search_template' ), 20 );
             add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
@@ -814,6 +815,21 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function remove_useless_bar_menus() {
             global $wp_admin_bar;
             $wp_admin_bar->remove_menu( 'comments' );
+        }
+
+        /**
+         *  Template: Use "404.php" template inside the PiloPress-Addon
+         */
+        public function error_template( $template ) {
+
+            if ( !is_404() ) {
+                return $template;
+            }
+
+            // In plugin
+            $template = PIP_ADDON_PATH . 'templates/404.php';
+
+            return $template;
         }
 
         /**
