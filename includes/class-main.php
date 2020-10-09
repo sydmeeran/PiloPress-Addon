@@ -1127,6 +1127,19 @@ textarea {
     @apply bg-secondary;
 }
 
+/** WYSIWYG alignment styles */
+.aligncenter {
+    @apply mx-auto;
+}
+
+.alignleft {
+    @apply mr-auto;
+}
+
+.alignright {
+    @apply ml-auto;
+}
+
 @tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
