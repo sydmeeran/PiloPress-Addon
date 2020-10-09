@@ -79,6 +79,10 @@ if ( !class_exists( 'PIP_Addon' ) ) {
          */
         public function includes() {
 
+            // Fields
+            pip_addon_include( 'includes/fields/field-menus.php' );
+            pip_addon_include( 'includes/fields/field-menu-items.php' );
+
             // Field groups
             pip_addon_include( 'includes/field-groups/pip-configuration.php' );
             pip_addon_include( 'includes/field-groups/pip-addon-settings.php' );
