@@ -274,7 +274,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
             'label_placement'       => 'left',
             'instruction_placement' => 'label',
             'hide_on_screen'        => '',
-            'active'                => true,
+            'active'                => false,
             'description'           => '',
             'acfe_display_title'    => '',
             'acfe_autosync'         => array(
