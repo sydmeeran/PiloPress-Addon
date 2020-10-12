@@ -939,7 +939,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return mixed
          */
         public function pip_flexible_args( $params ) {
-            $params['acfe_flexible_modal_col'] = 4;
+            $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
 
             return $params;
 
