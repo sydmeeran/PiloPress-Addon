@@ -37,6 +37,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'nav_menu_submenu_css_class', array( $this, 'menu_item_submenu_css_class' ), 10, 4 );
             add_filter( 'wp_nav_menu_objects', array( $this, 'menu_items_fa_icons' ), 9, 2 );
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
+            add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -58,6 +59,17 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // PIP hooks
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
+        }
+
+        /**
+         *  Use "attachment media url" instead of "attachment page url" by default
+         *  when you insert a media in a WYSIWYG
+         *
+         *  @param string $value
+         *  @return void
+         */
+        public function attachment_media_url_by_default( $value ) {
+            return 'file';
         }
 
         /**
