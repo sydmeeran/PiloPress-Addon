@@ -48,7 +48,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
             add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
-            add_filter( 'acf/prepare_field_group_for_import', array( $this, 'pip_flexible_args' ) );
+            add_filter( 'pip/builder/parameters', array( $this, 'pip_flexible_args' ) );
             add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
@@ -108,6 +108,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Menu item - Add "Font Awesome" icon to "text"
+         *
+         * @param $items
+         * @param $args
+         *
+         * @return mixed
          */
         public function menu_items_fa_icons( $items, $args ) {
 
@@ -161,6 +166,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          *  Menu - Submenu
          *  - Add "tailwind" classes on parent menu items
+         *
+         * @param $classes
+         * @param $item
+         * @param $args
+         * @param $depth
+         *
+         * @return array
          */
         public function menu_item_parent_css_class( $classes, $item, $args, $depth ) {
 
@@ -179,6 +191,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          *  Menu - Submenu
          *  - Add "tailwind" classes on parent menu items
+         *
+         * @param $classes
+         * @param $args
+         * @param $depth
+         *
+         * @return array
          */
         public function menu_item_submenu_css_class( $classes, $args, $depth ) {
 
@@ -191,6 +209,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Load WooCommerce templates from PiloPress WooCommerce folder
+         *
+         * @param $template
+         * @param $template_name
+         * @param $template_path
+         *
+         * @return string
          */
         public function wc_template_folder_path( $template, $template_name, $template_path ) {
 
@@ -209,6 +233,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Load WooCommerce templates from PiloPress WooCommerce folder
+         *
+         * @param $template
+         * @param $template_name
+         * @param $template_path
+         *
+         * @return string
          */
         public function wc_template_path( $template, $template_name, $template_path ) {
 
@@ -312,7 +342,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     $layout_param = reset( $layout_param );
 
                     // Add only new location
-                    if ( !in_array( $layout_param, $flexible_locations_flat ) ) {
+                    if ( !in_array( $layout_param, $flexible_locations_flat, true ) ) {
                         $flexible_locations[] = $layout_location;
                     }
                 }
@@ -325,6 +355,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Allow display of native WYSIWYG in product edition (needed for native WooCommerce display)
+         *
+         * @param $style
+         * @param $field_group
+         *
+         * @return string
          */
         public function pip_display_wysiwyg_on_product( $style, $field_group ) {
 
@@ -345,6 +380,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Extend "cabin" logged in duration
+         *
+         * @param $expiration
+         * @param $user_id
+         * @param $remember
+         *
+         * @return float|int
          */
         public function auth_cookie_extend_expiration( $expiration, $user_id, $remember ) {
 
@@ -394,6 +435,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          *  ACF field "Font Awesome" plugin
          *  - Force Pro mode (to have pro icons in select in the back-office)
+         *
+         * @param $acf_fa_params
+         *
+         * @return mixed
          */
         public function acf_field_fa_pro_activation( $acf_fa_params ) {
             $acf_fa_params['acffa_pro_cdn'] = true;
@@ -865,6 +910,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Template: Use "404.php" template inside the PiloPress-Addon
+         *
+         * @param $template
+         *
+         * @return string
          */
         public function error_template( $template ) {
 
@@ -880,6 +929,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Template: Use "search.php" template inside the PiloPress-Addon
+         *
+         * @param $template
+         *
+         * @return string
          */
         public function search_template( $template ) {
 
@@ -895,6 +948,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Template: Use "taxonomy.php" template inside the PiloPress-Addon
+         *
+         * @param $template
+         *
+         * @return string
          */
         public function taxonomy_template( $template ) {
 
@@ -911,32 +968,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          *  Edit PIP Flexible args
          *
-         * @param $field_group
+         * @param $params
          *
          * @return mixed
          */
-        public function pip_flexible_args( $field_group ) {
+        public function pip_flexible_args( $params ) {
+            $params['acfe_flexible_modal_col'] = 4;
 
-            $field_group_key = acf_maybe_get( $field_group, 'key' );
-            if ( mb_stripos( $field_group_key, PIP_Flexible::get_flexible_field_name() ) === false ) {
-                return $field_group;
-            }
-
-            $fields = acf_maybe_get( $field_group, 'fields' );
-            if ( empty( $fields ) ) {
-                return $field_group;
-            }
-
-            $flexible_args       = reset( $fields );
-            $acfe_flexible_modal = acf_maybe_get( $flexible_args, 'acfe_flexible_modal' );
-            if ( !$acfe_flexible_modal ) {
-                return $field_group;
-            }
-
-            // Set 4 layouts per row in layouts modal
-            $field_group['fields'][0]['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
-
-            return $field_group;
+            return $params;
 
         }
 
