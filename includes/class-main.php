@@ -38,6 +38,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_filter( 'wp_nav_menu_objects', array( $this, 'menu_items_fa_icons' ), 9, 2 );
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
+            add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -70,6 +71,39 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function attachment_media_url_by_default( $value ) {
             return 'file';
+        }
+
+        /**
+         *  WordPress - Shortcode - Gallery
+         *  - Add "lightbox" on gallery images using "lightbox2"
+         */
+        public function gallery_lightbox( $output, $tag, $attr, $regex ) {
+
+            // Only on front-end and using shortcode "gallery"
+            if ( $tag !== 'gallery' || is_admin() ) {
+                return $output;
+            }
+
+            ob_start(); ?>
+<script async="async" src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></link>
+<script>
+    jQuery(document).ready(function($) {
+        var $galleries = $('.gallery');
+        if (!$galleries.length) {
+            return;
+        }
+
+        $galleries.each(function(index) {
+            var $gallery = $(this),
+                $gallery_imgs = $gallery.find('.gallery-item a');
+            $gallery_imgs.attr('data-lightbox', "gallery" + index);
+        });
+    });
+</script>
+            <?php
+            $output .= ob_get_clean();
+            return $output;
         }
 
         /**
