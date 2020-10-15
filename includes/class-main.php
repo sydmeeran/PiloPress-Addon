@@ -176,6 +176,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function menu_item_parent_css_class( $classes, $item, $args, $depth ) {
 
+            // Only first-level
+            if ($depth !== 0) {
+                return $classes;
+            }
+
             /** Skip non-parent menu items */
             if ( !array_search( 'menu-item-has-children', $classes, true ) ) {
                 return $classes;
@@ -199,6 +204,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return array
          */
         public function menu_item_submenu_css_class( $classes, $args, $depth ) {
+
+            // Only first-level
+            if ($depth !== 0) {
+                return $classes;
+            }
 
             $new_classes = 'absolute hidden group-hover:block top-full right-0 p-4 shadow bg-white';
             $new_classes = explode( ' ', $new_classes );
