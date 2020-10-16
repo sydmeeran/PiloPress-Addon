@@ -931,6 +931,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $template;
             }
 
+            // In theme
+            if ( file_exists( get_stylesheet_directory() . '/404.php' ) ) {
+                return $template;
+            }
+
             // In plugin
             $template = PIP_ADDON_PATH . 'templates/404.php';
 
@@ -950,6 +955,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $template;
             }
 
+            // In theme
+            if ( file_exists( get_stylesheet_directory() . '/search.php' ) ) {
+                return $template;
+            }
+
             // In plugin
             $template = PIP_ADDON_PATH . 'templates/search.php';
 
@@ -966,6 +976,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function taxonomy_template( $template ) {
 
             if ( !is_tax() ) {
+                return $template;
+            }
+
+            // In theme
+            if ( file_exists( get_stylesheet_directory() . '/taxonomy.php' ) ) {
                 return $template;
             }
 
