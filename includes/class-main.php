@@ -6,6 +6,9 @@ if ( !defined( 'ABSPATH' ) ) {
 
 if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
+    /**
+     * Class PIP_Addon_Main
+     */
     class PIP_Addon_Main {
 
         public function __construct() {
@@ -67,7 +70,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          *  when you insert a media in a WYSIWYG
          *
          *  @param string $value
-         *  @return void
+         *  @return string
          */
         public function attachment_media_url_by_default( $value ) {
             return 'file';
@@ -76,6 +79,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         /**
          *  WordPress - Shortcode - Gallery
          *  - Add "lightbox" on gallery images using "lightbox2"
+         *
+         * @param $output
+         * @param $tag
+         * @param $attr
+         * @param $regex
+         *
+         * @return string
          */
         public function gallery_lightbox( $output, $tag, $attr, $regex ) {
 
@@ -120,6 +130,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $items;
             }
 
+            $rtl = pip_is_rtl();
+
             foreach ( $items as &$item ) {
 
                 $show_menu_icon = get_field( 'menu_icon_switch', $item );
@@ -148,12 +160,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     /** Menu icon position */
                     if ( $menu_icon_position === 'gauche' ) {
 
-                        $menu_icon   = str_replace( 'class="', 'class="mr-1 ', $menu_icon );
+                        $margin      = $rtl ? 'ml-2' : 'mr-2';
+                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
                         $item->title = $menu_icon . $old_item_title;
 
                     } elseif ( $menu_icon_position === 'droite' ) {
 
-                        $menu_icon   = str_replace( 'class="', 'class="ml-1 ', $menu_icon );
+                        $margin      = $rtl ? 'mr-2' : 'ml-2';
+                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
                         $item->title = $old_item_title . $menu_icon;
 
                     }
@@ -177,7 +191,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function menu_item_parent_css_class( $classes, $item, $args, $depth ) {
 
             // Only first-level
-            if ($depth !== 0) {
+            if ( $depth !== 0 ) {
                 return $classes;
             }
 
@@ -186,7 +200,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $classes;
             }
 
-            $new_classes = 'relative group';
+            $new_classes = 'group';
             $new_classes = explode( ' ', $new_classes );
             $classes     = array_merge( $classes, $new_classes );
 
@@ -204,9 +218,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return array
          */
         public function menu_item_submenu_css_class( $classes, $args, $depth ) {
+            // Only first-level
+            if ( $depth !== 0 ) {
+                return $classes;
+            }
 
             // Only first-level
-            if ($depth !== 0) {
+            if ( $depth !== 0 ) {
                 return $classes;
             }
 

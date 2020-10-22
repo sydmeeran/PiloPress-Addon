@@ -54,13 +54,12 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         <?php
         // Page précédente
         if ( $paged > 1 ) : ?>
-        <a
-            class="pagination-previous mr-auto hidden md:block"
-            href="<?php echo get_pagenum_link( $paged - 1 ); ?>"
-            >
-            <span class="far fa-sm fa-arrow-left mr-1"></span>
-            <?php _e( 'Page précédente', 'pilot-in' ); ?>
-        </a>
+            <a
+                class="pagination-previous mr-auto hidden md:block"
+                href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
+                <span class="far fa-sm fa-arrow-left mr-1"></span>
+                <?php _e( 'Page précédente', 'pilot-in' ); ?>
+            </a>
         <?php endif; ?>
 
         <?php
@@ -72,13 +71,12 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         <?php
         // Page suivante
         if ( $paged < $num_pages ) : ?>
-        <a
-            class="pagination-next ml-auto hidden md:block"
-            href="<?php echo get_pagenum_link( $paged + 1 ); ?>"
-            >
-            <?php _e( 'Page suivante', 'pilot-in' ); ?>
-            <span class="far fa-sm fa-arrow-right ml-1"></span>
-        </a>
+            <a
+                class="pagination-next ml-auto hidden md:block"
+                href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
+                <?php _e( 'Page suivante', 'pilot-in' ); ?>
+                <span class="far fa-sm fa-arrow-right ml-1"></span>
+            </a>
         <?php endif; ?>
 
     </div>
@@ -118,7 +116,7 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
     foreach ( $pip_flexible as $position => $layout ) {
         $layout_name = pip_maybe_get( $layout, 'acf_fc_layout' );
 
-        if ( in_array( $layout_name, $layouts ) ) {
+        if ( in_array( $layout_name, $layouts, true ) ) {
             $found_layouts[ $position ] = pip_maybe_get( $pip_flexible, $position );
         }
     }
@@ -157,16 +155,16 @@ function array_flatten_recursive( $array ) {
 /**
  *  PIP - Get Sized Image URL - Usefull for getting sized URL in one line (most usefull case with ACF Image)
  *
- *  @param mixed $img image array or image ID
- *  @param string $size image size
+ * @param mixed  $img  image array or image ID
+ * @param string $size image size
  *
- *	@return string URL of the sized image
+ * @return string|null URL of the sized image
  *
  *  Example of use case : echo pip_get_sized_image_url( get_sub_field('img'), 'full' )
  */
 function pip_get_sized_image_url( $img, $size = 'thumbnail' ) {
     if ( empty( $img ) ) {
-        return;
+        return null;
     }
 
     if ( is_array( $img ) ) {
@@ -176,4 +174,19 @@ function pip_get_sized_image_url( $img, $size = 'thumbnail' ) {
     $attachment = wp_get_attachment_image_src( $img, $size );
 
     return reset( $attachment );
+}
+
+/**
+ * Check if current language is RTL or LTR
+ *
+ * @return bool
+ */
+function pip_is_rtl() {
+    if ( !function_exists( 'pll_current_language' ) ) {
+        return false;
+    }
+
+    $current_language = pll_current_language( 'OBJECT' );
+
+    return $current_language ? (bool) $current_language->is_rtl : false;
 }
