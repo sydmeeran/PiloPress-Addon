@@ -811,7 +811,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 unset( $wp_filter['admin_notices'] );
             }
 
-            if ( isset( $wp_filter['all_admin_notices'] ) ) {
+            if ( isset( $wp_filter['all_admin_notices'] ) && apply_filters( 'pip_remove_all_admin_notices', true ) ) {
                 unset( $wp_filter['all_admin_notices'] );
             }
         }
