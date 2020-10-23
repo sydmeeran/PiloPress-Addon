@@ -140,15 +140,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 }
 
                 $menu_icon           = get_field( 'menu_icon', $item );
-                $menu_icon_style     = get_field( 'menu_icon_style', $item );
                 $menu_icon_position  = get_field( 'menu_icon_placement', $item );
                 $menu_icon_hide_text = get_field( 'menu_icon_hide_text', $item );
                 $old_item_title      = pip_maybe_get( $item, 'title' );
-
-                /** Font Awesome style */
-                if ( $menu_icon_style ) {
-                    $menu_icon = str_replace( 'fas', $menu_icon_style, $menu_icon );
-                }
 
                 /** Hide text */
                 if ( $menu_icon_hide_text ) {
