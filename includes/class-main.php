@@ -69,8 +69,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          *  Use "attachment media url" instead of "attachment page url" by default
          *  when you insert a media in a WYSIWYG
          *
-         *  @param string $value
-         *  @return string
+         * @param string $value
+         *
+         * @return string
          */
         public function attachment_media_url_by_default( $value ) {
             return 'file';
@@ -95,24 +96,25 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             ob_start(); ?>
-<script async="async" src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-<link href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></link>
-<script>
-    jQuery(document).ready(function($) {
-        var $galleries = $('.gallery');
-        if (!$galleries.length) {
-            return;
-        }
+            <script async="async" src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+            <link href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></link>
+            <script>
+                jQuery( document ).ready( function ($) {
+                    var $galleries = $( '.gallery' )
+                    if ( !$galleries.length ) {
+                        return
+                    }
 
-        $galleries.each(function(index) {
-            var $gallery = $(this),
-                $gallery_imgs = $gallery.find('.gallery-item a');
-            $gallery_imgs.attr('data-lightbox', "gallery" + index);
-        });
-    });
-</script>
+                    $galleries.each( function (index) {
+                        var $gallery      = $( this ),
+                            $gallery_imgs = $gallery.find( '.gallery-item a' )
+                        $gallery_imgs.attr( 'data-lightbox', 'gallery' + index )
+                    } )
+                } )
+            </script>
             <?php
             $output .= ob_get_clean();
+
             return $output;
         }
 
@@ -535,7 +537,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         background-size: contain;
                     }
                 </style>
-                <?php
+            <?php
             endif;
         }
 
@@ -830,7 +832,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
                 </script>
-                <?php
+            <?php
             endif;
         }
 
@@ -845,12 +847,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-                <?php
+            <?php
             endif;
         }
 
         /**
-         * Register Gmap Api Key for ACF Pro
+         * Register GMap Api Key for ACF Pro
          *
          * @param $api
          *
@@ -872,16 +874,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             if ( !acf_is_screen( 'nav-menus' ) ) {
                 return;
             } ?>
-        <style>
-            .menu-item-bar .menu-item-handle {
-                box-sizing: border-box;
-                width: 100%;
-            }
+            <style>
+                .menu-item-bar .menu-item-handle {
+                    box-sizing: border-box;
+                    width: 100%;
+                }
 
-            .menu-item .menu-item-settings {
-                width: auto;
-            }
-        </style>
+                .menu-item .menu-item-settings {
+                    width: auto;
+                }
+            </style>
             <?php
         }
 
@@ -1237,7 +1239,7 @@ textarea {
 
 /* Select2 - Fix margin */
 .select2 > .selection > .select2-selection {
-    margin: 0;
+    @apply m-0;
 }
 
 /* Select2 - Fix arrow position */
@@ -1249,13 +1251,13 @@ textarea {
 
 /* Select2 - Fix clear icon position */
 .select2 > .selection .select2-selection__clear {
-    padding: 0 .5em;
+    @apply px-2 py-0;
     margin-right: calc(1% + 1em);
 }
 
 /* Select2 - Fix select style */
 .select2 > .selection > .select2-selection > .select2-selection__rendered {
-    padding: 0;
+    @apply p-0;
     line-height: inherit;
 }
 
