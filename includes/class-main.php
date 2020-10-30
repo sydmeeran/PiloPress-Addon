@@ -1028,7 +1028,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-const defaultTheme = require('tailwindcss/defaultTheme')
+            const { colors, fontFamily } = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 const selectorParser = require("postcss-selector-parser")
 
@@ -1039,15 +1039,15 @@ module.exports = {
             'current': 'currentColor',
             'black': '#2E2B28',
             'white': '#FFFFFF',
-            'gray': defaultTheme.colors.gray,
+            'gray': colors.gray,
             'primary': '#575756',
             'primary-500': '#575756',
             'secondary': '#E2101B',
             'secondary-500': '#E2101B',
         },
         'fontFamily': {
-            'primary': ['NomDeLaFont', ...defaultTheme.fontFamily.sans],
-            'secondary': ['NomDeLaFont', ...defaultTheme.fontFamily.serif],
+            'primary': ['NomDeLaFont', ...fontFamily.sans],
+            'secondary': ['NomDeLaFont', ...fontFamily.serif],
         },
         'inset': {
             '0': 0,
@@ -1064,9 +1064,6 @@ module.exports = {
         },
         'namedGroups': ["1", "2"],
         'extend': {
-            'colors': {
-                'gray': '#a0aec0',
-            },
             'spacing': {
                 '75': '18.75rem',
                 '84': '21rem',
@@ -1237,7 +1234,7 @@ input[type="tel"],
 input[type="number"],
 select,
 textarea {
-    @apply text-sm border-2 border-gray rounded p-2;
+    @apply text-sm border-2 border-gray-500 rounded p-2;
 }
 
 /* Select2 - Fix margin */
