@@ -1064,6 +1064,9 @@ module.exports = {
         },
         'namedGroups': ["1", "2"],
         'extend': {
+            'colors': {
+                'gray': '#a0aec0',
+            },
             'spacing': {
                 '75': '18.75rem',
                 '84': '21rem',
