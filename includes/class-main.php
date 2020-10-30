@@ -1288,7 +1288,7 @@ textarea {
  * (extend it to create your buttons)
  */
 .btn-base {
-    @apply relative inline-block text-sm text-black uppercase px-2 py-1 font-primary font-bold bg-gray-300 border border-2 border-solid border-gray-300 mr-2 mb-2;
+    @apply relative inline-block text-sm text-black uppercase px-2 py-1 font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
 
     &:hover {
         @apply bg-gray-700 border-gray-700;
