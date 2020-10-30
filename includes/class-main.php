@@ -1039,7 +1039,10 @@ module.exports = {
             'current': 'currentColor',
             'black': '#2E2B28',
             'white': '#FFFFFF',
-            'gray': colors.gray,
+            'gray': {
+                ...colors.gray,
+                'default': "#A0AEC0",
+            },
             'primary': '#575756',
             'primary-500': '#575756',
             'secondary': '#E2101B',
