@@ -1283,6 +1283,31 @@ textarea {
     @apply ml-auto;
 }
 
+/**
+ * Button basic styling
+ * (extend it to create your buttons)
+ */
+.btn-base {
+    @apply relative inline-block text-sm text-black uppercase px-2 py-1 font-primary font-bold bg-gray-300 border border-2 border-solid border-gray-300 mr-2 mb-2;
+
+    &:hover {
+        @apply bg-gray-700 border-gray-700;
+    }
+}
+
+/** ----------------------------------
+ * Put your custom styles here below...
+ */ ----------------------------------
+
+/** Button - primary */
+.btn-primary {
+    @apply btn-base text-white bg-primary border-primary;
+
+    &:hover {
+        @apply bg-secondary border-secondary;
+    }
+}
+
 @tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
