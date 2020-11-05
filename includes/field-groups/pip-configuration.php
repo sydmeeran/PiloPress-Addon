@@ -4,7 +4,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
     acf_add_local_field_group(
         array(
             'key'                   => 'group_layouts_configuration',
-            'title'                 => 'Configuration',
+            'title'                 => 'Configuration - Layouts',
             'fields'                => array(
                 array(
                     'key'               => 'field_background_tab',
@@ -28,7 +28,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'key'               => 'field_bg_color',
                     'label'             => 'Couleur de fond',
                     'name'              => 'bg_color',
-                    'type'              => 'select',
+                    'type'              => 'pip_font_color',
                     'instructions'      => '',
                     'required'          => 0,
                     'conditional_logic' => 0,
@@ -38,16 +38,17 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         'id'    => '',
                     ),
                     'acfe_permissions'  => '',
-                    'choices'           => array(),
-                    'default_value'     => false,
-                    'allow_null'        => 0,
+                    'field_type'        => 'select',
                     'multiple'          => 0,
                     'ui'                => 0,
-                    'return_format'     => 'value',
+                    'class_output'      => 'background',
                     'acfe_settings'     => '',
                     'acfe_validate'     => '',
-                    'ajax'              => 0,
+                    'choices'           => array(),
                     'placeholder'       => '',
+                    'return_format'     => 'value',
+                    'allow_null'        => true,
+                    'ajax'              => false,
                     'acfe_form'         => true,
                 ),
                 array(

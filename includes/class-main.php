@@ -26,14 +26,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
-            add_action( 'admin_menu', array( $this, 'remove_useless_menus' ) );
-            add_action( 'admin_menu', array( $this, 'move_comments_menu' ) );
-            add_action( 'admin_menu', array( $this, 'move_page_menu' ) );
+            add_action( 'admin_menu', array( $this, 'admin_menu_hook' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
-            add_filter( 'template_include', array( $this, 'error_template' ), 20 );
-            add_filter( 'template_include', array( $this, 'search_template' ), 20 );
-            add_filter( 'template_include', array( $this, 'taxonomy_template' ), 20 );
+            add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
             add_filter( 'nav_menu_css_class', array( $this, 'menu_item_parent_css_class' ), 10, 4 );
@@ -42,25 +38,24 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
+            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
 
             // ACF hooks
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
-            add_filter( 'acf/load_field/name=bg_color', array( $this, 'pip_load_color_to_config' ) );
             add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
             add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
-            add_filter( 'pip/builder/parameters', array( $this, 'pip_flexible_args' ) );
             add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
-            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
             // ACFE hooks
             acfe_update_setting( 'modules/single_meta', true );
 
             // PIP hooks
+            add_filter( 'pip/builder/parameters', array( $this, 'pip_flexible_args' ) );
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
 
         }
@@ -128,41 +123,48 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function menu_items_fa_icons( $items, $args ) {
 
+            // If no menu items, return
             if ( !$items ) {
                 return $items;
             }
 
+            // Is RTL language
             $rtl = pip_is_rtl();
 
+            // Browse menu items
             foreach ( $items as &$item ) {
 
+                // If no icon, skip
                 $show_menu_icon = get_field( 'menu_icon_switch', $item );
                 if ( !$show_menu_icon ) {
                     continue;
                 }
 
+                // Get icon params
                 $menu_icon           = get_field( 'menu_icon', $item );
                 $menu_icon_position  = get_field( 'menu_icon_placement', $item );
                 $menu_icon_hide_text = get_field( 'menu_icon_hide_text', $item );
                 $old_item_title      = pip_maybe_get( $item, 'title' );
 
-                /** Hide text */
+                // Hide text
                 if ( $menu_icon_hide_text ) {
 
                     $item->title = $menu_icon;
 
                 } else {
 
-                    /** Menu icon position */
+                    // Menu icon position
                     if ( $menu_icon_position === 'gauche' ) {
 
                         $margin      = $rtl ? 'ml-2' : 'mr-2';
+                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
                         $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
                         $item->title = $menu_icon . $old_item_title;
 
                     } elseif ( $menu_icon_position === 'droite' ) {
 
                         $margin      = $rtl ? 'mr-2' : 'ml-2';
+                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
                         $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
                         $item->title = $old_item_title . $menu_icon;
 
@@ -191,12 +193,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $classes;
             }
 
-            /** Skip non-parent menu items */
+            // Skip non-parent menu items
             if ( !array_search( 'menu-item-has-children', $classes, true ) ) {
                 return $classes;
             }
 
             $new_classes = 'group';
+            $new_classes = apply_filters( 'pip_addon/parent_menu_item/classes', $new_classes );
             $new_classes = explode( ' ', $new_classes );
             $classes     = array_merge( $classes, $new_classes );
 
@@ -219,12 +222,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return $classes;
             }
 
-            // Only first-level
-            if ( $depth !== 0 ) {
-                return $classes;
-            }
-
             $new_classes = 'absolute hidden group-hover:block top-full right-0 p-4 shadow bg-white';
+            $new_classes = apply_filters( 'pip_addon/submenu_item/classes', $new_classes );
             $new_classes = explode( ' ', $new_classes );
             $classes     = array_merge( $classes, $new_classes );
 
@@ -232,31 +231,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         *  Load WooCommerce templates from PiloPress WooCommerce folder
-         *
-         * @param $template
-         * @param $template_name
-         * @param $template_path
-         *
-         * @return string
-         */
-        public function wc_template_folder_path( $template, $template_name, $template_path ) {
-
-            $default_template = $template;
-
-            // Look within passed path within the plugin - this is priority.
-            $template = trailingslashit( $template_path ) . $template_name;
-
-            // Get default template
-            if ( !file_exists( $template ) || WC_TEMPLATE_DEBUG_MODE ) {
-                return $default_template;
-            }
-
-            return $template;
-        }
-
-        /**
-         *  Load WooCommerce templates from PiloPress WooCommerce folder
+         *  Load WooCommerce templates from Pilo'Press Addon WooCommerce folder
          *
          * @param $template
          * @param $template_name
@@ -392,9 +367,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $screen_post_type = pip_maybe_get( $current_screen, 'post_type' );
 
             if (
-                !$current_screen ||
-                $screen_base !== 'post' ||
-                $screen_post_type !== 'product'
+                !$current_screen
+                || $screen_base !== 'post'
+                || $screen_post_type !== 'product'
             ) {
                 return $style;
             }
@@ -474,8 +449,19 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * Load admin assets
          */
         public function admin_assets() {
-            wp_enqueue_script( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/js/pip-addon-layouts.js', array( 'jquery' ), '', true );
-            wp_enqueue_style( 'pip-addon-layouts', PIP_ADDON_URL . 'assets/css/admin-layouts.css' );
+            wp_enqueue_script(
+                'pip-addon-layouts',
+                PIP_ADDON_URL . 'assets/js/pip-addon-layouts.js',
+                array( 'jquery' ),
+                1.0,
+                true
+            );
+            wp_enqueue_style(
+                'pip-addon-layouts',
+                PIP_ADDON_URL . 'assets/css/admin-layouts.css',
+                null,
+                1.0
+            );
         }
 
         /**
@@ -526,8 +512,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $logo_id = get_theme_mod( 'custom_logo' );
             $logo    = wp_get_attachment_image_src( $logo_id, 'full' );
 
-            if ( $logo ) :
-                ?>
+            if ( $logo ) : ?>
                 <style type="text/css">
                     #login h1 a, .login h1 a {
                         background-image: url('<?php echo reset( $logo ); ?>');
@@ -557,34 +542,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function login_header_title() {
             return get_bloginfo( 'name' );
-        }
-
-        /**
-         *  Move post_type "Page" to top + Add separator after "post_types"
-         */
-        public function move_page_menu() {
-            global $menu;
-
-            // Page
-            $menu['4.5'] = $menu[20];
-            unset( $menu[20] );
-
-            // Separator
-            $menu['8.5'] = array(
-                '',
-                'read',
-                'separator8.5',
-                '',
-                'wp-menu-separator',
-            );
-        }
-
-        /**
-         *  Move comments into post_type post submenu
-         */
-        public function move_comments_menu() {
-            add_submenu_page( 'edit.php', 'Commentaires', 'Commentaires', 'manage_options', 'edit-comments.php' );
-            remove_menu_page( 'edit-comments.php' );
         }
 
         /**
@@ -918,10 +875,43 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         * Remove some menus
+         * Admin menu hook.
          */
-        public function remove_useless_menus() {
+        public function admin_menu_hook() {
+            /**
+             * Remove some menus
+             */
             remove_menu_page( 'edit-comments.php' );
+
+            /**
+             * Move comments into post_type post submenu
+             */
+            add_submenu_page(
+                'edit.php',
+                __( 'Comments', 'acf' ),
+                __( 'Comments', 'acf' ),
+                'manage_options',
+                'edit-comments.php'
+            );
+            remove_menu_page( 'edit-comments.php' );
+
+            /**
+             * Move post_type "Page" to top + Add separator after "post_types"
+             */
+            global $menu;
+
+            // Page
+            $menu['4.5'] = $menu[20];
+            unset( $menu[20] );
+
+            // Separator
+            $menu['8.5'] = array(
+                '',
+                'read',
+                'separator8.5',
+                '',
+                'wp-menu-separator',
+            );
         }
 
         /**
@@ -933,73 +923,52 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         *  Template: Use "404.php" template inside the PiloPress-Addon
+         *  Use templates inside the Pilo'Press Addon
          *
          * @param $template
          *
          * @return string
          */
-        public function error_template( $template ) {
+        public function pip_addon_templates( $template ) {
 
-            if ( !is_404() ) {
-                return $template;
+            // Use "taxonomy.php" template inside the PiloPress-Addon
+            if ( is_tax() ) {
+                // In theme
+                if ( file_exists( get_stylesheet_directory() . '/taxonomy.php' ) ) {
+                    return $template;
+                }
+
+                // In plugin
+                if ( file_exists( PIP_ADDON_PATH . 'templates/taxonomy.php' ) ) {
+                    return PIP_ADDON_PATH . 'templates/taxonomy.php';
+                }
             }
 
-            // In theme
-            if ( file_exists( get_stylesheet_directory() . '/404.php' ) ) {
-                return $template;
+            // Use "404.php" template inside the PiloPress-Addon
+            if ( is_404() ) {
+                // In theme
+                if ( file_exists( get_stylesheet_directory() . '/404.php' ) ) {
+                    return $template;
+                }
+
+                // In plugin
+                if ( file_exists( PIP_ADDON_PATH . 'templates/404.php' ) ) {
+                    return PIP_ADDON_PATH . 'templates/404.php';
+                }
             }
 
-            // In plugin
-            $template = PIP_ADDON_PATH . 'templates/404.php';
+            // Use "search.php" template inside the PiloPress-Addon
+            if ( is_search() ) {
+                // In theme
+                if ( file_exists( get_stylesheet_directory() . '/search.php' ) ) {
+                    return $template;
+                }
 
-            return $template;
-        }
-
-        /**
-         *  Template: Use "search.php" template inside the PiloPress-Addon
-         *
-         * @param $template
-         *
-         * @return string
-         */
-        public function search_template( $template ) {
-
-            if ( !is_search() ) {
-                return $template;
+                // In plugin
+                if ( file_exists( PIP_ADDON_PATH . 'templates/search.php' ) ) {
+                    return PIP_ADDON_PATH . 'templates/search.php';
+                }
             }
-
-            // In theme
-            if ( file_exists( get_stylesheet_directory() . '/search.php' ) ) {
-                return $template;
-            }
-
-            // In plugin
-            $template = PIP_ADDON_PATH . 'templates/search.php';
-
-            return $template;
-        }
-
-        /**
-         *  Template: Use "taxonomy.php" template inside the PiloPress-Addon
-         *
-         * @param $template
-         *
-         * @return string
-         */
-        public function taxonomy_template( $template ) {
-
-            if ( !is_tax() ) {
-                return $template;
-            }
-
-            // In theme
-            if ( file_exists( get_stylesheet_directory() . '/taxonomy.php' ) ) {
-                return $template;
-            }
-
-            // In plugin
-            $template = PIP_ADDON_PATH . 'templates/taxonomy.php';
 
             return $template;
         }
@@ -1015,7 +984,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
 
             return $params;
-
         }
 
         /**
@@ -1028,7 +996,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-            const { colors, fontFamily } = require('tailwindcss/defaultTheme')
+const { colors, fontFamily } = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 const selectorParser = require("postcss-selector-parser")
 
