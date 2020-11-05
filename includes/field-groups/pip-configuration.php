@@ -4,11 +4,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
     acf_add_local_field_group(
         array(
             'key'                   => 'group_layouts_configuration',
-            'title'                 => 'Configuration - Layouts',
+            'title'                 => __( 'Configuration - Layouts', 'pip-addon' ),
             'fields'                => array(
                 array(
                     'key'               => 'field_background_tab',
-                    'label'             => 'Fond',
+                    'label'             => __( 'Fond', 'pip-addon' ),
                     'name'              => '',
                     'type'              => 'tab',
                     'instructions'      => '',
@@ -26,7 +26,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key'               => 'field_bg_color',
-                    'label'             => 'Couleur de fond',
+                    'label'             => __( 'Couleur de fond', 'pip-addon' ),
                     'name'              => 'bg_color',
                     'type'              => 'pip_font_color',
                     'instructions'      => '',
@@ -56,7 +56,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key'               => 'field_spacing_tab',
-                    'label'             => 'Espacement',
+                    'label'             => __( 'Espacement', 'pip-addon' ),
                     'name'              => '',
                     'type'              => 'tab',
                     'instructions'      => '',
@@ -74,7 +74,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key'               => 'field_vertical_spacing',
-                    'label'             => 'Espacement vertical',
+                    'label'             => __( 'Espacement vertical', 'pip-addon' ),
                     'name'              => 'vertical_space',
                     'type'              => 'select',
                     'instructions'      => '',
@@ -87,11 +87,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                     'acfe_permissions'  => '',
                     'choices'           => array(
-                        'py-0'  => 'Aucun',
-                        'py-4'  => 'Petit',
-                        'py-8'  => 'Moyen',
-                        'py-16' => 'Moyen grand',
-                        'py-32' => 'Grand',
+                        'py-0'  => __( 'Aucun', 'pip-addon' ),
+                        'py-4'  => __( 'Petit', 'pip-addon' ),
+                        'py-8'  => __( 'Moyen', 'pip-addon' ),
+                        'py-16' => __( 'Moyen grand', 'pip-addon' ),
+                        'py-32' => __( 'Grand', 'pip-addon' ),
                     ),
                     'default_value'     => 'py-16',
                     'allow_null'        => 0,
@@ -106,7 +106,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key'               => 'field_anchor_tab',
-                    'label'             => 'Ancre',
+                    'label'             => __( 'Ancre', 'pip-addon' ),
                     'name'              => '',
                     'type'              => 'tab',
                     'instructions'      => '',
@@ -124,7 +124,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key'               => 'field_section_id',
-                    'label'             => 'ID',
+                    'label'             => __( 'ID', 'pip-addon' ),
                     'name'              => 'section_id',
                     'type'              => 'text',
                     'instructions'      => '',
@@ -172,7 +172,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             'acfe_meta'             => '',
             'acfe_note'             => '',
             'acfe_categories'       => array(
-                'pilopress' => 'Pilo\'Press',
+                'pilopress' => "Pilo'Press",
             ),
         )
     );
