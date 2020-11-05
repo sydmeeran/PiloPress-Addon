@@ -55,8 +55,8 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         // Page précédente
         if ( $paged > 1 ) : ?>
             <a
-                class="pagination-previous mr-auto hidden md:block"
-                href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
+                    class="pagination-previous mr-auto hidden md:block"
+                    href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
                 <span class="far fa-sm fa-arrow-left mr-1"></span>
                 <?php _e( 'Page précédente', 'pilot-in' ); ?>
             </a>
@@ -72,8 +72,8 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         // Page suivante
         if ( $paged < $num_pages ) : ?>
             <a
-                class="pagination-next ml-auto hidden md:block"
-                href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
+                    class="pagination-next ml-auto hidden md:block"
+                    href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
                 <?php _e( 'Page suivante', 'pilot-in' ); ?>
                 <span class="far fa-sm fa-arrow-right ml-1"></span>
             </a>
@@ -87,7 +87,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
 /**
  *  Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
  *
- * @param mixed  $layouts , string or array of strings of the layouts' "acf_fc_layout"
+ * @param mixed $layouts , string or array of strings of the layouts' "acf_fc_layout"
  * @param string $post_id
  *
  * @return mixed false if no layouts were found, if found an array of layouts
@@ -143,9 +143,9 @@ function array_flatten_recursive( $array ) {
     }
 
     $flat = array();
-    $RII  = new RecursiveIteratorIterator( new RecursiveArrayIterator( $array ) );
+    $rii  = new RecursiveIteratorIterator( new RecursiveArrayIterator( $array ) );
 
-    foreach ( $RII as $value ) {
+    foreach ( $rii as $value ) {
         $flat[] = $value;
     }
 
@@ -153,9 +153,9 @@ function array_flatten_recursive( $array ) {
 }
 
 /**
- *  PIP - Get Sized Image URL - Usefull for getting sized URL in one line (most usefull case with ACF Image)
+ *  PIP - Get Sized Image URL - Useful for getting sized URL in one line (most useful case with ACF Image)
  *
- * @param mixed  $img  image array or image ID
+ * @param mixed $img image array or image ID
  * @param string $size image size
  *
  * @return string|null URL of the sized image
@@ -189,4 +189,38 @@ function pip_is_rtl() {
     $current_language = pll_current_language( 'OBJECT' );
 
     return $current_language ? (bool) $current_language->is_rtl : false;
+}
+
+/**
+ * Get layout configuration data
+ *
+ * @param string|null $layout_name
+ *
+ * @return array
+ */
+function pip_layout_configuration( $layout_name = null ) {
+
+    // Get layout name
+    $layout_object = (array) get_sub_field_object( 'layout_settings' );
+    if ( $layout_object ) {
+        $layout_name = pip_maybe_get( $layout_object, 'parent_layout' );
+        $layout_name = $layout_name ? str_replace( 'layout_', '', $layout_name ) : '';
+    }
+
+    // Get configuration data
+    $configuration  = (array) get_sub_field( 'layout_settings' );
+    $bg_color       = pip_maybe_get( $configuration, 'bg_color' );
+    $vertical_space = pip_maybe_get( $configuration, 'vertical_space' );
+    $section_id_val = pip_maybe_get( $configuration, 'section_id' ) ? pip_maybe_get( $configuration, 'section_id' ) : acf_uniqid( $layout_name );
+    $section_id     = $section_id_val ? 'id="' . $section_id_val . '"' : '';
+    $section_class  = $layout_name . ' relative w-full ' . $bg_color . ' ' . $vertical_space;
+
+    // Return layout configuration data
+    return array(
+        'layout_name'    => $layout_name,
+        'section_class'  => $section_class,
+        'section_id'     => $section_id,
+        'bg_color'       => $bg_color,
+        'vertical_space' => $vertical_space,
+    );
 }
