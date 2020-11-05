@@ -100,7 +100,8 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
         return $response;
     }
 
-    $pip_flexible_name = (string) PIP_Flexible::get_flexible_field_name();
+    $pip_flexible      = acf_get_instance( 'PIP_Flexible' );
+    $pip_flexible_name = (string) $pip_flexible->flexible_field_name;
     $post_id           = $post_id ? $post_id : get_the_ID();
     $pip_flexible      = get_field( $pip_flexible_name, $post_id );
 
