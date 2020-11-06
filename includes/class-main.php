@@ -427,7 +427,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return;
             }
 
-            $fa_url = apply_filters( 'ACFFA_get_fa_url', '//pro.fontawesome.com/releases/v5.14.0/css/all.css' );
+            $fa_url = '//pro.fontawesome.com/releases/v5.14.0/css/all.css';
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
         }
 
@@ -522,7 +522,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         background-size: contain;
                     }
                 </style>
-            <?php
+                <?php
             endif;
         }
 
@@ -789,7 +789,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
                 </script>
-            <?php
+                <?php
             endif;
         }
 
@@ -804,7 +804,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-            <?php
+                <?php
             endif;
         }
 
