@@ -203,7 +203,7 @@ function pip_layout_configuration( $layout_name = null ) {
 
     // Get layout name
     $layout_object = (array) get_sub_field_object( 'layout_settings' );
-    if ( $layout_object ) {
+    if ( pip_maybe_get( $layout_object, 'parent_layout' ) ) {
         $layout_name = pip_maybe_get( $layout_object, 'parent_layout' );
         $layout_name = $layout_name ? str_replace( 'layout_', '', $layout_name ) : '';
     }
