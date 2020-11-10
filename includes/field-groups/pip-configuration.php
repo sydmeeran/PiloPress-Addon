@@ -42,6 +42,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'field_type'         => 'select',
                     'multiple'           => 0,
                     'ui'                 => 0,
+                    'class_output'       => 'background',
                     'return_type'        => 'background',
                     'show_add_to_editor' => 1,
                     'acfe_settings'      => '',
