@@ -45,6 +45,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // ACF hooks
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
             add_filter( 'acf/fields/google_map/api', array( $this, 'acf_register_map_api' ) );
+            add_filter( 'acf/render_field_settings/type=pip_font_color', array( $this, 'pip_font_color_settings' ), 20, 1 );
+            add_filter( 'acf/format_value/type=pip_font_color', array( $this, 'pip_font_color_format_value' ), 20, 3 );
             add_filter( 'acf/load_field_groups', array( $this, 'pip_flexible_layouts_locations' ), 30 );
             add_filter( 'acf/load_field/name=tailwind_config', array( $this, 'pip_tailwind_config_default' ), 20 );
             add_filter( 'acf/load_field/name=tailwind_style', array( $this, 'pip_tailwind_style_default' ), 20 );
@@ -92,18 +94,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             <script async="async" src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
             <link href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></link>
             <script>
-                jQuery( document ).ready( function ($) {
-                    var $galleries = $( '.gallery' )
-                    if ( !$galleries.length ) {
+                jQuery(document).ready(function ($) {
+                    var $galleries = $('.gallery')
+                    if (!$galleries.length) {
                         return
                     }
 
-                    $galleries.each( function (index) {
-                        var $gallery      = $( this ),
-                            $gallery_imgs = $gallery.find( '.gallery-item a' )
-                        $gallery_imgs.attr( 'data-lightbox', 'gallery' + index )
-                    } )
-                } )
+                    $galleries.each(function (index) {
+                        var $gallery = $(this),
+                            $gallery_imgs = $gallery.find('.gallery-item a')
+                        $gallery_imgs.attr('data-lightbox', 'gallery' + index)
+                    })
+                })
             </script>
             <?php
             $output .= ob_get_clean();
@@ -608,6 +610,150 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
+         * Add bg-color to configuration layout
+         *
+         * @param $field
+         *
+         * @return mixed
+         */
+        public function pip_load_color_to_config( $field ) {
+            // Get Pilo'Press version
+            $pilopress   = acf_get_instance( 'PiloPress' );
+            $pip_version = defined( 'PIP_VERSION' ) ? PIP_VERSION : $pilopress::$version;
+
+            if ( version_compare( $pip_version, '0.4.0', '<' ) ) {
+
+                $field['choices'] = array();
+                $new_colors       = array();
+                if ( function_exists( 'pip_get_colors' ) ) {
+                    $colors = pip_get_colors();
+                } else {
+                    $colors = PIP_TinyMCE::get_custom_colors();
+                }
+
+                if ( $colors ) {
+                    foreach ( $colors as $color ) {
+                        $classes      = acf_maybe_get( $color, 'classes' );
+                        $classes      = $classes ? str_replace( 'text-', '', $classes ) : acf_maybe_get( $color, 'class_name' );
+                        $new_colors[] = array(
+                            'name'    => $color['name'],
+                            'font'    => $color['name'],
+                            'classes' => 'bg-' . $classes,
+                        );
+                    }
+                }
+
+                // Add default empty value (to avoid saving some color by mistake)
+                $field['choices'][] = '- Choisir -';
+
+                if ( is_array( $new_colors ) ) {
+                    foreach ( $new_colors as $color ) {
+                        $field['choices'][ $color['classes'] ] = $color['name'];
+                    }
+                }
+            }
+
+            return $field;
+        }
+
+        /**
+         * Add a render field setting to change class output in value
+         *
+         * @param $field
+         */
+        public function pip_font_color_settings( $field ) {
+            // Get Pilo'Press version
+            $pilopress   = acf_get_instance( 'PiloPress' );
+            $pip_version = defined( 'PIP_VERSION' ) ? PIP_VERSION : $pilopress::$version;
+
+            if ( version_compare( $pip_version, '0.4.0', '<' ) ) {
+
+                // Select: Class output
+                acf_render_field_setting(
+                    $field,
+                    array(
+                        'label'             => __( 'Return Value', 'acf' ),
+                        'instructions'      => __( 'Classe retournée dans le champ', 'pip-addon' ),
+                        'name'              => 'class_output',
+                        'type'              => 'select',
+                        'required'          => 0,
+                        'conditional_logic' => 0,
+                        'wrapper'           => array(
+                            'width' => '',
+                            'class' => '',
+                            'id'    => '',
+                        ),
+                        'acfe_permissions'  => '',
+                        'choices'           => array(
+                            'text'       => __( 'Classe de texte', 'pip-addon' ),
+                            'background' => __( 'Classe de fond', 'pip-addon' ),
+                            'border'     => __( 'Classe de bordure', 'pip-addon' ),
+                        ),
+                        'default_value'     => 'text',
+                        'allow_null'        => 1,
+                        'multiple'          => 0,
+                        'ui'                => 1,
+                        'return_format'     => 'value',
+                        'acfe_settings'     => '',
+                        'acfe_validate'     => '',
+                        'ajax'              => 0,
+                        'placeholder'       => '',
+                    )
+                );
+            }
+
+        }
+
+        /**
+         * Change class output in format value
+         *
+         * @param $value
+         * @param $post_id
+         * @param $field
+         *
+         * @return string|string[]
+         */
+        public function pip_font_color_format_value( $value, $post_id, $field ) {
+
+            $class_output = acf_maybe_get( $field, 'class_output' );
+            if ( !$class_output ) {
+                return $value;
+            }
+
+            // Get Pilo'Press version
+            $pilopress   = acf_get_instance( 'PiloPress' );
+            $pip_version = defined( 'PIP_VERSION' ) ? PIP_VERSION : $pilopress::$version;
+
+            if ( version_compare( $pip_version, '0.4.0', '<' ) ) {
+
+                switch ( $class_output ) {
+                    case 'background':
+                        if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                            $value = str_replace( 'text-', 'bg-', $value );
+                        } else {
+                            $value = 'bg-' . $value;
+                        }
+                        break;
+
+                    case 'border':
+                        if ( mb_stripos( $value, 'text-' ) === 0 ) {
+                            $value = str_replace( 'text-', 'border-', $value );
+                        } else {
+                            $value = 'border-' . $value;
+                        }
+                        break;
+
+                    case 'text':
+                    default:
+                        // Don't change value
+                        break;
+                }
+            }
+
+            return $value;
+        }
+
+        /**
          *  WordPress - Admin
          *  - Hide Admin notices mess
          */
@@ -636,15 +782,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 <script>(
                         function (w, d, s, l, i) {
                             w[l] = w[l] || []
-                            w[l].push( { 'gtm.start': new Date().getTime(), event: 'gtm.js' } )
-                            var f                            = d.getElementsByTagName( s )[0],
-                                j = d.createElement( s ), dl = l != 'dataLayer' ? '&l=' + l : ''
-                            j.async                          = true
-                            j.src                            =
+                            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+                            var f = d.getElementsByTagName(s)[0],
+                                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''
+                            j.async = true
+                            j.src =
                                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-                            f.parentNode.insertBefore( j, f )
+                            f.parentNode.insertBefore(j, f)
                         }
-                    )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
+                    )(window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>')
                 </script>
             <?php
             endif;
@@ -853,137 +999,137 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-const { colors, fontFamily } = require('tailwindcss/defaultTheme')
-const plugin = require('tailwindcss/plugin')
-const selectorParser = require("postcss-selector-parser")
+            const { colors, fontFamily } = require('tailwindcss/defaultTheme')
+            const plugin = require('tailwindcss/plugin')
+            const selectorParser = require("postcss-selector-parser")
 
-module.exports = {
-    'theme': {
-        'colors': {
+            module.exports = {
+            'theme': {
+            'colors': {
             'transparent': 'transparent',
             'current': 'currentColor',
             'black': '#2E2B28',
             'white': '#FFFFFF',
             'gray': {
-                ...colors.gray,
-                'default': "#A0AEC0",
+            ...colors.gray,
+            'default': "#A0AEC0",
             },
             'primary': '#575756',
             'primary-500': '#575756',
             'secondary': '#E2101B',
             'secondary-500': '#E2101B',
-        },
-        'fontFamily': {
+            },
+            'fontFamily': {
             'primary': ['NomDeLaFont', ...fontFamily.sans],
             'secondary': ['NomDeLaFont', ...fontFamily.serif],
-        },
-        'inset': {
+            },
+            'inset': {
             '0': 0,
             auto: 'auto',
             '1/2': '50%',
             'full': '100%',
-        },
-        'container': {
+            },
+            'container': {
             'center': 'true',
             'padding': {
-                default: '2rem',
-                'lg': 0,
+            default: '2rem',
+            'lg': 0,
             },
-        },
-        'namedGroups': ["1", "2"],
-        'extend': {
+            },
+            'namedGroups': ["1", "2"],
+            'extend': {
             'spacing': {
-                '75': '18.75rem',
-                '84': '21rem',
-                '88': '22rem',
-                '96': '24rem',
-                '100': '25rem',
-                '112': '28rem',
-                '120': '30rem',
-                '124': '31rem',
-                '136': '34rem',
-                '138': '34.5rem',
-                '140': '35rem',
-                '150': '37.5rem',
-                '152': '38rem',
-                '162': '40.5rem',
-                '176': '44rem',
-                '186': '46.5rem',
-                '192': '48rem',
-                '200': '50rem',
+            '75': '18.75rem',
+            '84': '21rem',
+            '88': '22rem',
+            '96': '24rem',
+            '100': '25rem',
+            '112': '28rem',
+            '120': '30rem',
+            '124': '31rem',
+            '136': '34rem',
+            '138': '34.5rem',
+            '140': '35rem',
+            '150': '37.5rem',
+            '152': '38rem',
+            '162': '40.5rem',
+            '176': '44rem',
+            '186': '46.5rem',
+            '192': '48rem',
+            '200': '50rem',
             },
-        }
-    },
-    'variants': {
-        'backgroundColor': ['group-hover', 'hover', 'focus'],
-        'textColor': ['group-hover', 'hover', 'focus'],
-        'display': ['responsive', 'group-hover'],
-    },
-    'plugins': [
+            }
+            },
+            'variants': {
+            'backgroundColor': ['group-hover', 'hover', 'focus'],
+            'textColor': ['group-hover', 'hover', 'focus'],
+            'display': ['responsive', 'group-hover'],
+            },
+            'plugins': [
 
-        /** "Tailwind Named Groups" plugin */
-        plugin(({ theme, addVariant, prefix, e }) => {
+            /** "Tailwind Named Groups" plugin */
+            plugin(({ theme, addVariant, prefix, e }) => {
             const namedGroups = theme("namedGroups") || [];
 
             addVariant(`group-hover`, ({ modifySelectors, separator }) => {
-                return modifySelectors(({ selector }) => {
-                    return selectorParser((root) => {
-                        root.walkClasses((node) => {
-                            // Regular group
-                            const value = node.value;
-                            node.value = `group-hover${separator}${value}`;
+            return modifySelectors(({ selector }) => {
+            return selectorParser((root) => {
+            root.walkClasses((node) => {
+            // Regular group
+            const value = node.value;
+            node.value = `group-hover${separator}${value}`;
 
-                            node.parent.insertBefore(
-                                node,
-                                selectorParser().astSync(prefix(`.group:hover `))
-                            );
+            node.parent.insertBefore(
+            node,
+            selectorParser().astSync(prefix(`.group:hover `))
+            );
 
-                            // Named groups
-                            namedGroups.forEach((namedGroup) => {
-                                node.parent.parent.insertAfter(
-                                    node.parent,
-                                    selectorParser().astSync(
-                                        prefix(`.group-${namedGroup}:hover .`) +
-                                        e(`group-${namedGroup}-hover${separator}${value}`)
-                                    )
-                                );
-                            });
-                        });
-                    }).processSync(selector);
-                });
+            // Named groups
+            namedGroups.forEach((namedGroup) => {
+            node.parent.parent.insertAfter(
+            node.parent,
+            selectorParser().astSync(
+            prefix(`.group-${namedGroup}:hover .`) +
+            e(`group-${namedGroup}-hover${separator}${value}`)
+            )
+            );
+            });
+            });
+            }).processSync(selector);
+            });
             });
 
             addVariant(`group-focus`, ({ modifySelectors, separator }) => {
-                return modifySelectors(({ selector }) => {
-                    return selectorParser((root) => {
-                        root.walkClasses((node) => {
-                            // Regular group
-                            const value = node.value;
-                            node.value = `group-focus${separator}${value}`;
+            return modifySelectors(({ selector }) => {
+            return selectorParser((root) => {
+            root.walkClasses((node) => {
+            // Regular group
+            const value = node.value;
+            node.value = `group-focus${separator}${value}`;
 
-                            node.parent.insertBefore(
-                                node,
-                                selectorParser().astSync(prefix(`.group:focus `))
-                            );
+            node.parent.insertBefore(
+            node,
+            selectorParser().astSync(prefix(`.group:focus `))
+            );
 
-                            // Named groups
-                            namedGroups.forEach((namedGroup) => {
-                                node.parent.parent.insertAfter(
-                                    node.parent,
-                                    selectorParser().astSync(
-                                        prefix(`.group-${namedGroup}:focus .`) +
-                                        e(`group-${namedGroup}-focus${separator}${value}`)
-                                    )
-                                );
-                            });
-                        });
-                    }).processSync(selector);
-                });
+            // Named groups
+            namedGroups.forEach((namedGroup) => {
+            node.parent.parent.insertAfter(
+            node.parent,
+            selectorParser().astSync(
+            prefix(`.group-${namedGroup}:focus .`) +
+            e(`group-${namedGroup}-focus${separator}${value}`)
+            )
+            );
             });
-        })
+            });
+            }).processSync(selector);
+            });
+            });
+            })
 
-    ],
-};
+            ],
+            };
             <?php
             $field['default_value'] = ob_get_clean();
 
@@ -1001,139 +1147,139 @@ module.exports = {
         public function pip_tailwind_style_default( $field ) {
 
             ob_start(); ?>
-@tailwind base;
-@tailwind components;
+            @tailwind base;
+            @tailwind components;
 
-body {
-    @apply font-primary overflow-x-hidden;
-    max-width: 100vw;
-}
+            body {
+            @apply font-primary overflow-x-hidden;
+            max-width: 100vw;
+            }
 
-ul {
-    @apply list-disc list-inside;
-}
+            ul {
+            @apply list-disc list-inside;
+            }
 
-ol {
-    @apply list-decimal list-inside;
-}
+            ol {
+            @apply list-decimal list-inside;
+            }
 
-ul[class],
-ol[class] {
-    @apply list-none;
-}
+            ul[class],
+            ol[class] {
+            @apply list-none;
+            }
 
-/** Headings */
-h1,
-.h1 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
-}
+            /** Headings */
+            h1,
+            .h1 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
+            }
 
-h2,
-.h2 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
-}
+            h2,
+            .h2 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
+            }
 
-h3,
-.h3 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
-}
+            h3,
+            .h3 {
+            @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+            }
 
-h4,
-.h4 {
-    @apply font-primary leading-tight font-semibold text-black text-xl;
-}
+            h4,
+            .h4 {
+            @apply font-primary leading-tight font-semibold text-black text-xl;
+            }
 
-h5,
-.h5 {
-    @apply font-primary leading-tight font-semibold text-black text-lg;
-}
+            h5,
+            .h5 {
+            @apply font-primary leading-tight font-semibold text-black text-lg;
+            }
 
-h6,
-.h6 {
-    @apply font-primary leading-tight font-semibold text-black text-base;
-}
+            h6,
+            .h6 {
+            @apply font-primary leading-tight font-semibold text-black text-base;
+            }
 
-/* Inputs */
-.select2 > .selection > .select2-selection,
-input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="tel"],
-input[type="number"],
-select,
-textarea {
-    @apply text-sm border-2 border-gray-500 rounded p-2;
-}
+            /* Inputs */
+            .select2 > .selection > .select2-selection,
+            input[type="email"],
+            input[type="password"],
+            input[type="text"],
+            input[type="tel"],
+            input[type="number"],
+            select,
+            textarea {
+            @apply text-sm border-2 border-gray-500 rounded p-2;
+            }
 
-/* Select2 - Fix margin */
-.select2 > .selection > .select2-selection {
-    @apply m-0;
-}
+            /* Select2 - Fix margin */
+            .select2 > .selection > .select2-selection {
+            @apply m-0;
+            }
 
-/* Select2 - Fix arrow position */
-.select2 > .selection > .select2-selection > .select2-selection__arrow {
-    top: 50%;
-    right: 1%;
-    transform: translateY(-50%);
-}
+            /* Select2 - Fix arrow position */
+            .select2 > .selection > .select2-selection > .select2-selection__arrow {
+            top: 50%;
+            right: 1%;
+            transform: translateY(-50%);
+            }
 
-/* Select2 - Fix clear icon position */
-.select2 > .selection .select2-selection__clear {
-    @apply px-2 py-0;
-    margin-right: calc(1% + 1em);
-}
+            /* Select2 - Fix clear icon position */
+            .select2 > .selection .select2-selection__clear {
+            @apply px-2 py-0;
+            margin-right: calc(1% + 1em);
+            }
 
-/* Select2 - Fix select style */
-.select2 > .selection > .select2-selection > .select2-selection__rendered {
-    @apply p-0;
-    line-height: inherit;
-}
+            /* Select2 - Fix select style */
+            .select2 > .selection > .select2-selection > .select2-selection__rendered {
+            @apply p-0;
+            line-height: inherit;
+            }
 
-/** Select2 - Dropdown - Option selected - Hover */
-.select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
-.select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
-    @apply bg-secondary;
-}
+            /** Select2 - Dropdown - Option selected - Hover */
+            .select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
+            .select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
+            @apply bg-secondary;
+            }
 
-/** WYSIWYG alignment styles */
-.aligncenter {
-    @apply mx-auto;
-}
+            /** WYSIWYG alignment styles */
+            .aligncenter {
+            @apply mx-auto;
+            }
 
-.alignleft {
-    @apply mr-auto;
-}
+            .alignleft {
+            @apply mr-auto;
+            }
 
-.alignright {
-    @apply ml-auto;
-}
+            .alignright {
+            @apply ml-auto;
+            }
 
-/**
- * Button basic styling
- * (extend it to create your buttons)
- */
-.btn-base {
-    @apply relative inline-flex items-center justify-center text-sm text-black uppercase px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
+            /**
+            * Button basic styling
+            * (extend it to create your buttons)
+            */
+            .btn-base {
+            @apply relative inline-flex items-center justify-center text-sm text-black uppercase px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
 
-    &:hover {
-        @apply bg-gray-700 border-gray-700;
-    }
-}
+            &:hover {
+            @apply bg-gray-700 border-gray-700;
+            }
+            }
 
-/** ----------------------------------
- * Put your custom styles here below...
- * ---------------------------------- */
+            /** ----------------------------------
+            * Put your custom styles here below...
+            * ---------------------------------- */
 
-/** Button - primary */
-.btn-primary {
-    @apply btn-base text-white bg-primary border-primary;
+            /** Button - primary */
+            .btn-primary {
+            @apply btn-base text-white bg-primary border-primary;
 
-    &:hover {
-        @apply bg-secondary border-secondary;
-    }
-}
+            &:hover {
+            @apply bg-secondary border-secondary;
+            }
+            }
 
-@tailwind utilities;
+            @tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
 
