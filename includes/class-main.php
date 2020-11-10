@@ -610,53 +610,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         * Add bg-color to configuration layout
-         *
-         * @param $field
-         *
-         * @return mixed
-         */
-        public function pip_load_color_to_config( $field ) {
-            // Get Pilo'Press version
-            $pilopress   = acf_get_instance( 'PiloPress' );
-            $pip_version = defined( 'PIP_VERSION' ) ? PIP_VERSION : $pilopress::$version;
-
-            if ( version_compare( $pip_version, '0.4.0', '<' ) ) {
-
-                $field['choices'] = array();
-                $new_colors       = array();
-                if ( function_exists( 'pip_get_colors' ) ) {
-                    $colors = pip_get_colors();
-                } else {
-                    $colors = PIP_TinyMCE::get_custom_colors();
-                }
-
-                if ( $colors ) {
-                    foreach ( $colors as $color ) {
-                        $classes      = acf_maybe_get( $color, 'classes' );
-                        $classes      = $classes ? str_replace( 'text-', '', $classes ) : acf_maybe_get( $color, 'class_name' );
-                        $new_colors[] = array(
-                            'name'    => $color['name'],
-                            'font'    => $color['name'],
-                            'classes' => 'bg-' . $classes,
-                        );
-                    }
-                }
-
-                // Add default empty value (to avoid saving some color by mistake)
-                $field['choices'][] = '- Choisir -';
-
-                if ( is_array( $new_colors ) ) {
-                    foreach ( $new_colors as $color ) {
-                        $field['choices'][ $color['classes'] ] = $color['name'];
-                    }
-                }
-            }
-
-            return $field;
-        }
-
-        /**
          * Add a render field setting to change class output in value
          *
          * @param $field
@@ -731,6 +684,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         if ( mb_stripos( $value, 'text-' ) === 0 ) {
                             $value = str_replace( 'text-', 'bg-', $value );
                         } else {
+                            $value = str_replace( 'bg-', '', $value );
                             $value = 'bg-' . $value;
                         }
                         break;
@@ -739,13 +693,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         if ( mb_stripos( $value, 'text-' ) === 0 ) {
                             $value = str_replace( 'text-', 'border-', $value );
                         } else {
+                            $value = str_replace( 'border-', '', $value );
                             $value = 'border-' . $value;
                         }
                         break;
 
                     case 'text':
                     default:
-                        // Don't change value
+                        $value = str_replace( 'text-', '', $value );
+                        $value = 'text-' . $value;
                         break;
                 }
             }
