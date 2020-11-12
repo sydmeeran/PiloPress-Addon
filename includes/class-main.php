@@ -20,7 +20,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
-            add_action( 'after_body_open_tag', array( $this, 'enqueue_gtm_noscript' ) );
+            add_action( 'wp_body_open', array( $this, 'enqueue_gtm_noscript' ) );
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
