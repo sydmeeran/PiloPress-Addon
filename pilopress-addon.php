@@ -176,3 +176,30 @@ function pip_addon() {
 
 // Instantiate
 pip_addon();
+
+/**
+ *  On plugin activation
+ *  (useful to run code only once)
+ */
+register_activation_hook( __FILE__, 'pip_addon_activation' );
+function pip_addon_activation( $network_wide ) {
+
+    /**
+     *  "ACF Font Awesome" plugin - Update configuration
+     */
+    update_option( 'ACFFA_active_icon_set', 'pro' );
+    $acf_fa_settings = get_option( 'acffa_settings' );
+    if ( $acf_fa_settings && is_array( $acf_fa_settings ) ) {
+        $acf_fa_settings['acffa_pro_cdn'] = true;
+        update_option( 'acffa_settings', $acf_fa_settings );
+    }
+
+    /**
+     *  "ACF Font Awesome" plugin - Force refresh of icons (to have pro icons)
+     */
+    if ( !defined( 'ACFFA_FORCE_REFRESH' ) ) {
+        define( 'ACFFA_FORCE_REFRESH', true );
+        do_action( 'ACFFA_refresh_latest_icons' );
+    }
+
+}

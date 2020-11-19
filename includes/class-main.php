@@ -38,7 +38,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
-            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -427,22 +426,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return;
             }
 
-            $fa_url = '//pro.fontawesome.com/releases/v5.14.0/css/all.css';
+            // Get latest Font Awesome version from "ACF Font Awesome" plugin
+            $fa_version = get_option( 'ACFFA_current_version' );
+            if ( !$fa_version ) {
+                $fa_version = '5.15.1';
+            }
+
+            $fa_url = "//pro.fontawesome.com/releases/v$fa_version/css/all.css";
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
-        }
-
-        /**
-         *  ACF field "Font Awesome" plugin
-         *  - Force Pro mode (to have pro icons in select in the back-office)
-         *
-         * @param $acf_fa_params
-         *
-         * @return mixed
-         */
-        public function acf_field_fa_pro_activation( $acf_fa_params ) {
-            $acf_fa_params['acffa_pro_cdn'] = true;
-
-            return $acf_fa_params;
         }
 
         /**
