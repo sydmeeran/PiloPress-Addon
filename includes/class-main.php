@@ -29,6 +29,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_menu', array( $this, 'admin_menu_hook' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_action( 'customize_register', array( $this, 'pip_add_logo_versions_to_customizer' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
             add_filter( 'acf/get_field_group_style', array( $this, 'pip_display_wysiwyg_on_product' ), 20, 2 );
@@ -911,6 +912,58 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function remove_useless_bar_menus() {
             global $wp_admin_bar;
             $wp_admin_bar->remove_menu( 'comments' );
+        }
+
+        /**
+         *  WordPress - Customizer
+         *  - Add logo versions in customizer, based on the filter pip_addon/logo_versions
+         *
+         * Example of filtering :
+         * add_filter(
+         * 'pip_addon/logo_versions',
+         * function( $possible_versions ) {
+         *
+         *     $possible_versions[] = array(
+         *         'label' => __( 'Logo blanc', 'pilot-in' ),
+         *         'slug'  => 'logo-white',
+         *    );
+         *
+         *    return $possible_versions;
+         *  }
+         * );
+         */
+        public function pip_add_logo_versions_to_customizer( $wp_customize ) {
+
+            $possible_versions = apply_filters( 'pip_addon/logo_versions', array() );
+
+            if ( empty( $possible_versions ) ) {
+                return;
+            }
+
+            foreach ( $possible_versions as $possible_version ) {
+
+                $version_label = pip_maybe_get( $possible_version, 'label' );
+                $version_slug  = pip_maybe_get( $possible_version, 'slug' );
+
+                $wp_customize->add_setting(
+                    $version_slug,
+                    array(
+                        'default'    => '',
+                        'capability' => 'edit_theme_options',
+                    )
+                );
+
+                $wp_customize->add_control(
+                    new WP_Customize_Image_Control(
+                        $wp_customize,
+                        $version_slug,
+                        array(
+                            'label'   => $version_label,
+                            'section' => 'title_tagline',
+                        )
+                    )
+                );
+            }
         }
 
         /**

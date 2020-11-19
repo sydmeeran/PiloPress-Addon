@@ -224,3 +224,70 @@ function pip_layout_configuration( $layout_name = null ) {
         'vertical_space' => $vertical_space,
     );
 }
+
+
+/**
+ * Display a version of the website's Logo
+ *
+ * @param string|null $version (empty for WordPress custom_logo or slug of the version added through pip_addon/logo_versions)
+ *
+ * Example pip_the_logo('logo-white') to get the logo which get_theme_mod is 'logo-white' (see pip_add_logo_versions_to_customizer() to add versions)
+ */
+function pip_the_logo( $version = '' ) {
+
+    $logo_url = false;
+
+    //If custom_logo exist then it is the default logo
+    if ( !has_custom_logo() ) {
+        return false;
+    }
+
+    $logo_id = get_theme_mod( 'custom_logo' );
+    if ( !$logo_id ) {
+        return false;
+    }
+
+    $logo = wp_get_attachment_image_src( $logo_id, 'full' );
+    if ( is_array( $logo ) && !empty( $logo ) ) {
+        $logo_url = reset( $logo );
+    }
+
+    if ( !empty( $version ) ) {
+
+        //If there is a logo version with an image then override the default logo with the versionned logo
+        $logo_version = get_theme_mod( $version );
+        if ( $logo_version ) {
+            $logo_url = $logo_version;
+        }
+    }
+
+    $logo_class = 'pip-logo-link';
+    if ( $version ) {
+        $logo_class .= ' logo-' . $version;
+    }
+
+    $logo_alt = get_bloginfo( 'name', 'display' );
+
+    if ( $logo_id = get_theme_mod( 'custom_logo' ) ) {
+        $alt = get_post_meta( $logo_id, '_wp_attachment_image_alt', true );
+        if ( !empty( $alt ) ) {
+            $logo_alt = $alt;
+        }
+    }
+
+    ?>
+
+        <a 
+            class="<?php echo esc_attr( $logo_class ); ?>" 
+            href="<?php echo esc_url( home_url( '/' ) ); ?>"
+            rel="home"
+            itemprop="url"
+        >
+            <img 
+                src="<?php echo esc_url( $logo_url ); ?>"
+                alt="<?php echo esc_attr( $logo_alt ); ?>"
+            />
+        </a>
+
+    <?php
+}
