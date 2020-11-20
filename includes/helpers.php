@@ -277,17 +277,48 @@ function pip_the_logo( $version = '' ) {
 
     ?>
 
-        <a 
-            class="<?php echo esc_attr( $logo_class ); ?>" 
+        <a
+            class="<?php echo esc_attr( $logo_class ); ?>"
             href="<?php echo esc_url( home_url( '/' ) ); ?>"
             rel="home"
             itemprop="url"
         >
-            <img 
+            <img
                 src="<?php echo esc_url( $logo_url ); ?>"
                 alt="<?php echo esc_attr( $logo_alt ); ?>"
             />
         </a>
 
     <?php
+}
+
+if ( !function_exists( 'get_layout_title' ) ) {
+    /*
+     *  get_layout_title()
+     *  This function will return a string representation of the current layout title within a 'have_rows' loop
+     *
+     *  @return string
+     */
+    function get_layout_title() {
+
+        // vars
+        $row          = get_row();
+        $layout_title = false;
+
+        if ( empty( $row ) ) {
+            return $layout_title;
+        }
+
+        foreach ( $row as $key => $value ) {
+            if ( mb_stripos( $key, '_title' ) === false ) {
+                continue;
+            }
+
+            $layout_title = $value;
+        }
+
+        // return
+        return $layout_title;
+
+    }
 }
