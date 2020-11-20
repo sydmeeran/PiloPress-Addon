@@ -144,12 +144,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 $menu_icon           = get_field( 'menu_icon', $item );
                 $menu_icon_position  = get_field( 'menu_icon_placement', $item );
                 $menu_icon_hide_text = get_field( 'menu_icon_hide_text', $item );
+                $menu_icon_color     = get_field( 'menu_icon_color', $item );
                 $old_item_title      = pip_maybe_get( $item, 'title' );
 
                 // Hide text
                 if ( $menu_icon_hide_text ) {
 
-                    $item->title = $menu_icon;
+                    $menu_icon_class = "fa-fw $menu_icon_color";
+                    $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                    $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                    $item->title     = $menu_icon;
 
                 } else {
 
@@ -158,7 +162,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
                         $margin          = $rtl ? 'ml-2' : 'mr-2';
                         $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon_class = "fa-fw $margin";
+                        $menu_icon_class = "fa-fw $menu_icon_color $margin";
                         $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
                         $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
                         $item->title     = $menu_icon . $old_item_title;
@@ -167,7 +171,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
                         $margin          = $rtl ? 'mr-2' : 'ml-2';
                         $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon_class = "fa-fw $margin";
+                        $menu_icon_class = "fa-fw $menu_icon_color $margin";
                         $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
                         $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
                         $item->title     = $old_item_title . $menu_icon;
