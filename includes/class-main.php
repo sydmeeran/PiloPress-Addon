@@ -156,17 +156,21 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     // Menu icon position
                     if ( $menu_icon_position === 'gauche' ) {
 
-                        $margin      = $rtl ? 'ml-2' : 'mr-2';
-                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
-                        $item->title = $menu_icon . $old_item_title;
+                        $margin          = $rtl ? 'ml-2' : 'mr-2';
+                        $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
+                        $menu_icon_class = "fa-fw $margin";
+                        $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                        $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                        $item->title     = $menu_icon . $old_item_title;
 
                     } elseif ( $menu_icon_position === 'droite' ) {
 
-                        $margin      = $rtl ? 'mr-2' : 'ml-2';
-                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
-                        $item->title = $old_item_title . $menu_icon;
+                        $margin          = $rtl ? 'mr-2' : 'ml-2';
+                        $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
+                        $menu_icon_class = "fa-fw $margin";
+                        $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                        $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                        $item->title     = $old_item_title . $menu_icon;
 
                     }
                 }
