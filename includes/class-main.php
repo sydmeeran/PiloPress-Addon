@@ -1033,7 +1033,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return mixed
          */
         public function pip_flexible_args( $params ) {
-            $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
+
+            $params['acfe_flexible_advanced']                         = 1; // Toggle advanced flexible features mode
+            $params['acfe_flexible_toggle']                           = 1; // Toggle layout visibilty on front-end
+            $params['acfe_flexible_layouts_state']                    = 'collapsed'; // Force layouts to be on "closed / preview"
+            $params['acfe_flexible_modal_edition']                    = 1; // Show layout edition inside a modal
+            $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4; // Set 4 layouts per row in layouts selection
 
             return $params;
         }
