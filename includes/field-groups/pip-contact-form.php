@@ -197,7 +197,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'choices'           => array(
-                        'Les informations recueillies dans ce formulaire sont utilisées pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité' => 'Les informations recueillies dans ce formulaire sont utilisées par PARATRONIC pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité',
+                        'Les informations recueillies dans ce formulaire sont utilisées pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité' => 'Les informations recueillies dans ce formulaire sont utilisées par MONSITE pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité',
                     ),
                     'allow_custom'      => 0,
                     'default_value'     => array(),
@@ -230,7 +230,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
-                        'class' => 'mt-0',
+                        'class' => 'mt-0 flex justify-center',
                         'id'    => '',
                     ),
                     'acfe_save_meta'    => 0,
