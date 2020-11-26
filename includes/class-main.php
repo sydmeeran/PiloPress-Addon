@@ -1205,7 +1205,7 @@ module.exports = {
 @tailwind components;
 
 body {
-    @apply font-primary overflow-x-hidden;
+    @apply text-base text-black font-primary antialiased overflow-x-hidden;
     max-width: 100vw;
 }
 
@@ -1226,16 +1226,31 @@ ol[class] {
 h1,
 .h1 {
     @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
+
+    /* Desktop size */
+    @screen lg {
+        @apply text-5xl;
+    }
 }
 
 h2,
 .h2 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
+    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+
+    /* Desktop size */
+    @screen lg {
+        @apply text-3xl;
+    }
 }
 
 h3,
 .h3 {
-    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
+    @apply font-primary leading-tight uppercase font-semibold text-black text-xl;
+
+    /* Desktop size */
+    @screen lg {
+        @apply text-2xl;
+    }
 }
 
 h4,
@@ -1308,6 +1323,20 @@ textarea {
     @apply ml-auto;
 }
 
+/* Pagination */
+.pagination {
+    @apply flex items-center justify-center text-black w-full pt-6 border-t border-gray;
+
+    .page-numbers {
+        @apply px-1 mr-1;
+    }
+
+    /* Hover, current */
+    .page-numbers.current, .prev:hover, .next:hover {
+        @apply text-primary;
+    }
+}
+
 /**
  * Button basic styling
  * (extend it to create your buttons)
@@ -1320,6 +1349,32 @@ textarea {
     }
 }
 
+/** Icon Font Awesome - Left position */
+.icon-left {
+    &::before {
+        content: '';
+        display: inline-block;
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 400;
+        color: currentcolor;
+        margin-right: 12px;
+        text-align: center;
+    }
+}
+
+/** Icon Font Awesome - Right position */
+.icon-right {
+    &::after {
+        content: '';
+        display: inline-block;
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 400;
+        color: currentcolor;
+        margin-left: 12px;
+        text-align: center;
+    }
+}
+
 /** ----------------------------------
  * Put your custom styles here below...
  * ---------------------------------- */
@@ -1328,7 +1383,7 @@ textarea {
 .btn-primary {
     @apply btn-base text-white bg-primary border-primary;
 
-    &:hover {
+    &:hover, &.active {
         @apply bg-secondary border-secondary;
     }
 }
