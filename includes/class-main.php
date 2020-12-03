@@ -69,7 +69,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return string
          */
         public function attachment_media_url_by_default( $value ) {
-            return 'file';
+            return 'none';
         }
 
         /**

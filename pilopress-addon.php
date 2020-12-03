@@ -202,4 +202,37 @@ function pip_addon_activation( $network_wide ) {
         do_action( 'ACFFA_refresh_latest_icons' );
     }
 
+    /**
+     *  ACFE Form - Import default form
+     */
+    if (!function_exists('import_acfe_contact_form')) {
+        function import_acfe_contact_form() {
+
+            // Do this only if PiloPress addon & ACF are available
+            if ( !defined( 'PIP_ADDON_PATH' ) || !function_exists( 'acf' ) ) {
+                return;
+            }
+
+            // Get exported contact form
+            $default_form_json = file_get_contents( PIP_ADDON_PATH . 'includes/forms/default-contact-form.json' ); // phpcs:ignore
+            if ( !$default_form_json ) {
+                return;
+            }
+
+            // Decode json
+            $default_form_data = json_decode( $default_form_json, true );
+
+            // Force initialize of ACF tools (only loaded on Tools page by default)
+            acf()->admin_tools = new acf_admin_tools();
+            acf()->admin_tools->load();
+
+            // Initialise ACFE Tool Import Form & import contact form
+            $acfe_tool_import_form = new ACFE_Admin_Tool_Import_Form();
+            $acfe_tool_import_form->import_external( $default_form_data );
+
+        }
+    }
+
+    import_acfe_contact_form();
+
 }
