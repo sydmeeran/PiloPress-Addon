@@ -39,6 +39,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
+            add_shortcode( 'pip_icon_fa', array( $this, 'shortcode_icon_fa' ) );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -857,6 +858,41 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $file      = ( !empty( $extension ) ) ? preg_replace( '/.' . $extension . '$/', '', $input ) : $input;
 
             return sanitize_title( str_replace( '_', '-', $file ) ) . ( ( !empty( $extension ) ) ? '.' . $extension : '' );
+        }
+
+        /**
+         *  Icon - Font Awesome
+         */
+        public function shortcode_icon_fa( $atts, $content = null ) {
+
+            // Extract variables from shortcodes attributes
+            extract( // phpcs:ignore
+                shortcode_atts(
+                    array(
+                        's' => '', // Style class (ex: far)
+                        'i' => '', // Icon class (ex: fa-paper-plane)
+                        'u' => '', // Utility classes (ex: fa-fw fa-2x)
+                        'l' => '', // Link url
+                    ),
+                    $atts
+                )
+            );
+
+            ob_start(); ?>
+            <i class="<?php echo "pip-shortcode-icon $s $i $u"; ?>"></i>
+            <?php
+            $render_icon = ob_get_clean();
+
+            if ( $l ) :
+                ob_start(); ?>
+                <a href="<?php echo $l; ?>">
+                    <?php echo $render_icon; ?>
+                </a>
+                <?php
+                $render_icon = ob_get_clean();
+            endif;
+
+            return $render_icon;
         }
 
         /**
