@@ -22,27 +22,35 @@
                 if ($forms.length) {
 
                     // forms found
-
                     $forms.each(function(index) {
                         var $form = $(this);
-                        $form.replaceWith('<div>' + $form.html() + '</div>');
+                        $form.replaceWith('<div class="' + $form.attr('class') + '">' + $form.html() + '</div>');
                     });
-
                     // forms replaced
 
                  }
 
-                var $inputs = $preview_window.find('input, select, textarea, button');
+                var $inputs = $preview_window.find('input, textarea, button[type="submit"]');
                 if ($inputs.length) {
 
                     // inputs found
-
                     $inputs.each(function(index) {
                         var $input = $(this);
-                        $input.replaceWith('<div>' + $input.html() + '</div>');
+                        $input.replaceWith('<div class="' + $input.attr('class') + '">' + $input.html() + '</div>');
                     });
-
                     // input replaced
+
+                }
+
+                var $selects = $preview_window.find('select[name]');
+                if ($selects.length) {
+
+                    // selects found
+                    $selects.each(function(index) {
+                        var $select = $(this);
+                        $select.removeAttr('name').removeAttr('required').removeAttr('id');
+                    });
+                    // selects replaced
 
                 }
 
