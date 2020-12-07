@@ -455,7 +455,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 $fa_version = '5.15.1';
             }
 
-            $fa_url = "//pro.fontawesome.com/releases/v$fa_version/css/all.css";
+            $fa_url = "https://pro.fontawesome.com/releases/v$fa_version/css/all.css";
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
         }
 
