@@ -1305,20 +1305,20 @@ h6,
 }
 
 /* Inputs */
-.select2 > .selection > .select2-selection,
 input[type="email"],
 input[type="password"],
 input[type="text"],
 input[type="tel"],
 input[type="number"],
 select,
-textarea {
-    @apply text-sm border-2 border-gray-500 rounded p-2;
+textarea,
+.select2 > .selection > .select2-selection {
+    @apply h-auto text-sm border-2 border-gray-500 rounded p-3 !important;
 }
 
 /* Select2 - Fix margin */
 .select2 > .selection > .select2-selection {
-    @apply m-0;
+    @apply m-0 !important;
 }
 
 /* Select2 - Fix arrow position */
@@ -1330,20 +1330,20 @@ textarea {
 
 /* Select2 - Fix clear icon position */
 .select2 > .selection .select2-selection__clear {
-    @apply px-2 py-0;
-    margin-right: calc(1% + 1em);
+    @apply px-2 py-0 !important;
+    margin-right: calc(1% + 1em) !important;
 }
 
 /* Select2 - Fix select style */
 .select2 > .selection > .select2-selection > .select2-selection__rendered {
-    @apply p-0;
-    line-height: inherit;
+    @apply p-0 !important;
+    line-height: inherit !important;
 }
 
 /** Select2 - Dropdown - Option selected - Hover */
 .select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
 .select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
-    @apply bg-secondary;
+    @apply bg-secondary !important;
 }
 
 /** WYSIWYG alignment styles */
