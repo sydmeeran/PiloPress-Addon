@@ -12,7 +12,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'nom',
                     'type'              => 'text',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -47,7 +47,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'prenom',
                     'type'              => 'text',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -82,7 +82,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'email',
                     'type'              => 'email',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -151,7 +151,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'               => 'message',
                     'type'               => 'textarea',
                     'instructions'       => '',
-                    'required'           => 0,
+                    'required'           => 1,
                     'conditional_logic'  => 0,
                     'wrapper'            => array(
                         'width' => '',
@@ -226,7 +226,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'captcha',
                     'type'              => 'acfe_recaptcha',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
