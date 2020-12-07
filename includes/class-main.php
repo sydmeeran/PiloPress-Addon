@@ -28,6 +28,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu_hook' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
+            add_filter( 'ACFFA_get_fa_url', array( $this, 'dequeue_font_awesome_free' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
             add_action( 'customize_register', array( $this, 'pip_add_logo_versions_to_customizer' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
@@ -426,6 +427,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             );
             wp_localize_script( 'jquery', 'pipAddon', $pip_js_object );
 
+        }
+
+        /**
+         *  Dequeue Font Awesome Free CSS
+         */
+        public function dequeue_font_awesome_free( $load_plugin_fa_css ) {
+
+            if ( !is_admin() ) {
+                $load_plugin_fa_css = false;
+            }
+
+            return $load_plugin_fa_css;
         }
 
         /**
