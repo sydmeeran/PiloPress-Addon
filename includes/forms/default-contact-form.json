@@ -54,6 +54,6 @@
         "acfe_form_return": "",
         "acfe_form_updated_message": "<p style=\"text-align: center;\"><strong>Votre message a bien été envoyé.<\/strong><\/p>",
         "acfe_form_html_updated_message": "<div id=\"message\" class=\"updated\">%s<\/div>",
-        "acfe_form_custom_html": "<style>.acf-field { margin: 0 !important; }<\/style>\r\n<div class=\"grid gap-4 my-4 grid-cols-1 lg:grid-cols-2\">\r\n\t\t\t\t{field:nom}\r\n\t\t\t\t{field:prenom}\r\n\t\t\t\t{field:email}\r\n\t\t\t\t{field:telephone}\r\n<\/div>\r\n<div class=\"grid gap-4 grid-cols-1 my-4\">\r\n\t\t\t\t{field:message}\r\n\t\t\t\t{field:opt-in}\r\n\t\t\t\t{field:captcha}\r\n<\/div>"
+        "acfe_form_custom_html": "<style>.acf-field { margin: 0 !important; } .acf-form-submit { text-align: center; }<\/style>\r\n<div class=\"grid gap-4 my-4 grid-cols-1 lg:grid-cols-2\">\r\n\t\t\t\t{field:nom}\r\n\t\t\t\t{field:prenom}\r\n\t\t\t\t{field:email}\r\n\t\t\t\t{field:telephone}\r\n<\/div>\r\n<div class=\"grid gap-4 grid-cols-1 my-4\">\r\n\t\t\t\t{field:message}\r\n\t\t\t\t{field:opt-in}\r\n\t\t\t\t{field:captcha}\r\n<\/div>"
     }
 ]
