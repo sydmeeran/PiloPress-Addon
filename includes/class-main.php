@@ -1151,9 +1151,10 @@ module.exports = {
         }
     },
     'variants': {
-        'backgroundColor': ['group-hover', 'hover', 'focus'],
-        'textColor': ['group-hover', 'hover', 'focus'],
-        'display': ['responsive', 'group-hover'],
+        'backgroundColor': ['hover', 'focus', 'active', 'group-hover'],
+        'textColor': ['hover', 'focus', 'active', 'group-hover'],
+        'display': ['responsive', 'hover', 'group-hover'],
+        'opacity': ['responsive', 'hover', 'focus', 'active', 'group-hover'],
     },
     'plugins': [
 
