@@ -251,6 +251,15 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                                 ),
                             ),
                         ),
+                        '5fd0fc7876f64' => array(
+                            'acfe_settings_location' => 'admin',
+                            'acfe_settings_settings' => array(
+                                '5fd0fc7b76f65' => array(
+                                    'acfe_settings_setting_type' => 'hide_field',
+                                    'acfe_settings_setting_operator' => 'true',
+                                ),
+                            ),
+                        ),
                     ),
                     'acfe_validate'     => '',
                     'disabled'          => 0,
@@ -264,7 +273,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     array(
                         'param'    => 'post_type',
                         'operator' => '==',
-                        'value'    => 'post',
+                        'value'    => 'soumission',
                     ),
                 ),
             ),
