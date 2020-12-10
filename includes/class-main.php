@@ -1259,6 +1259,10 @@ body {
     max-width: 100vw;
 }
 
+button:focus {
+    outline: none;
+}
+
 ul {
     @apply list-disc list-inside;
 }
