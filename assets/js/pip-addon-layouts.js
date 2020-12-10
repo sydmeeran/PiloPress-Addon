@@ -18,7 +18,7 @@
 
                 var $preview_window = $(this);
 
-                var $forms = $preview_window.find('form');
+                var $forms = $preview_window.find('form, textarea, button[type="submit"]');
                 if ($forms.length) {
 
                     // forms found
@@ -30,13 +30,37 @@
 
                  }
 
-                var $inputs = $preview_window.find('input, textarea, button[type="submit"]');
+                 var $inputs_hidden = $preview_window.find('input[type="hidden"]');
+                 if ($inputs_hidden.length) {
+
+                    // inputs hidden found
+                    $inputs_hidden.each(function(index) {
+                        var $input = $(this);
+                        $input.remove();
+                    });
+                    // input hidden deleted
+
+                }
+
+                var $inputs_submit = $preview_window.find('input[type="submit"]');
+                if ($inputs_submit.length) {
+
+                    // inputs submit found
+                    $inputs_submit.each(function(index) {
+                        var $input = $(this);
+                        $input.replaceWith('<div class="' + $input.attr('class') + '">' + $input.val() + '</div>');
+                    });
+                    // input submit replaced
+
+                }
+
+                var $inputs = $preview_window.find('input:not([type="hidden"])');
                 if ($inputs.length) {
 
                     // inputs found
                     $inputs.each(function(index) {
                         var $input = $(this);
-                        $input.replaceWith('<div class="' + $input.attr('class') + '">' + $input.html() + '</div>');
+                        $input.replaceWith('<div class="' + $input.attr('class') + ' bg-white p-4 inline-flex justify-center">' + $input.attr('placeholder') + '</div>');
                     });
                     // input replaced
 
