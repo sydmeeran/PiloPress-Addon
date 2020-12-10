@@ -716,6 +716,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return string|string[]
          */
         public function pip_font_color_format_value( $value, $post_id, $field ) {
+        	
+            if ( !$value ) {
+                return $value;
+            }
 
             $class_output = acf_maybe_get( $field, 'class_output' );
             if ( !$class_output ) {
