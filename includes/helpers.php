@@ -322,3 +322,67 @@ if ( !function_exists( 'get_layout_title' ) ) {
 
     }
 }
+
+
+if ( !function_exists( 'pip_upload_file' ) ) {
+    
+    /**
+     *  Helper to upload a remote file (not only images) to the WP media library
+     *  (fork of "media_sideload_image")
+     *
+     *  Example for setting post thumbnail from img URL:
+     *  $upload_img_id = pip_upload_file( $url_img_file, $wp_post_id, null, 'id' );
+     *  set_post_thumbnail( $wp_post_id, $upload_img_id );
+     *
+     *  @param string $file
+     *  @param integer $post_id
+     *  @param string $desc
+     *  @param string $return
+     *  @return void
+     */
+    
+    function pip_upload_file( $file = '', $post_id = 0, $desc = null, $return = 'src' ) {
+
+        /** Add admin required files */
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        if ( !empty( $file ) ) {
+
+            $file_array         = array();
+            $file_array['name'] = wp_basename( $file );
+
+            // Download file to temp location.
+            $file_array['tmp_name'] = download_url( $file );
+
+            // If error storing temporarily, return the error.
+            if ( is_wp_error( $file_array['tmp_name'] ) ) {
+                return $file_array['tmp_name'];
+            }
+
+            // Do the validation and storage stuff.
+            $id = media_handle_sideload( $file_array, $post_id, $desc );
+
+            // If error storing permanently, unlink.
+            if ( is_wp_error( $id ) ) {
+                @unlink( $file_array['tmp_name'] );
+                return $id;
+                // If attachment id was requested, return it early.
+            } elseif ( $return === 'id' ) {
+                return $id;
+            }
+
+            $src = wp_get_attachment_url( $id );
+        }
+
+        // Finally, check to make sure the file has been saved, then return the HTML.
+        if ( !empty( $src ) ) {
+            if ( $return === 'src' ) {
+                return $src;
+            }
+        } else {
+            return new WP_Error( 'image_sideload_failed' );
+        }
+    }
+}
