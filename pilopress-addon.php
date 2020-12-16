@@ -144,13 +144,29 @@ if ( !class_exists( 'PIP_Addon' ) ) {
          * @return bool
          */
         public function has_pip() {
+
             // If Pilo'Press already available, return
             if ( $this->pip ) {
                 return true;
             }
 
+            $pip_exists = class_exists( 'PiloPress' );
+            if ( !$pip_exists ) {
+                return false;
+            }
+
+            $pip_instance = new PiloPress();
+            if ( !$pip_instance ) {
+                return false;
+            }
+
+            $acf = $pip_instance->has_acf();
+            if ( !$acf ) {
+                return false;
+            }
+
             // Check if Pilo'Press activated
-            $this->pip = class_exists( 'PiloPress' );
+            $this->pip = true;
 
             return $this->pip;
         }
