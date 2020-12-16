@@ -156,7 +156,11 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             }
 
             $pip_instance = new PiloPress();
-            $acf          = $pip_instance->has_acf();
+            if ( !$pip_instance ) {
+                return false;
+            }
+
+            $acf = $pip_instance->has_acf();
             if ( !$acf ) {
                 return false;
             }
