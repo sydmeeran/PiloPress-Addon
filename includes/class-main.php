@@ -716,7 +716,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return string|string[]
          */
         public function pip_font_color_format_value( $value, $post_id, $field ) {
-        	
+
             if ( !$value ) {
                 return $value;
             }
@@ -1037,7 +1037,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_addon_templates( $template ) {
 
             // Use "taxonomy.php" template inside the PiloPress-Addon
-            if ( is_tax() ) {
+            if ( is_category() || is_tax() ) {
                 // In theme
                 if ( file_exists( get_stylesheet_directory() . '/taxonomy.php' ) ) {
                     return $template;
