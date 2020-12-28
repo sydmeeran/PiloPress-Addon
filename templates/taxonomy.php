@@ -4,7 +4,7 @@ get_header();
 if ( function_exists( 'the_pip_content' ) ) {
 
     // Use term flexible if it exists otherwise fallback on archive flexible
-    $term_content = has_flexible( PIP_Flexible::get_flexible_field_name(), pip_get_formatted_post_id() );
+    $term_content = has_flexible( 'pip_flexible', pip_get_formatted_post_id() );
     if ( $term_content ) {
 
         the_pip_content();

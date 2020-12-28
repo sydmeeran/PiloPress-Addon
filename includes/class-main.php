@@ -793,11 +793,11 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             <style>
                 .menu-item-bar .menu-item-handle {
                     box-sizing: border-box;
-                    width: 100%;
+                    max-width: none;
                 }
 
                 .menu-item .menu-item-settings {
-                    width: auto;
+                    max-width: none;
                 }
             </style>
             <?php

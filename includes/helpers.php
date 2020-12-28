@@ -225,3 +225,34 @@ function pip_layout_configuration( $layout_name = null ) {
         'vertical_space' => $vertical_space,
     );
 }
+
+if ( !function_exists( 'get_layout_title' ) ) {
+    /*
+     *  get_layout_title()
+     *  This function will return a string representation of the current layout title within a 'have_rows' loop
+     *
+     *  @return string
+     */
+    function get_layout_title() {
+
+        // vars
+        $row          = get_row();
+        $layout_title = false;
+
+        if ( empty( $row ) ) {
+            return $layout_title;
+        }
+
+        foreach ( $row as $key => $value ) {
+            if ( mb_stripos( $key, '_title' ) === false ) {
+                continue;
+            }
+
+            $layout_title = $value;
+        }
+
+        // return
+        return $layout_title;
+
+    }
+}
