@@ -1280,6 +1280,13 @@ ol[class] {
     @apply list-none;
 }
 
+/** Images - Fix when "img" are replaced with "picture" */
+picture > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /** Headings */
 h1,
 .h1 {
