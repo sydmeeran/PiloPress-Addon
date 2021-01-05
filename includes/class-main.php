@@ -1280,11 +1280,18 @@ ol[class] {
     @apply list-none;
 }
 
-/** Images - Fix when "img" are replaced with "picture" */
-picture > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/** Images */
+picture {
+    @apply block align-middle;
+
+    & > img {
+        all: inherit;
+    }
+
+    /** Fix when <img> are replaced with <picture> */
+    &:not([class*="wp-image"]) > img {
+        @apply w-full h-full object-cover;
+    }
 }
 
 /** Headings */
