@@ -15,38 +15,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'required'          => 0,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
-                        'width' => '10',
-                        'class' => '',
-                        'id'    => '',
-                    ),
-                    'hide_admin'        => 0,
-                    'user_roles'        => array(
-                        0 => 'all',
-                    ),
-                    'message'           => '',
-                    'default_value'     => 0,
-                    'ui'                => 1,
-                    'ui_on_text'        => '',
-                    'ui_off_text'       => '',
-                ),
-                array(
-                    'key'               => 'field_5c73ac8d14a8x',
-                    'label'             => 'Icône - Masquer le texte ?',
-                    'name'              => 'menu_icon_hide_text',
-                    'type'              => 'true_false',
-                    'instructions'      => '',
-                    'required'          => 0,
-                    'conditional_logic' => array(
-                        array(
-                            array(
-                                'field'    => 'field_5c73ac8d14a8e',
-                                'operator' => '==',
-                                'value'    => '1',
-                            ),
-                        ),
-                    ),
-                    'wrapper'           => array(
-                        'width' => '10',
+                        'width' => '12',
                         'class' => '',
                         'id'    => '',
                     ),
@@ -77,7 +46,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         ),
                     ),
                     'wrapper'           => array(
-                        'width' => '40',
+                        'width' => '30',
                         'class' => '',
                         'id'    => '',
                     ),
@@ -103,6 +72,71 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'choices'           => array(),
                 ),
                 array(
+                    'key'               => 'field_5c73aacc6b3de',
+                    'label'             => 'Icône - Couleur',
+                    'name'              => 'menu_icon_color',
+                    'type'              => 'pip_font_color',
+                    'instructions'      => '',
+                    'required'          => 0,
+                    'conditional_logic' => array(
+                        array(
+                            array(
+                                'field'    => 'field_5c73ac8d14a8e',
+                                'operator' => '==',
+                                'value'    => '1',
+                            ),
+                        ),
+                    ),
+                    'wrapper'           => array(
+                        'width' => '20',
+                        'class' => '',
+                        'id'    => '',
+                    ),
+                    'hide_admin'        => 0,
+                    'user_roles'        => array(
+                        0 => 'all',
+                    ),
+                    'choices'           => array(),
+                    'default_value'     => '',
+                    'allow_null'        => 1,
+                    'multiple'          => 0,
+                    'ui'                => 0,
+                    'return_format'     => 'value',
+                    'ajax'              => 0,
+                    'placeholder'       => '',
+                ),
+                array(
+                    'key'               => 'field_5c73ac8d14a8x',
+                    'label'             => 'Masquer le texte ?',
+                    'name'              => 'menu_icon_hide_text',
+                    'type'              => 'true_false',
+                    'instructions'      => '',
+                    'required'          => 0,
+                    'conditional_logic' => array(
+                        array(
+                            array(
+                                'field'    => 'field_5c73ac8d14a8e',
+                                'operator' => '==',
+                                'value'    => '1',
+                            ),
+                        ),
+                    ),
+                    'wrapper'           => array(
+                        'width' => '12',
+                        'class' => '',
+                        'id'    => '',
+                    ),
+                    'hide_admin'        => 0,
+                    'user_roles'        => array(
+                        0 => 'all',
+                    ),
+                    'message'           => '',
+                    'default_value'     => 0,
+                    'ui'                => 1,
+                    'ui_on_text'        => '',
+                    'ui_off_text'       => '',
+                ),
+                array(
                     'key'               => 'field_5c73aacc6b3dd',
                     'label'             => 'Icône - Placement',
                     'name'              => 'menu_icon_placement',
@@ -124,7 +158,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         ),
                     ),
                     'wrapper'           => array(
-                        'width' => '40',
+                        'width' => '20',
                         'class' => '',
                         'id'    => '',
                     ),

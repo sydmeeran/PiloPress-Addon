@@ -20,7 +20,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
-            add_action( 'after_body_open_tag', array( $this, 'enqueue_gtm_noscript' ) );
+            add_action( 'wp_body_open', array( $this, 'enqueue_gtm_noscript' ) );
             add_filter( 'login_headerurl', array( $this, 'login_header_url' ) );
             add_filter( 'login_headertitle', array( $this, 'login_header_title' ) );
             add_action( 'admin_print_scripts', array( $this, 'remove_admin_notices' ) );
@@ -28,7 +28,9 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu_hook' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
+            add_filter( 'ACFFA_get_fa_url', array( $this, 'dequeue_font_awesome_free' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_action( 'customize_register', array( $this, 'pip_add_logo_versions_to_customizer' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
             add_filter( 'nav_menu_css_class', array( $this, 'menu_item_parent_css_class' ), 10, 4 );
@@ -37,7 +39,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
-            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
+            add_shortcode( 'pip_icon_fa', array( $this, 'shortcode_icon_fa' ) );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -69,7 +71,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return string
          */
         public function attachment_media_url_by_default( $value ) {
-            return 'file';
+            return 'none';
         }
 
         /**
@@ -144,29 +146,37 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 $menu_icon           = get_field( 'menu_icon', $item );
                 $menu_icon_position  = get_field( 'menu_icon_placement', $item );
                 $menu_icon_hide_text = get_field( 'menu_icon_hide_text', $item );
+                $menu_icon_color     = get_field( 'menu_icon_color', $item );
                 $old_item_title      = pip_maybe_get( $item, 'title' );
 
                 // Hide text
                 if ( $menu_icon_hide_text ) {
 
-                    $item->title = $menu_icon;
+                    $menu_icon_class = "fa-fw $menu_icon_color";
+                    $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                    $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                    $item->title     = $menu_icon;
 
                 } else {
 
                     // Menu icon position
                     if ( $menu_icon_position === 'gauche' ) {
 
-                        $margin      = $rtl ? 'ml-2' : 'mr-2';
-                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
-                        $item->title = $menu_icon . $old_item_title;
+                        $margin          = $rtl ? 'ml-2' : 'mr-2';
+                        $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
+                        $menu_icon_class = "fa-fw $menu_icon_color $margin";
+                        $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                        $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                        $item->title     = $menu_icon . $old_item_title;
 
                     } elseif ( $menu_icon_position === 'droite' ) {
 
-                        $margin      = $rtl ? 'mr-2' : 'ml-2';
-                        $margin      = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
-                        $menu_icon   = str_replace( 'class="', 'class="' . $margin . ' ', $menu_icon );
-                        $item->title = $old_item_title . $menu_icon;
+                        $margin          = $rtl ? 'mr-2' : 'ml-2';
+                        $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
+                        $menu_icon_class = "fa-fw $menu_icon_color $margin";
+                        $menu_icon_class = apply_filters( 'pip_addon/menu_icon/class', $menu_icon_class );
+                        $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
+                        $item->title     = $old_item_title . $menu_icon;
 
                     }
                 }
@@ -420,6 +430,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
+         *  Dequeue Font Awesome Free CSS
+         */
+        public function dequeue_font_awesome_free( $load_plugin_fa_css ) {
+
+            if ( !is_admin() ) {
+                $load_plugin_fa_css = false;
+            }
+
+            return $load_plugin_fa_css;
+        }
+
+        /**
          *  Enqueue Font Awesome Pro CSS
          */
         public function enqueue_font_awesome_pro() {
@@ -427,22 +449,14 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return;
             }
 
-            $fa_url = apply_filters( 'ACFFA_get_fa_url', '//pro.fontawesome.com/releases/v5.14.0/css/all.css' );
+            // Get latest Font Awesome version from "ACF Font Awesome" plugin
+            $fa_version = get_option( 'ACFFA_current_version' );
+            if ( !$fa_version ) {
+                $fa_version = '5.15.1';
+            }
+
+            $fa_url = "https://pro.fontawesome.com/releases/v$fa_version/css/all.css";
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
-        }
-
-        /**
-         *  ACF field "Font Awesome" plugin
-         *  - Force Pro mode (to have pro icons in select in the back-office)
-         *
-         * @param $acf_fa_params
-         *
-         * @return mixed
-         */
-        public function acf_field_fa_pro_activation( $acf_fa_params ) {
-            $acf_fa_params['acffa_pro_cdn'] = true;
-
-            return $acf_fa_params;
         }
 
         /**
@@ -522,7 +536,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         background-size: contain;
                     }
                 </style>
-            <?php
+                <?php
             endif;
         }
 
@@ -668,6 +682,10 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          */
         public function pip_font_color_format_value( $value, $post_id, $field ) {
 
+            if ( !$value ) {
+                return $value;
+            }
+
             $class_output = acf_maybe_get( $field, 'class_output' );
             if ( !$class_output ) {
                 return $value;
@@ -748,7 +766,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )(window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>')
                 </script>
-            <?php
+                <?php
             endif;
         }
 
@@ -763,7 +781,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-            <?php
+                <?php
             endif;
         }
 
@@ -816,6 +834,41 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             $file      = ( !empty( $extension ) ) ? preg_replace( '/.' . $extension . '$/', '', $input ) : $input;
 
             return sanitize_title( str_replace( '_', '-', $file ) ) . ( ( !empty( $extension ) ) ? '.' . $extension : '' );
+        }
+
+        /**
+         *  Icon - Font Awesome
+         */
+        public function shortcode_icon_fa( $atts, $content = null ) {
+
+            // Extract variables from shortcodes attributes
+            extract( // phpcs:ignore
+                shortcode_atts(
+                    array(
+                        's' => '', // Style class (ex: far)
+                        'i' => '', // Icon class (ex: fa-paper-plane)
+                        'u' => '', // Utility classes (ex: fa-fw fa-2x)
+                        'l' => '', // Link url
+                    ),
+                    $atts
+                )
+            );
+
+            ob_start(); ?>
+            <i class="<?php echo "pip-shortcode-icon $s $i $u"; ?>"></i>
+            <?php
+            $render_icon = ob_get_clean();
+
+            if ( $l ) :
+                ob_start(); ?>
+                <a href="<?php echo $l; ?>">
+                    <?php echo $render_icon; ?>
+                </a>
+                <?php
+                $render_icon = ob_get_clean();
+            endif;
+
+            return $render_icon;
         }
 
         /**
@@ -882,6 +935,58 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
+         *  WordPress - Customizer
+         *  - Add logo versions in customizer, based on the filter pip_addon/logo_versions
+         *
+         * Example of filtering :
+         * add_filter(
+         * 'pip_addon/logo_versions',
+         * function( $possible_versions ) {
+         *
+         *     $possible_versions[] = array(
+         *         'label' => __( 'Logo blanc', 'pilot-in' ),
+         *         'slug'  => 'logo-white',
+         *    );
+         *
+         *    return $possible_versions;
+         *  }
+         * );
+         */
+        public function pip_add_logo_versions_to_customizer( $wp_customize ) {
+
+            $possible_versions = apply_filters( 'pip_addon/logo_versions', array() );
+
+            if ( empty( $possible_versions ) ) {
+                return;
+            }
+
+            foreach ( $possible_versions as $possible_version ) {
+
+                $version_label = pip_maybe_get( $possible_version, 'label' );
+                $version_slug  = pip_maybe_get( $possible_version, 'slug' );
+
+                $wp_customize->add_setting(
+                    $version_slug,
+                    array(
+                        'default'    => '',
+                        'capability' => 'edit_theme_options',
+                    )
+                );
+
+                $wp_customize->add_control(
+                    new WP_Customize_Image_Control(
+                        $wp_customize,
+                        $version_slug,
+                        array(
+                            'label'   => $version_label,
+                            'section' => 'title_tagline',
+                        )
+                    )
+                );
+            }
+        }
+
+        /**
          *  Use templates inside the Pilo'Press Addon
          *
          * @param $template
@@ -891,7 +996,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_addon_templates( $template ) {
 
             // Use "taxonomy.php" template inside the PiloPress-Addon
-            if ( is_tax() ) {
+            if ( is_category() || is_tax() ) {
                 // In theme
                 if ( file_exists( get_stylesheet_directory() . '/taxonomy.php' ) ) {
                     return $template;
@@ -940,7 +1045,12 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          * @return mixed
          */
         public function pip_flexible_args( $params ) {
-            $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4;
+
+            $params['acfe_flexible_advanced']                         = 1; // Toggle advanced flexible features mode
+            $params['acfe_flexible_toggle']                           = 1; // Toggle layout visibilty on front-end
+            $params['acfe_flexible_layouts_state']                    = 'collapsed'; // Force layouts to be on "closed / preview"
+            $params['acfe_flexible_modal_edition']                    = 1; // Show layout edition inside a modal
+            $params['acfe_flexible_modal']['acfe_flexible_modal_col'] = 4; // Set 4 layouts per row in layouts selection
 
             return $params;
         }
@@ -955,137 +1065,138 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_config_default( $field ) {
 
             ob_start(); ?>
-            const { colors, fontFamily } = require('tailwindcss/defaultTheme')
-            const plugin = require('tailwindcss/plugin')
-            const selectorParser = require("postcss-selector-parser")
+const { colors, fontFamily } = require('tailwindcss/defaultTheme')
+const plugin = require('tailwindcss/plugin')
+const selectorParser = require("postcss-selector-parser")
 
-            module.exports = {
-            'theme': {
-            'colors': {
+module.exports = {
+    'theme': {
+        'colors': {
             'transparent': 'transparent',
             'current': 'currentColor',
             'black': '#2E2B28',
             'white': '#FFFFFF',
             'gray': {
-            ...colors.gray,
-            'default': "#A0AEC0",
+                ...colors.gray,
+                'default': "#A0AEC0",
             },
             'primary': '#575756',
             'primary-500': '#575756',
             'secondary': '#E2101B',
             'secondary-500': '#E2101B',
-            },
-            'fontFamily': {
+        },
+        'fontFamily': {
             'primary': ['NomDeLaFont', ...fontFamily.sans],
             'secondary': ['NomDeLaFont', ...fontFamily.serif],
-            },
-            'inset': {
+        },
+        'inset': {
             '0': 0,
             auto: 'auto',
             '1/2': '50%',
             'full': '100%',
-            },
-            'container': {
+        },
+        'container': {
             'center': 'true',
             'padding': {
-            default: '2rem',
-            'lg': 0,
+                default: '2rem',
+                'lg': 0,
             },
-            },
-            'namedGroups': ["1", "2"],
-            'extend': {
+        },
+        'namedGroups': ["1", "2"],
+        'extend': {
             'spacing': {
-            '75': '18.75rem',
-            '84': '21rem',
-            '88': '22rem',
-            '96': '24rem',
-            '100': '25rem',
-            '112': '28rem',
-            '120': '30rem',
-            '124': '31rem',
-            '136': '34rem',
-            '138': '34.5rem',
-            '140': '35rem',
-            '150': '37.5rem',
-            '152': '38rem',
-            '162': '40.5rem',
-            '176': '44rem',
-            '186': '46.5rem',
-            '192': '48rem',
-            '200': '50rem',
+                '75': '18.75rem',
+                '84': '21rem',
+                '88': '22rem',
+                '96': '24rem',
+                '100': '25rem',
+                '112': '28rem',
+                '120': '30rem',
+                '124': '31rem',
+                '136': '34rem',
+                '138': '34.5rem',
+                '140': '35rem',
+                '150': '37.5rem',
+                '152': '38rem',
+                '162': '40.5rem',
+                '176': '44rem',
+                '186': '46.5rem',
+                '192': '48rem',
+                '200': '50rem',
             },
-            }
-            },
-            'variants': {
-            'backgroundColor': ['group-hover', 'hover', 'focus'],
-            'textColor': ['group-hover', 'hover', 'focus'],
-            'display': ['responsive', 'group-hover'],
-            },
-            'plugins': [
+        }
+    },
+    'variants': {
+        'backgroundColor': ['hover', 'focus', 'active', 'group-hover'],
+        'textColor': ['hover', 'focus', 'active', 'group-hover'],
+        'display': ['responsive', 'hover', 'group-hover'],
+        'opacity': ['responsive', 'hover', 'focus', 'active', 'group-hover'],
+    },
+    'plugins': [
 
-            /** "Tailwind Named Groups" plugin */
-            plugin(({ theme, addVariant, prefix, e }) => {
+        /** "Tailwind Named Groups" plugin */
+        plugin(({ theme, addVariant, prefix, e }) => {
             const namedGroups = theme("namedGroups") || [];
 
             addVariant(`group-hover`, ({ modifySelectors, separator }) => {
-            return modifySelectors(({ selector }) => {
-            return selectorParser((root) => {
-            root.walkClasses((node) => {
-            // Regular group
-            const value = node.value;
-            node.value = `group-hover${separator}${value}`;
+                return modifySelectors(({ selector }) => {
+                    return selectorParser((root) => {
+                        root.walkClasses((node) => {
+                            // Regular group
+                            const value = node.value;
+                            node.value = `group-hover${separator}${value}`;
 
-            node.parent.insertBefore(
-            node,
-            selectorParser().astSync(prefix(`.group:hover `))
-            );
+                            node.parent.insertBefore(
+                                node,
+                                selectorParser().astSync(prefix(`.group:hover `))
+                            );
 
-            // Named groups
-            namedGroups.forEach((namedGroup) => {
-            node.parent.parent.insertAfter(
-            node.parent,
-            selectorParser().astSync(
-            prefix(`.group-${namedGroup}:hover .`) +
-            e(`group-${namedGroup}-hover${separator}${value}`)
-            )
-            );
-            });
-            });
-            }).processSync(selector);
-            });
+                            // Named groups
+                            namedGroups.forEach((namedGroup) => {
+                                node.parent.parent.insertAfter(
+                                    node.parent,
+                                    selectorParser().astSync(
+                                        prefix(`.group-${namedGroup}:hover .`) +
+                                        e(`group-${namedGroup}-hover${separator}${value}`)
+                                    )
+                                );
+                            });
+                        });
+                    }).processSync(selector);
+                });
             });
 
             addVariant(`group-focus`, ({ modifySelectors, separator }) => {
-            return modifySelectors(({ selector }) => {
-            return selectorParser((root) => {
-            root.walkClasses((node) => {
-            // Regular group
-            const value = node.value;
-            node.value = `group-focus${separator}${value}`;
+                return modifySelectors(({ selector }) => {
+                    return selectorParser((root) => {
+                        root.walkClasses((node) => {
+                            // Regular group
+                            const value = node.value;
+                            node.value = `group-focus${separator}${value}`;
 
-            node.parent.insertBefore(
-            node,
-            selectorParser().astSync(prefix(`.group:focus `))
-            );
+                            node.parent.insertBefore(
+                                node,
+                                selectorParser().astSync(prefix(`.group:focus `))
+                            );
 
-            // Named groups
-            namedGroups.forEach((namedGroup) => {
-            node.parent.parent.insertAfter(
-            node.parent,
-            selectorParser().astSync(
-            prefix(`.group-${namedGroup}:focus .`) +
-            e(`group-${namedGroup}-focus${separator}${value}`)
-            )
-            );
+                            // Named groups
+                            namedGroups.forEach((namedGroup) => {
+                                node.parent.parent.insertAfter(
+                                    node.parent,
+                                    selectorParser().astSync(
+                                        prefix(`.group-${namedGroup}:focus .`) +
+                                        e(`group-${namedGroup}-focus${separator}${value}`)
+                                    )
+                                );
+                            });
+                        });
+                    }).processSync(selector);
+                });
             });
-            });
-            }).processSync(selector);
-            });
-            });
-            })
+        })
 
-            ],
-            };
+    ],
+};
             <?php
             $field['default_value'] = ob_get_clean();
 
@@ -1103,139 +1214,212 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_tailwind_style_default( $field ) {
 
             ob_start(); ?>
-            @tailwind base;
-            @tailwind components;
+@tailwind base;
+@tailwind components;
 
-            body {
-            @apply font-primary overflow-x-hidden;
-            max-width: 100vw;
-            }
+body {
+    @apply text-base text-black font-primary antialiased overflow-x-hidden;
+    max-width: 100vw;
+}
 
-            ul {
-            @apply list-disc list-inside;
-            }
+button:focus {
+    outline: none;
+}
 
-            ol {
-            @apply list-decimal list-inside;
-            }
+ul {
+    @apply list-disc list-inside;
+}
 
-            ul[class],
-            ol[class] {
-            @apply list-none;
-            }
+ol {
+    @apply list-decimal list-inside;
+}
 
-            /** Headings */
-            h1,
-            .h1 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
-            }
+ul[class],
+ol[class] {
+    @apply list-none;
+}
 
-            h2,
-            .h2 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-3xl;
-            }
+/** Images */
+picture {
+    @apply block align-middle;
 
-            h3,
-            .h3 {
-            @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
-            }
+    & > img {
+        all: inherit;
+    }
 
-            h4,
-            .h4 {
-            @apply font-primary leading-tight font-semibold text-black text-xl;
-            }
+    /** Fix when <img> are replaced with <picture> */
+    &:not([class*="wp-image"]) > img {
+        @apply w-full h-full object-cover;
+    }
+}
 
-            h5,
-            .h5 {
-            @apply font-primary leading-tight font-semibold text-black text-lg;
-            }
+/** Headings */
+h1,
+.h1 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-4xl;
 
-            h6,
-            .h6 {
-            @apply font-primary leading-tight font-semibold text-black text-base;
-            }
+    /* Desktop size */
+    @screen lg {
+        @apply text-5xl;
+    }
+}
 
-            /* Inputs */
-            .select2 > .selection > .select2-selection,
-            input[type="email"],
-            input[type="password"],
-            input[type="text"],
-            input[type="tel"],
-            input[type="number"],
-            select,
-            textarea {
-            @apply text-sm border-2 border-gray-500 rounded p-2;
-            }
+h2,
+.h2 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-2xl;
 
-            /* Select2 - Fix margin */
-            .select2 > .selection > .select2-selection {
-            @apply m-0;
-            }
+    /* Desktop size */
+    @screen lg {
+        @apply text-3xl;
+    }
+}
 
-            /* Select2 - Fix arrow position */
-            .select2 > .selection > .select2-selection > .select2-selection__arrow {
-            top: 50%;
-            right: 1%;
-            transform: translateY(-50%);
-            }
+h3,
+.h3 {
+    @apply font-primary leading-tight uppercase font-semibold text-black text-xl;
 
-            /* Select2 - Fix clear icon position */
-            .select2 > .selection .select2-selection__clear {
-            @apply px-2 py-0;
-            margin-right: calc(1% + 1em);
-            }
+    /* Desktop size */
+    @screen lg {
+        @apply text-2xl;
+    }
+}
 
-            /* Select2 - Fix select style */
-            .select2 > .selection > .select2-selection > .select2-selection__rendered {
-            @apply p-0;
-            line-height: inherit;
-            }
+h4,
+.h4 {
+    @apply font-primary leading-tight font-semibold text-black text-xl;
+}
 
-            /** Select2 - Dropdown - Option selected - Hover */
-            .select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
-            .select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
-            @apply bg-secondary;
-            }
+h5,
+.h5 {
+    @apply font-primary leading-tight font-semibold text-black text-lg;
+}
 
-            /** WYSIWYG alignment styles */
-            .aligncenter {
-            @apply mx-auto;
-            }
+h6,
+.h6 {
+    @apply font-primary leading-tight font-semibold text-black text-base;
+}
 
-            .alignleft {
-            @apply mr-auto;
-            }
+/* Inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea,
+.select2 > .selection > .select2-selection {
+    @apply h-auto text-sm border-2 border-gray-500 rounded p-3 !important;
+}
 
-            .alignright {
-            @apply ml-auto;
-            }
+/* Select2 - Fix margin */
+.select2 > .selection > .select2-selection {
+    @apply m-0 !important;
+}
 
-            /**
-            * Button basic styling
-            * (extend it to create your buttons)
-            */
-            .btn-base {
-            @apply relative inline-flex items-center justify-center text-sm text-black uppercase px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
+/* Select2 - Fix arrow position */
+.select2 > .selection > .select2-selection > .select2-selection__arrow {
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+}
 
-            &:hover {
-            @apply bg-gray-700 border-gray-700;
-            }
-            }
+/* Select2 - Fix clear icon position */
+.select2 > .selection .select2-selection__clear {
+    @apply px-2 py-0 !important;
+    margin-right: calc(1% + 1em) !important;
+}
 
-            /** ----------------------------------
-            * Put your custom styles here below...
-            * ---------------------------------- */
+/* Select2 - Fix select style */
+.select2 > .selection > .select2-selection > .select2-selection__rendered {
+    @apply p-0 !important;
+    line-height: inherit !important;
+}
 
-            /** Button - primary */
-            .btn-primary {
-            @apply btn-base text-white bg-primary border-primary;
+/** Select2 - Dropdown - Option selected - Hover */
+.select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
+.select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
+    @apply bg-secondary !important;
+}
 
-            &:hover {
-            @apply bg-secondary border-secondary;
-            }
-            }
+/** WYSIWYG alignment styles */
+.aligncenter {
+    @apply mx-auto;
+}
 
-            @tailwind utilities;
+.alignleft {
+    @apply mr-auto;
+}
+
+.alignright {
+    @apply ml-auto;
+}
+
+/* Pagination */
+.pagination {
+    @apply flex items-center justify-center text-black w-full pt-6 border-t border-gray;
+
+    .page-numbers {
+        @apply px-1 mr-1;
+    }
+
+    /* Hover, current */
+    .page-numbers.current, .prev:hover, .next:hover {
+        @apply text-primary;
+    }
+}
+
+/**
+ * Button basic styling
+ * (extend it to create your buttons)
+ */
+.btn-base {
+    @apply relative inline-flex items-center justify-center text-sm text-black uppercase px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
+
+    &:hover {
+        @apply bg-gray-700 border-gray-700;
+    }
+}
+
+/** Icon Font Awesome - Left position */
+.icon-left {
+    &::before {
+        content: '';
+        display: inline-block;
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 400;
+        color: currentcolor;
+        margin-right: 12px;
+        text-align: center;
+    }
+}
+
+/** Icon Font Awesome - Right position */
+.icon-right {
+    &::after {
+        content: '';
+        display: inline-block;
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 400;
+        color: currentcolor;
+        margin-left: 12px;
+        text-align: center;
+    }
+}
+
+/** ----------------------------------
+ * Put your custom styles here below...
+ * ---------------------------------- */
+
+/** Button - primary */
+.btn-primary {
+    @apply btn-base text-white bg-primary border-primary;
+
+    &:hover, &.active {
+        @apply bg-secondary border-secondary;
+    }
+}
+
+@tailwind utilities;
             <?php
             $field['default_value'] = ob_get_clean();
 

@@ -12,7 +12,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'nom',
                     'type'              => 'text',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -47,7 +47,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'prenom',
                     'type'              => 'text',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -82,7 +82,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'email',
                     'type'              => 'email',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
@@ -151,7 +151,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'               => 'message',
                     'type'               => 'textarea',
                     'instructions'       => '',
-                    'required'           => 0,
+                    'required'           => 1,
                     'conditional_logic'  => 0,
                     'wrapper'            => array(
                         'width' => '',
@@ -197,7 +197,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'choices'           => array(
-                        'Les informations recueillies dans ce formulaire sont utilisées pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité' => 'Les informations recueillies dans ce formulaire sont utilisées par PARATRONIC pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité',
+                        'Les informations recueillies dans ce formulaire sont utilisées pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité' => 'Les informations recueillies dans ce formulaire sont utilisées par MONSITE pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité',
                     ),
                     'allow_custom'      => 0,
                     'default_value'     => array(),
@@ -226,11 +226,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'name'              => 'captcha',
                     'type'              => 'acfe_recaptcha',
                     'instructions'      => '',
-                    'required'          => 0,
+                    'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
                         'width' => '',
-                        'class' => 'mt-0',
+                        'class' => 'mt-0 flex justify-center',
                         'id'    => '',
                     ),
                     'acfe_save_meta'    => 0,
@@ -251,6 +251,15 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                                 ),
                             ),
                         ),
+                        '5fd0fc7876f64' => array(
+                            'acfe_settings_location' => 'admin',
+                            'acfe_settings_settings' => array(
+                                '5fd0fc7b76f65' => array(
+                                    'acfe_settings_setting_type' => 'hide_field',
+                                    'acfe_settings_setting_operator' => 'true',
+                                ),
+                            ),
+                        ),
                     ),
                     'acfe_validate'     => '',
                     'disabled'          => 0,
@@ -264,7 +273,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     array(
                         'param'    => 'post_type',
                         'operator' => '==',
-                        'value'    => 'post',
+                        'value'    => 'soumission',
                     ),
                 ),
             ),

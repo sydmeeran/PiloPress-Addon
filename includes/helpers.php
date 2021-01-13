@@ -228,34 +228,164 @@ function pip_layout_configuration( $layout_name = null ) {
     );
 }
 
+
+/**
+ * Display a version of the website's Logo
+ *
+ * @param string|null $version (empty for WordPress custom_logo or slug of the version added through pip_addon/logo_versions)
+ *
+ * Example pip_the_logo('logo-white') to get the logo which get_theme_mod is 'logo-white' (see pip_add_logo_versions_to_customizer() to add versions)
+ */
+function pip_the_logo( $version = '' ) {
+
+    $logo_url = false;
+
+    //If custom_logo exist then it is the default logo
+    if ( !has_custom_logo() ) {
+        return false;
+    }
+
+    $logo_id = get_theme_mod( 'custom_logo' );
+    if ( !$logo_id ) {
+        return false;
+    }
+
+    $logo = wp_get_attachment_image_src( $logo_id, 'full' );
+    if ( is_array( $logo ) && !empty( $logo ) ) {
+        $logo_url = reset( $logo );
+    }
+
+    if ( !empty( $version ) ) {
+
+        //If there is a logo version with an image then override the default logo with the versionned logo
+        $logo_version = get_theme_mod( $version );
+        if ( $logo_version ) {
+            $logo_url = $logo_version;
+        }
+    }
+
+    $logo_class = 'pip-logo-link';
+    if ( $version ) {
+        $logo_class .= ' logo-' . $version;
+    }
+
+    $logo_alt = get_bloginfo( 'name', 'display' );
+
+    if ( $logo_id = get_theme_mod( 'custom_logo' ) ) {
+        $alt = get_post_meta( $logo_id, '_wp_attachment_image_alt', true );
+        if ( !empty( $alt ) ) {
+            $logo_alt = $alt;
+        }
+    }
+
+    ?>
+
+        <a
+            class="<?php echo esc_attr( $logo_class ); ?>"
+            href="<?php echo esc_url( home_url( '/' ) ); ?>"
+            rel="home"
+            itemprop="url"
+        >
+            <img
+                src="<?php echo esc_url( $logo_url ); ?>"
+                alt="<?php echo esc_attr( $logo_alt ); ?>"
+            />
+        </a>
+
+    <?php
+}
+
 if ( !function_exists( 'get_layout_title' ) ) {
-    /**
+    /*
+     *  get_layout_title()
      *  This function will return a string representation of the current layout title within a 'have_rows' loop
      *
-     * @return string
+     *  @return string
      */
     function get_layout_title() {
+
+        // vars
+        $row          = get_row();
         $layout_title = false;
 
-        // Get row
-        $row = get_row();
-        if ( !$row ) {
+        if ( empty( $row ) ) {
             return $layout_title;
         }
 
-        // Browse row
         foreach ( $row as $key => $value ) {
-            // If no title, skip
             if ( mb_stripos( $key, '_title' ) === false ) {
                 continue;
             }
 
-            // Store value
             $layout_title = $value;
         }
 
-        // Return title
+        // return
         return $layout_title;
 
+    }
+}
+
+
+if ( !function_exists( 'pip_upload_file' ) ) {
+
+    /**
+     *  Helper to upload a remote file (not only images) to the WP media library
+     *  (fork of "media_sideload_image")
+     *
+     *  Example for setting post thumbnail from img URL:
+     *  $upload_img_id = pip_upload_file( $url_img_file, $wp_post_id, null, 'id' );
+     *  set_post_thumbnail( $wp_post_id, $upload_img_id );
+     *
+     *  @param string $file
+     *  @param integer $post_id
+     *  @param string $desc
+     *  @param string $return
+     *  @return void
+     */
+
+    function pip_upload_file( $file = '', $post_id = 0, $desc = null, $return = 'src' ) {
+
+        /** Add admin required files */
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        if ( !empty( $file ) ) {
+
+            $file_array         = array();
+            $file_array['name'] = wp_basename( $file );
+
+            // Download file to temp location.
+            $file_array['tmp_name'] = download_url( $file );
+
+            // If error storing temporarily, return the error.
+            if ( is_wp_error( $file_array['tmp_name'] ) ) {
+                return $file_array['tmp_name'];
+            }
+
+            // Do the validation and storage stuff.
+            $id = media_handle_sideload( $file_array, $post_id, $desc );
+
+            // If error storing permanently, unlink.
+            if ( is_wp_error( $id ) ) {
+                @unlink( $file_array['tmp_name'] );
+                return $id;
+                // If attachment id was requested, return it early.
+            } elseif ( $return === 'id' ) {
+                return $id;
+            }
+
+            $src = wp_get_attachment_url( $id );
+        }
+
+        // Finally, check to make sure the file has been saved, then return the HTML.
+        if ( !empty( $src ) ) {
+            if ( $return === 'src' ) {
+                return $src;
+            }
+        } else {
+            return new WP_Error( 'image_sideload_failed' );
+        }
     }
 }
