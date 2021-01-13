@@ -51,9 +51,8 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
     ob_start(); ?>
     <div class="pagination relative flex items-center justify-center w-full">
 
-        <?php
-        // Page précédente
-        if ( $paged > 1 ) : ?>
+        <?php // Previous page link ?>
+        <?php if ( $paged > 1 ) : ?>
             <a
                     class="pagination-previous mr-auto hidden md:block"
                     href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
@@ -62,15 +61,13 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
             </a>
         <?php endif; ?>
 
-        <?php
-        // Pages numérotées ?>
+        <?php // Numbers ?>
         <div class="pagination-numbers absolute inset-auto">
             <?php echo $pagination_numbers; ?>
         </div>
 
-        <?php
-        // Page suivante
-        if ( $paged < $num_pages ) : ?>
+        <?php // Next page link ?>
+        <?php if ( $paged < $num_pages ) : ?>
             <a
                     class="pagination-next ml-auto hidden md:block"
                     href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
@@ -87,7 +84,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
 /**
  *  Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
  *
- * @param mixed $layouts , string or array of strings of the layouts' "acf_fc_layout"
+ * @param mixed  $layouts string or array of strings of the layouts' "acf_fc_layout"
  * @param string $post_id
  *
  * @return mixed false if no layouts were found, if found an array of layouts
@@ -156,7 +153,7 @@ function array_flatten_recursive( $array ) {
 /**
  *  PIP - Get Sized Image URL - Useful for getting sized URL in one line (most useful case with ACF Image)
  *
- * @param mixed $img image array or image ID
+ * @param mixed  $img  image array or image ID
  * @param string $size image size
  *
  * @return string|null URL of the sized image
@@ -208,6 +205,10 @@ function pip_layout_configuration( $layout_name = null ) {
         $layout_name = $layout_name ? str_replace( 'layout_', '', $layout_name ) : '';
     }
 
+    // Get layout vars
+    $field_group = PIP_Layouts_Single::get_layout_field_group_by_slug( $layout_name );
+    $layout_vars = acf_maybe_get( $field_group, 'pip_layout_var' );
+
     // Get configuration data
     $configuration  = (array) get_sub_field( 'layout_settings' );
     $bg_color       = pip_maybe_get( $configuration, 'bg_color' );
@@ -223,35 +224,37 @@ function pip_layout_configuration( $layout_name = null ) {
         'section_id'     => $section_id,
         'bg_color'       => $bg_color,
         'vertical_space' => $vertical_space,
+        'layout_vars'    => $layout_vars,
     );
 }
 
 if ( !function_exists( 'get_layout_title' ) ) {
-    /*
-     *  get_layout_title()
+    /**
      *  This function will return a string representation of the current layout title within a 'have_rows' loop
      *
-     *  @return string
+     * @return string
      */
     function get_layout_title() {
-
-        // vars
-        $row          = get_row();
         $layout_title = false;
 
-        if ( empty( $row ) ) {
+        // Get row
+        $row = get_row();
+        if ( !$row ) {
             return $layout_title;
         }
 
+        // Browse row
         foreach ( $row as $key => $value ) {
+            // If no title, skip
             if ( mb_stripos( $key, '_title' ) === false ) {
                 continue;
             }
 
+            // Store value
             $layout_title = $value;
         }
 
-        // return
+        // Return title
         return $layout_title;
 
     }
