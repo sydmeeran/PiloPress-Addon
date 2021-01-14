@@ -160,7 +160,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 } else {
 
                     // Menu icon position
-                    if ( $menu_icon_position === 'gauche' ) {
+                    if ( $menu_icon_position === 'left' ) {
 
                         $margin          = $rtl ? 'ml-2' : 'mr-2';
                         $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );
@@ -169,7 +169,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         $menu_icon       = str_replace( 'class="', 'class="' . $menu_icon_class . ' ', $menu_icon );
                         $item->title     = $menu_icon . $old_item_title;
 
-                    } elseif ( $menu_icon_position === 'droite' ) {
+                    } elseif ( $menu_icon_position === 'right' ) {
 
                         $margin          = $rtl ? 'mr-2' : 'ml-2';
                         $margin          = apply_filters( 'pip_addon/menu_icon/margin', $margin, $rtl );

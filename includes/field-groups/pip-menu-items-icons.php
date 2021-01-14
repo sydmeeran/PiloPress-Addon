@@ -167,10 +167,10 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         0 => 'all',
                     ),
                     'choices'           => array(
-                        'gauche' => 'Gauche du texte',
-                        'droite' => 'Droite du texte',
+                        'left'  => 'Gauche du texte',
+                        'right' => 'Droite du texte',
                     ),
-                    'default_value'     => 'gauche',
+                    'default_value'     => 'left',
                     'allow_null'        => 0,
                     'multiple'          => 0,
                     'ui'                => 0,
