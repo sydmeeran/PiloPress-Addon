@@ -17,6 +17,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'front_assets' ) );
             add_action( 'init', array( $this, 'init_hook' ) );
+            add_action( 'init', array( $this, 'pip_update_gdpr_content' ) );
             add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
@@ -1076,6 +1077,54 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             }
 
             return $template;
+        }
+
+        /**
+         *  Update GDPR Add-On String
+         *
+         */
+        public function pip_update_gdpr_content() {
+            // Buttons
+            update_option(
+                'CookieLawInfo-0.9',
+                array(
+                    'button_1_text'          => 'Accepter',
+                    'button_1_button_colour' => '#1e73be',
+                    'button_3_text'          => 'Refuser',
+                    'button_3_button_colour' => '#000',
+                    'button_4_text'          => 'Vos préférences',
+                    'notify_message'         => 'En continuant d\'utiliser le site, vous acceptez l\'utilisation de cookies.[cookie_settings margin="5px 20px 5px 20px"][cookie_button margin="5px"]',
+                )
+            );
+
+            // Non necessary cookies
+            update_option(
+                'cookielawinfo_thirdparty_settings',
+                array(
+                    'thirdparty_title'       => 'Cookies non nécessaires',
+                    'thirdparty_description' => 'Tous les cookies qui peuvent ne pas être particulièrement nécessaires au fonctionnement du site Web et qui sont utilisés spécifiquement pour collecter des données personnelles des utilisateurs via des analyses, des publicités ou tout autre contenu intégré sont qualifiés de cookies non nécessaires. Il est obligatoire d\'obtenir le consentement de l\'utilisateur avant d\'exécuter ces cookies sur votre site Web.',
+                )
+            );
+
+            // Necessary cookies
+            update_option(
+                'cookielawinfo_necessary_settings',
+                array(
+                    'necessary_title'       => 'Cookies nécessaires',
+                    'necessary_description' => 'Les cookies nécessaires sont absolument essentiels au bon fonctionnement du site. Cette catégorie inclut uniquement les cookies qui garantissent les fonctionnalités de base et les fonctionnalités de sécurité du site Web. Ces cookies ne stockent aucune information personnelle.',
+                )
+            );
+
+            // Politique de confidentialité
+            $privacy_page_id  = get_option( 'wp_page_for_privacy_policy' );
+            $privacy_page_url = get_the_permalink( $privacy_page_id );
+            update_option(
+                'cookielawinfo_privacy_overview_content_settings',
+                array(
+                    'privacy_overview_title'   => 'Apercu de confidentialité',
+                    'privacy_overview_content' => '<a href="' . $privacy_page_url . '">Politique de confidentialité</a>',
+                )
+            );
         }
 
         /**
