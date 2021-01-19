@@ -1081,7 +1081,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
         /**
          *  Update GDPR Add-On String
-         *
          */
         public function pip_update_gdpr_content() {
             // Buttons
