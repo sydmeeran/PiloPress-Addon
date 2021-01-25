@@ -427,7 +427,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 return;
             }
 
-            $fa_url = apply_filters( 'ACFFA_get_fa_url', '//pro.fontawesome.com/releases/v5.14.0/css/all.css' );
+            // Get latest Font Awesome version from "ACF Font Awesome" plugin
+            $fa_version = get_option( 'ACFFA_current_version' );
+            if ( !$fa_version ) {
+                $fa_version = '5.15.1';
+            }
+
+            $fa_url = "https://pro.fontawesome.com/releases/v$fa_version/css/all.css";
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
         }
 
