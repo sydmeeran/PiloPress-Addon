@@ -28,6 +28,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu_hook' ) );
             add_action( 'wp_before_admin_bar_render', array( $this, 'remove_useless_bar_menus' ) );
+            add_filter( 'ACFFA_get_fa_url', array( $this, 'dequeue_font_awesome_free' ) );
             add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'auth_cookie_expiration', array( $this, 'auth_cookie_extend_expiration' ), 10, 3 );
@@ -37,7 +38,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
-            add_filter( 'option_acffa_settings', array( $this, 'acf_field_fa_pro_activation' ), 20 );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );
@@ -420,6 +420,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
+         *  Dequeue Font Awesome Free CSS
+         */
+        public function dequeue_font_awesome_free( $load_plugin_fa_css ) {
+
+            if ( !is_admin() ) {
+                $load_plugin_fa_css = false;
+            }
+
+            return $load_plugin_fa_css;
+        }
+
+        /**
          *  Enqueue Font Awesome Pro CSS
          */
         public function enqueue_font_awesome_pro() {
@@ -435,20 +447,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
 
             $fa_url = "https://pro.fontawesome.com/releases/v$fa_version/css/all.css";
             wp_enqueue_style( 'fa-pro', $fa_url, array(), null );
-        }
-
-        /**
-         *  ACF field "Font Awesome" plugin
-         *  - Force Pro mode (to have pro icons in select in the back-office)
-         *
-         * @param $acf_fa_params
-         *
-         * @return mixed
-         */
-        public function acf_field_fa_pro_activation( $acf_fa_params ) {
-            $acf_fa_params['acffa_pro_cdn'] = true;
-
-            return $acf_fa_params;
         }
 
         /**
