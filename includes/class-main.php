@@ -39,7 +39,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'admin_footer', array( $this, 'nav_menu_items_display' ) );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
             add_filter( 'do_shortcode_tag', array( $this, 'gallery_lightbox' ), 10, 4 );
-            add_shortcode( 'pip_icon_fa', array( $this, 'shortcode_icon_fa' ) );
 
             // WC hooks
             add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_path' ), 99, 3 );

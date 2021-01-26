@@ -96,6 +96,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             // Classes
             pip_addon_include( 'includes/class-bottom-admin-bar.php' );
             pip_addon_include( 'includes/class-main.php' );
+            pip_addon_include( 'includes/class-pip-cleanup.php' );
 
         }
 
