@@ -1,14 +1,15 @@
 <?php
 
-if ( function_exists( 'acf_add_local_field_group' ) ) :
+if ( function_exists( 'acf_add_local_field_group' ) ) {
+
     acf_add_local_field_group(
         array(
-            'key'                   => 'group_5c7029387315d',
-            'title'                 => 'Menu item: Icons',
+            'key'                   => 'group_menu_item_icons',
+            'title'                 => __( 'Menu item: Icons', 'pip-addon' ),
             'fields'                => array(
                 array(
-                    'key'               => 'field_5c73ac8d14a8e',
-                    'label'             => 'Ajouter un icône au texte ?',
+                    'key'               => 'field_menu_icon_switch',
+                    'label'             => __( 'Ajouter un icône au texte ?', 'pip-addon' ),
                     'name'              => 'menu_icon_switch',
                     'type'              => 'true_false',
                     'instructions'      => '',
@@ -30,8 +31,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'ui_off_text'       => '',
                 ),
                 array(
-                    'key'               => 'field_5c702956e29c2',
-                    'label'             => 'Icône (Font Awesome)',
+                    'key'               => 'field_menu_icon',
+                    'label'             => __( 'Icône (Font Awesome)', 'pip-addon' ),
                     'name'              => 'menu_icon',
                     'type'              => 'font-awesome',
                     'instructions'      => '',
@@ -39,7 +40,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'conditional_logic' => array(
                         array(
                             array(
-                                'field'    => 'field_5c73ac8d14a8e',
+                                'field'    => 'field_menu_icon_switch',
                                 'operator' => '==',
                                 'value'    => '1',
                             ),
@@ -72,8 +73,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'choices'           => array(),
                 ),
                 array(
-                    'key'               => 'field_5c73aacc6b3de',
-                    'label'             => 'Icône - Couleur',
+                    'key'               => 'field_menu_icon_color',
+                    'label'             => __( 'Icône - Couleur', 'pip-addon' ),
                     'name'              => 'menu_icon_color',
                     'type'              => 'pip_font_color',
                     'instructions'      => '',
@@ -81,7 +82,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'conditional_logic' => array(
                         array(
                             array(
-                                'field'    => 'field_5c73ac8d14a8e',
+                                'field'    => 'field_menu_icon_switch',
                                 'operator' => '==',
                                 'value'    => '1',
                             ),
@@ -106,8 +107,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'placeholder'       => '',
                 ),
                 array(
-                    'key'               => 'field_5c73ac8d14a8x',
-                    'label'             => 'Masquer le texte ?',
+                    'key'               => 'field_menu_icon_hide_text',
+                    'label'             => __( 'Masquer le texte ?', 'pip-addon' ),
                     'name'              => 'menu_icon_hide_text',
                     'type'              => 'true_false',
                     'instructions'      => '',
@@ -115,7 +116,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'conditional_logic' => array(
                         array(
                             array(
-                                'field'    => 'field_5c73ac8d14a8e',
+                                'field'    => 'field_menu_icon_switch',
                                 'operator' => '==',
                                 'value'    => '1',
                             ),
@@ -137,8 +138,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'ui_off_text'       => '',
                 ),
                 array(
-                    'key'               => 'field_5c73aacc6b3dd',
-                    'label'             => 'Icône - Placement',
+                    'key'               => 'field_menu_icon_placement',
+                    'label'             => __( 'Icône - Placement', 'pip-addon' ),
                     'name'              => 'menu_icon_placement',
                     'type'              => 'select',
                     'instructions'      => '',
@@ -146,7 +147,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'conditional_logic' => array(
                         array(
                             array(
-                                'field'    => 'field_5c73ac8d14a8e',
+                                'field'    => 'field_menu_icon_switch',
                                 'operator' => '==',
                                 'value'    => '1',
                             ),
@@ -167,8 +168,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         0 => 'all',
                     ),
                     'choices'           => array(
-                        'gauche' => 'Gauche du texte',
-                        'droite' => 'Droite du texte',
+                        'gauche' => __( 'Gauche du texte', 'pip-addon' ),
+                        'droite' => __( 'Droite du texte', 'pip-addon' ),
                     ),
                     'default_value'     => 'gauche',
                     'allow_null'        => 0,
@@ -199,4 +200,4 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
             'modified'              => 1554718949,
         )
     );
-endif;
+}

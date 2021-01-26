@@ -1,10 +1,17 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
+if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) {
+
+    /**
+     * Class PIP_Addon_Field_Menus
+     */
     class PIP_Addon_Field_Menus extends acf_field {
 
-        function __construct() {
+        /**
+         * PIP_Addon_Field_Menus constructor.
+         */
+        public function __construct() {
 
             $this->name     = 'pip_addon_field_menus';
             $this->label    = __( 'Menus', 'pip-addon' );
@@ -30,7 +37,12 @@ if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
 
         }
 
-        function render_field_settings( $field ) {
+        /**
+         * Render field
+         *
+         * @param $field
+         */
+        public function render_field_settings( $field ) {
 
             if ( isset( $field['default_value'] ) ) {
                 $field['default_value'] = acf_encode_choices( $field['default_value'], false );
@@ -377,7 +389,14 @@ if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
 
         }
 
-        function prepare_field( $field ) {
+        /**
+         * Prepare field
+         *
+         * @param $field
+         *
+         * @return mixed
+         */
+        public function prepare_field( $field ) {
 
             // Set Field Type
             $field['type'] = $field['field_type'];
@@ -410,18 +429,16 @@ if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
             // Allow Custom
             if ( acf_maybe_get( $field, 'allow_custom' ) ) {
 
-                if ( $value = acf_maybe_get( $field, 'value' ) ) {
+                $value = acf_maybe_get( $field, 'value' );
+                if ( $value ) {
 
                     $value = acf_get_array( $value );
-
                     foreach ( $value as $v ) {
-
                         if ( isset( $field['choices'][ $v ] ) ) {
                             continue;
                         }
 
                         $field['choices'][ $v ] = $v;
-
                     }
                 }
             }
@@ -430,7 +447,16 @@ if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
 
         }
 
-        function format_value( $value, $post_id, $field ) {
+        /**
+         * Format value
+         *
+         * @param $value
+         * @param $post_id
+         * @param $field
+         *
+         * @return mixed|WP_Term
+         */
+        public function format_value( $value, $post_id, $field ) {
 
             // Return: object
             if ( $field['return_format'] === 'object' ) {
@@ -469,7 +495,7 @@ if ( !class_exists( 'PIP_Addon_Field_Menus' ) ) :
 
     }
 
-    // initialize
+    // Initialize
     acf_register_field_type( 'pip_addon_field_menus' );
 
-endif;
+}

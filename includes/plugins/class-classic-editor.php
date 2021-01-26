@@ -5,10 +5,22 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 if ( !class_exists( 'PIP_Addon_Classic_Editor' ) ) {
+
+    /**
+     * Class PIP_Addon_Classic_Editor
+     */
     class PIP_Addon_Classic_Editor {
 
+        /**
+         * Settings
+         *
+         * @var $settings
+         */
         private static $settings;
 
+        /**
+         * PIP_Addon_Classic_Editor constructor.
+         */
         private function __construct() {
             // Do nothing.
         }

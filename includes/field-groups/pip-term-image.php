@@ -1,13 +1,14 @@
 <?php
-if ( function_exists( 'acf_add_local_field_group' ) ) :
+if ( function_exists( 'acf_add_local_field_group' ) ) {
+
     acf_add_local_field_group(
         array(
-            'key'                   => 'group_5f7ecc1c103d3',
-            'title'                 => 'Terme',
+            'key'                   => 'group_pip_addon_term',
+            'title'                 => __( 'Terme', 'pip-addon' ),
             'fields'                => array(
                 array(
-                    'key'               => 'field_5f7eccb76647b',
-                    'label'             => 'Image',
+                    'key'               => 'field_term_image',
+                    'label'             => __( 'Image', 'pip-addon' ),
                     'name'              => 'term_image',
                     'type'              => 'image',
                     'instructions'      => '',
@@ -93,4 +94,4 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
         )
     );
 
-endif;
+}

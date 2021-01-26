@@ -52,10 +52,10 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             add_action( 'plugins_loaded', array( $this, 'load' ) );
 
             // Hide login
-            pip_addon_include( 'includes/class-hide-login.php' );
+            pip_addon_include( 'includes/plugins/class-hide-login.php' );
 
             // Classic Editor
-            pip_addon_include( 'includes/class-classic-editor.php' );
+            pip_addon_include( 'includes/plugins/class-classic-editor.php' );
         }
 
         /**
@@ -90,13 +90,16 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             pip_addon_include( 'includes/field-groups/pip-contact-form.php' );
             pip_addon_include( 'includes/field-groups/pip-term-image.php' );
 
-            // Other
+            // Helpers
             pip_addon_include( 'includes/helpers.php' );
 
             // Classes
-            pip_addon_include( 'includes/class-bottom-admin-bar.php' );
+            pip_addon_include( 'includes/plugins/class-bottom-admin-bar.php' );
             pip_addon_include( 'includes/class-main.php' );
-            pip_addon_include( 'includes/class-pip-cleanup.php' );
+            pip_addon_include( 'includes/class-admin.php' );
+            pip_addon_include( 'includes/class-menus.php' );
+            pip_addon_include( 'includes/class-tailwind.php' );
+            pip_addon_include( 'includes/class-cleanup.php' );
 
         }
 
@@ -222,7 +225,7 @@ function pip_addon_activation( $network_wide ) {
     /**
      *  ACFE Form - Import default form
      */
-    if (!function_exists('import_acfe_contact_form')) {
+    if ( !function_exists( 'import_acfe_contact_form' ) ) {
         function import_acfe_contact_form() {
 
             // Do this only if PiloPress addon & ACF are available
