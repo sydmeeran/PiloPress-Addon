@@ -104,7 +104,7 @@ if ( !class_exists( 'PIP_Addon_Admin' ) ) {
                         background-size: contain;
                     }
                 </style>
-            <?php
+                <?php
             endif;
         }
 
@@ -143,10 +143,13 @@ if ( !class_exists( 'PIP_Addon_Admin' ) ) {
                 return;
             }
 
+            //Instantiate PIP_Addon_Main to able to have access to the function column_hidden
+            $addon_main = new PIP_Addon_Main();
+
             // Browse post types
             foreach ( $post_types as $post_type ) {
                 $filter = sprintf( 'get_user_option_%s', sprintf( 'manage%scolumnshidden', 'edit-' . $post_type ) );
-                add_filter( $filter, array( $this, 'column_hidden' ), 10, 3 );
+                add_filter( $filter, array( $addon_main, 'column_hidden' ), 10, 3 );
             }
         }
 
