@@ -116,7 +116,7 @@ if ( !class_exists( 'PIP_Addon_Menus' ) ) {
                 return $classes;
             }
 
-            $new_classes = 'absolute hidden group-hover:block top-full right-0 p-4 shadow bg-white';
+            $new_classes = 'flex items-center justify-center h-full lg:h-auto lg:absolute lg:hidden lg:group-hover:block lg:top-full lg:right-0 lg:p-3 lg:shadow lg:bg-white';
             $new_classes = apply_filters( 'pip_addon/submenu_item/classes', $new_classes );
             $new_classes = explode( ' ', $new_classes );
             $classes     = array_merge( $classes, $new_classes );
