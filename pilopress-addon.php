@@ -228,8 +228,13 @@ function pip_addon_activation( $network_wide ) {
     if ( !function_exists( 'import_acfe_contact_form' ) ) {
         function import_acfe_contact_form() {
 
-            // Do this only if PiloPress addon & ACF are available
-            if ( !defined( 'PIP_ADDON_PATH' ) || !function_exists( 'acf' ) ) {
+            // Do this only if PiloPress addon, ACF & ACFE are available
+            if (
+                !defined( 'PIP_ADDON_PATH' ) ||
+                !function_exists( 'acf' ) ||
+                !class_exists( 'acf_admin_tools' ) ||
+                !class_exists( 'ACFE_Admin_Tool_Import_Form' )
+            ) {
                 return;
             }
 
