@@ -19,7 +19,6 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // WP hooks
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'init', array( $this, 'pip_update_gdpr_content' ) );
-            add_action( 'admin_init', array( $this, 'customize_admin' ) );
             add_action( 'login_enqueue_scripts', array( $this, 'login_logo_style' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'front_assets' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
