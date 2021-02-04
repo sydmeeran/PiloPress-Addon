@@ -3,7 +3,7 @@
  * Plugin Name:         Pilo'Press - Addon
  * Plugin URI:          https://www.pilot-in.com
  * Description:         Quick start config we use at Pilot'in for WordPress & Pilo'Press
- * Version:             0.1
+ * Version:             0.2
  * Author:              Pilot'in
  * Author URI:          https://www.pilot-in.com
  * License:             GPLv2 or later
@@ -20,7 +20,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
     class PIP_Addon {
 
         // Plugin version
-        var $version = '0.1';
+        var $version = '0.2';
 
         // PiloPress
         var $pip = false;

@@ -104,7 +104,7 @@ if ( !class_exists( 'PIP_Addon_Admin' ) ) {
                         background-size: contain;
                     }
                 </style>
-                <?php
+            <?php
             endif;
         }
 
@@ -143,7 +143,7 @@ if ( !class_exists( 'PIP_Addon_Admin' ) ) {
                 return;
             }
 
-            //Instantiate PIP_Addon_Main to able to have access to the function column_hidden
+            // Instantiate PIP_Addon_Main to able to have access to the function column_hidden
             $addon_main = new PIP_Addon_Main();
 
             // Browse post types
