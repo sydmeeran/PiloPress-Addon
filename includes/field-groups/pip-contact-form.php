@@ -1,15 +1,15 @@
 <?php
-if ( function_exists( 'acf_add_local_field_group' ) ) :
+if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     acf_add_local_field_group(
         array(
-            'key'                   => 'group_5f685beee7074',
-            'title'                 => 'Formulaire : Contact',
+            'key'                   => 'group_contact_form',
+            'title'                 => __( 'Formulaire : Contact', 'pip-addon' ),
             'fields'                => array(
                 array(
-                    'key'               => 'field_5f685cbd38f19',
-                    'label'             => 'Nom',
-                    'name'              => 'nom',
+                    'key'               => 'field_contact_form_name',
+                    'label'             => __( 'Nom', 'pip-addon' ),
+                    'name'              => 'name',
                     'type'              => 'text',
                     'instructions'      => '',
                     'required'          => 1,
@@ -22,17 +22,17 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'default_value'     => '',
-                    'placeholder'       => 'Nom',
+                    'placeholder'       => __( 'Nom', 'pip-addon' ),
                     'prepend'           => '',
                     'append'            => '',
                     'maxlength'         => '',
                     'translations'      => 'translate',
                     'acfe_settings'     => array(
-                        '5f6863a99055a' => array(
+                        'name_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863ad9055b' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'name_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -42,9 +42,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'         => true,
                 ),
                 array(
-                    'key'               => 'field_5f685cc138f1a',
-                    'label'             => 'Prénom',
-                    'name'              => 'prenom',
+                    'key'               => 'field_contact_form_first_name',
+                    'label'             => __( 'Prénom', 'pip-addon' ),
+                    'name'              => 'first_name',
                     'type'              => 'text',
                     'instructions'      => '',
                     'required'          => 1,
@@ -57,17 +57,17 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'default_value'     => '',
-                    'placeholder'       => 'Prénom',
+                    'placeholder'       => __( 'Prénom', 'pip-addon' ),
                     'prepend'           => '',
                     'append'            => '',
                     'maxlength'         => '',
                     'translations'      => 'translate',
                     'acfe_settings'     => array(
-                        '5f6863b49055c' => array(
+                        'first_name_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863b79055d' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'first_name_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -77,8 +77,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'         => true,
                 ),
                 array(
-                    'key'               => 'field_5f685cc838f1b',
-                    'label'             => 'Email',
+                    'key'               => 'field_contact_form_',
+                    'label'             => __( 'Email', 'pip-addon' ),
                     'name'              => 'email',
                     'type'              => 'email',
                     'instructions'      => '',
@@ -92,16 +92,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'default_value'     => '',
-                    'placeholder'       => 'Email',
+                    'placeholder'       => __( 'Email', 'pip-addon' ),
                     'prepend'           => '',
                     'append'            => '',
                     'translations'      => 'copy_once',
                     'acfe_settings'     => array(
-                        '5f6863bd9055e' => array(
+                        'email_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863bd9055f' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'email_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -111,9 +111,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'         => true,
                 ),
                 array(
-                    'key'               => 'field_5f685ce038f1c',
-                    'label'             => 'Téléphone',
-                    'name'              => 'telephone',
+                    'key'               => 'field_contact_form_phone',
+                    'label'             => __( 'Téléphone', 'pip-addon' ),
+                    'name'              => 'phone',
                     'type'              => 'text',
                     'instructions'      => '',
                     'required'          => 0,
@@ -126,17 +126,17 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'default_value'     => '',
-                    'placeholder'       => 'Téléphone',
+                    'placeholder'       => __( 'Téléphone', 'pip-addon' ),
                     'prepend'           => '',
                     'append'            => '',
                     'maxlength'         => '',
                     'translations'      => 'translate',
                     'acfe_settings'     => array(
-                        '5f6863c890560' => array(
+                        'phone_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863c990561' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'phone_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -146,8 +146,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'         => true,
                 ),
                 array(
-                    'key'                => 'field_5f685d0438f1d',
-                    'label'              => 'Message',
+                    'key'                => 'field_contact_form_message',
+                    'label'              => __( 'Message', 'pip-addon' ),
                     'name'               => 'message',
                     'type'               => 'textarea',
                     'instructions'       => '',
@@ -161,18 +161,18 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'     => 0,
                     'acfe_permissions'   => '',
                     'default_value'      => '',
-                    'placeholder'        => 'Votre message',
+                    'placeholder'        => __( 'Votre message', 'pip-addon' ),
                     'maxlength'          => '',
                     'rows'               => 3,
                     'new_lines'          => '',
                     'acfe_textarea_code' => 0,
                     'translations'       => 'translate',
                     'acfe_settings'      => array(
-                        '5f6863d390562' => array(
+                        'message_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863d590563' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'message_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -182,8 +182,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'          => true,
                 ),
                 array(
-                    'key'               => 'field_5f685d4238f1e',
-                    'label'             => 'Opt-in',
+                    'key'               => 'field_contact_form_opt_in',
+                    'label'             => __( 'Opt-in', 'pip-addon' ),
                     'name'              => 'opt-in',
                     'type'              => 'checkbox',
                     'instructions'      => '',
@@ -197,7 +197,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_save_meta'    => 0,
                     'acfe_permissions'  => '',
                     'choices'           => array(
-                        'Les informations recueillies dans ce formulaire sont utilisées pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité' => 'Les informations recueillies dans ce formulaire sont utilisées par MONSITE pour répondre à votre demande. Pour plus d’informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page politique de confidentialité',
+                        'rgpd' => __( "Les informations recueillies dans ce formulaire sont utilisées par MONSITE pour répondre à votre demande. Pour plus d'informations et pour faire valoir votre droit de rétractation, rendez-vous sur notre page <a href='#'>politique de confidentialité</a>", 'pip-addon' ),
                     ),
                     'allow_custom'      => 0,
                     'default_value'     => array(),
@@ -206,11 +206,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'return_format'     => 'value',
                     'translations'      => 'copy_once',
                     'acfe_settings'     => array(
-                        '5f6863dd90564' => array(
+                        'opt-in_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863df90565' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'opt-in_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -221,8 +221,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'acfe_form'         => true,
                 ),
                 array(
-                    'key'               => 'field_5f685d7838f1f',
-                    'label'             => 'Captcha',
+                    'key'               => 'field_contact_form_captcha',
+                    'label'             => __( 'Captcha', 'pip-addon' ),
                     'name'              => 'captcha',
                     'type'              => 'acfe_recaptcha',
                     'instructions'      => '',
@@ -242,20 +242,20 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                     'secret_key'        => '',
                     'translations'      => 'copy_once',
                     'acfe_settings'     => array(
-                        '5f6863ec90566' => array(
+                        'captcha_settings_1' => array(
                             'acfe_settings_location' => 'front',
                             'acfe_settings_settings' => array(
-                                '5f6863ef90567' => array(
-                                    'acfe_settings_setting_type' => 'hide_label',
+                                'captcha_settings_1_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_label',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
                         ),
-                        '5fd0fc7876f64' => array(
+                        'captcha_settings_2' => array(
                             'acfe_settings_location' => 'admin',
                             'acfe_settings_settings' => array(
-                                '5fd0fc7b76f65' => array(
-                                    'acfe_settings_setting_type' => 'hide_field',
+                                'captcha_settings_2_setting_1' => array(
+                                    'acfe_settings_setting_type'     => 'hide_field',
                                     'acfe_settings_setting_operator' => 'true',
                                 ),
                             ),
@@ -296,4 +296,4 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
         )
     );
 
-endif;
+}

@@ -1,10 +1,17 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) :
+if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) {
+
+    /**
+     * Class PIP_Addon_Field_Menu_Items
+     */
     class PIP_Addon_Field_Menu_Items extends acf_field {
 
-        function __construct() {
+        /**
+         * PIP_Addon_Field_Menu_Items constructor.
+         */
+        public function __construct() {
 
             $this->name     = 'pip_addon_field_menu_items';
             $this->label    = __( 'Menu items', 'pip-addon' );
@@ -30,7 +37,12 @@ if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) :
 
         }
 
-        function render_field_settings( $field ) {
+        /**
+         * Render field settings
+         *
+         * @param $field
+         */
+        public function render_field_settings( $field ) {
 
             if ( isset( $field['default_value'] ) ) {
                 $field['default_value'] = acf_encode_choices( $field['default_value'], false );
@@ -389,7 +401,14 @@ if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) :
 
         }
 
-        function prepare_field( $field ) {
+        /**
+         * Prepare field
+         *
+         * @param $field
+         *
+         * @return mixed
+         */
+        public function prepare_field( $field ) {
 
             // Set Field Type
             $field['type'] = $field['field_type'];
@@ -454,7 +473,16 @@ if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) :
 
         }
 
-        function format_value( $value, $post_id, $field ) {
+        /**
+         * Format value
+         *
+         * @param $value
+         * @param $post_id
+         * @param $field
+         *
+         * @return int[]|mixed|WP_Post[]
+         */
+        public function format_value( $value, $post_id, $field ) {
 
             // Return: object
             if ( $field['return_format'] === 'object' ) {
@@ -519,7 +547,7 @@ if ( !class_exists( 'PIP_Addon_Field_Menu_Items' ) ) :
 
     }
 
-    // initialize
+    // Initialize
     acf_register_field_type( 'pip_addon_field_menu_items' );
 
-endif;
+}

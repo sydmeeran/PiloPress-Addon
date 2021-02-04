@@ -6,7 +6,14 @@ if ( !defined( 'ABSPATH' ) ) {
 
 if ( !class_exists( 'PIP_Addon_Bottom_Admin_Bar' ) ) {
 
+    /**
+     * Class PIP_Addon_Bottom_Admin_Bar
+     */
     class PIP_Addon_Bottom_Admin_Bar {
+
+        /**
+         * PIP_Addon_Bottom_Admin_Bar constructor.
+         */
         public function __construct() {
             add_action( 'after_setup_theme', array( &$this, 'show_toolbar_check' ) );
             add_action( 'plugins_loaded', array( &$this, 'myplugin_init' ) );

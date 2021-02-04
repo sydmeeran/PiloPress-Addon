@@ -3,7 +3,7 @@
  * Plugin Name:         Pilo'Press - Addon
  * Plugin URI:          https://www.pilot-in.com
  * Description:         Quick start config we use at Pilot'in for WordPress & Pilo'Press
- * Version:             0.1
+ * Version:             0.2
  * Author:              Pilot'in
  * Author URI:          https://www.pilot-in.com
  * License:             GPLv2 or later
@@ -20,7 +20,7 @@ if ( !class_exists( 'PIP_Addon' ) ) {
     class PIP_Addon {
 
         // Plugin version
-        var $version = '0.1';
+        var $version = '0.2';
 
         // PiloPress
         var $pip = false;
@@ -52,10 +52,10 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             add_action( 'plugins_loaded', array( $this, 'load' ) );
 
             // Hide login
-            pip_addon_include( 'includes/class-hide-login.php' );
+            pip_addon_include( 'includes/plugins/class-hide-login.php' );
 
             // Classic Editor
-            pip_addon_include( 'includes/class-classic-editor.php' );
+            pip_addon_include( 'includes/plugins/class-classic-editor.php' );
         }
 
         /**
@@ -90,13 +90,16 @@ if ( !class_exists( 'PIP_Addon' ) ) {
             pip_addon_include( 'includes/field-groups/pip-contact-form.php' );
             pip_addon_include( 'includes/field-groups/pip-term-image.php' );
 
-            // Other
+            // Helpers
             pip_addon_include( 'includes/helpers.php' );
 
             // Classes
-            pip_addon_include( 'includes/class-bottom-admin-bar.php' );
+            pip_addon_include( 'includes/plugins/class-bottom-admin-bar.php' );
             pip_addon_include( 'includes/class-main.php' );
-            pip_addon_include( 'includes/class-pip-cleanup.php' );
+            pip_addon_include( 'includes/class-admin.php' );
+            pip_addon_include( 'includes/class-menus.php' );
+            pip_addon_include( 'includes/class-tailwind.php' );
+            pip_addon_include( 'includes/class-cleanup.php' );
 
         }
 
@@ -222,34 +225,35 @@ function pip_addon_activation( $network_wide ) {
     /**
      *  ACFE Form - Import default form
      */
-    if (!function_exists('import_acfe_contact_form')) {
-        function import_acfe_contact_form() {
+    // FIXME: Move this piece of code below in a safer hook which have ACF & ACFE enabled, ideally it should be executed once.
+    // if ( !function_exists( 'import_acfe_contact_form' ) ) {
+    //     function import_acfe_contact_form() {
 
-            // Do this only if PiloPress addon & ACF are available
-            if ( !defined( 'PIP_ADDON_PATH' ) || !function_exists( 'acf' ) ) {
-                return;
-            }
+    //         // Do this only if PiloPress addon & ACF are available
+    //         if ( !defined( 'PIP_ADDON_PATH' ) || !function_exists( 'acf' ) ) {
+    //             return;
+    //         }
 
-            // Get exported contact form
-            $default_form_json = file_get_contents( PIP_ADDON_PATH . 'includes/forms/default-contact-form.json' ); // phpcs:ignore
-            if ( !$default_form_json ) {
-                return;
-            }
+    //         // Get exported contact form
+    //         $default_form_json = file_get_contents( PIP_ADDON_PATH . 'includes/forms/default-contact-form.json' ); // phpcs:ignore
+    //         if ( !$default_form_json ) {
+    //             return;
+    //         }
 
-            // Decode json
-            $default_form_data = json_decode( $default_form_json, true );
+    //         // Decode json
+    //         $default_form_data = json_decode( $default_form_json, true );
 
-            // Force initialize of ACF tools (only loaded on Tools page by default)
-            acf()->admin_tools = new acf_admin_tools();
-            acf()->admin_tools->load();
+    //         // Force initialize of ACF tools (only loaded on Tools page by default)
+    //         acf()->admin_tools = new acf_admin_tools();
+    //         acf()->admin_tools->load();
 
-            // Initialise ACFE Tool Import Form & import contact form
-            $acfe_tool_import_form = new ACFE_Admin_Tool_Import_Form();
-            $acfe_tool_import_form->import_external( $default_form_data );
+    //         // Initialise ACFE Tool Import Form & import contact form
+    //         $acfe_tool_import_form = new ACFE_Admin_Tool_Import_Form();
+    //         $acfe_tool_import_form->import_external( $default_form_data );
 
-        }
-    }
+    //     }
+    // }
 
-    import_acfe_contact_form();
+    // import_acfe_contact_form();
 
 }

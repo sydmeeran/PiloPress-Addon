@@ -1,6 +1,6 @@
 <?php
 
-if ( !class_exists( 'PIP_CleanUp' ) ) :
+if ( !class_exists( 'PIP_CleanUp' ) ) {
 
     /**
      * Clean up wp_head()
@@ -13,6 +13,7 @@ if ( !class_exists( 'PIP_CleanUp' ) ) :
      * Remove self-closing tag
      */
     class PIP_CleanUp {
+
         /**
          * Name of the module.
          *
@@ -145,9 +146,9 @@ if ( !class_exists( 'PIP_CleanUp' ) ) :
          *
          * Remove dir="ltr"
          *
+         * @return void
          * @internal Used by `language_attributes`
          *
-         * @return void
          */
         public function language_attributes() {
             $attributes = array();
@@ -168,10 +169,11 @@ if ( !class_exists( 'PIP_CleanUp' ) ) :
         /**
          * Add and remove body_class() classes.
          *
+         * @param array $classes
+         *
+         * @return array
          * @internal Used by `body_class`
          *
-         * @param array $classes
-         * @return array
          */
         public function body_class( $classes ) {
             $remove_classes = array(
@@ -198,29 +200,32 @@ if ( !class_exists( 'PIP_CleanUp' ) ) :
         /**
          * Remove the default site tagline from RSS feed.
          *
+         * @param string $bloginfo
+         *
+         * @return string
          * @internal Used by `get_bloginfo_rss`
          *
-         * @param string $bloginfo
-         * @return string
          */
         public function remove_default_site_tagline( $bloginfo ) {
             $default_tagline = __( 'Just another WordPress site' );
+
             return ( $bloginfo === $default_tagline ) ? '' : $bloginfo;
         }
 
         /**
          * Remove self-closing tags.
          *
+         * @param string|string[] $html
+         *
+         * @return string|string[]
          * @internal Used by `get_avatar`, `comment_id_fields`, and `post_thumbnail_html`
          *
-         * @param string|string[] $html
-         * @return string|string[]
          */
         public function remove_self_closing_tags( $html ) {
             return str_replace( ' />', '>', $html );
         }
     }
-endif;
+}
 
 new PIP_CleanUp();
 

@@ -51,9 +51,8 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
     ob_start(); ?>
     <div class="pagination relative flex items-center justify-center w-full">
 
-        <?php
-        // Page précédente
-        if ( $paged > 1 ) : ?>
+        <?php // Previous page link ?>
+        <?php if ( $paged > 1 ) : ?>
             <a
                     class="pagination-previous mr-auto hidden md:block"
                     href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
@@ -62,15 +61,13 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
             </a>
         <?php endif; ?>
 
-        <?php
-        // Pages numérotées ?>
+        <?php // Numbers ?>
         <div class="pagination-numbers absolute inset-auto">
             <?php echo $pagination_numbers; ?>
         </div>
 
-        <?php
-        // Page suivante
-        if ( $paged < $num_pages ) : ?>
+        <?php // Next page link ?>
+        <?php if ( $paged < $num_pages ) : ?>
             <a
                     class="pagination-next ml-auto hidden md:block"
                     href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
@@ -87,7 +84,7 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
 /**
  *  Retrieve layouts based on given "acf_fc_layout" in the pip_flexible of given post
  *
- * @param mixed $layouts , string or array of strings of the layouts' "acf_fc_layout"
+ * @param mixed  $layouts string or array of strings of the layouts' "acf_fc_layout"
  * @param string $post_id
  *
  * @return mixed false if no layouts were found, if found an array of layouts
@@ -100,7 +97,8 @@ function pip_get_flexible_layout( $layouts, $post_id = '' ) {
         return $response;
     }
 
-    $pip_flexible_name = (string) PIP_Flexible::get_flexible_field_name();
+    $pip_flexible      = acf_get_instance( 'PIP_Flexible' );
+    $pip_flexible_name = (string) $pip_flexible->flexible_field_name;
     $post_id           = $post_id ? $post_id : get_the_ID();
     $pip_flexible      = get_field( $pip_flexible_name, $post_id );
 
@@ -155,7 +153,7 @@ function array_flatten_recursive( $array ) {
 /**
  *  PIP - Get Sized Image URL - Useful for getting sized URL in one line (most useful case with ACF Image)
  *
- * @param mixed $img image array or image ID
+ * @param mixed  $img  image array or image ID
  * @param string $size image size
  *
  * @return string|null URL of the sized image
@@ -202,9 +200,19 @@ function pip_layout_configuration( $layout_name = null ) {
 
     // Get layout name
     $layout_object = (array) get_sub_field_object( 'layout_settings' );
-    if ( $layout_object ) {
+    if ( pip_maybe_get( $layout_object, 'parent_layout' ) ) {
         $layout_name = pip_maybe_get( $layout_object, 'parent_layout' );
         $layout_name = $layout_name ? str_replace( 'layout_', '', $layout_name ) : '';
+    }
+
+    // Get layout vars
+    $field_group = PIP_Layouts_Single::get_layout_field_group_by_slug( $layout_name );
+    $layout_vars = acf_maybe_get( $field_group, 'pip_layout_var' );
+    $css_vars    = array();
+    if ( $layout_vars ) {
+        foreach ( $layout_vars as $layout_var ) {
+            $css_vars[ acf_maybe_get( $layout_var, 'pip_layout_var_key' ) ] = acf_maybe_get( $layout_var, 'pip_layout_var_value' );
+        }
     }
 
     // Get configuration data
@@ -222,22 +230,25 @@ function pip_layout_configuration( $layout_name = null ) {
         'section_id'     => $section_id,
         'bg_color'       => $bg_color,
         'vertical_space' => $vertical_space,
+        'css_vars'       => $css_vars,
     );
 }
-
 
 /**
  * Display a version of the website's Logo
  *
- * @param string|null $version (empty for WordPress custom_logo or slug of the version added through pip_addon/logo_versions)
+ * @param string|null $version (empty for WordPress custom_logo or slug of the version added through pip_addon/logo_versions hook)
  *
- * Example pip_the_logo('logo-white') to get the logo which get_theme_mod is 'logo-white' (see pip_add_logo_versions_to_customizer() to add versions)
+ * Example pip_the_logo('logo-white') to get the logo which get_theme_mod is 'logo-white'
+ * (see pip_add_logo_versions_to_customizer() to add versions)
+ *
+ * @return false
  */
 function pip_the_logo( $version = '' ) {
 
     $logo_url = false;
 
-    //If custom_logo exist then it is the default logo
+    // If custom_logo exist then it is the default logo
     if ( !has_custom_logo() ) {
         return false;
     }
@@ -254,7 +265,7 @@ function pip_the_logo( $version = '' ) {
 
     if ( !empty( $version ) ) {
 
-        //If there is a logo version with an image then override the default logo with the versionned logo
+        // If there is a logo version with an image then override the default logo with the versioned logo
         $logo_version = get_theme_mod( $version );
         if ( $logo_version ) {
             $logo_url = $logo_version;
@@ -267,8 +278,9 @@ function pip_the_logo( $version = '' ) {
     }
 
     $logo_alt = get_bloginfo( 'name', 'display' );
+    $logo_id  = get_theme_mod( 'custom_logo' );
 
-    if ( $logo_id = get_theme_mod( 'custom_logo' ) ) {
+    if ( $logo_id ) {
         $alt = get_post_meta( $logo_id, '_wp_attachment_image_alt', true );
         if ( !empty( $alt ) ) {
             $logo_alt = $alt;
@@ -277,112 +289,154 @@ function pip_the_logo( $version = '' ) {
 
     ?>
 
-        <a
+    <a
             class="<?php echo esc_attr( $logo_class ); ?>"
             href="<?php echo esc_url( home_url( '/' ) ); ?>"
             rel="home"
-            itemprop="url"
-        >
-            <img
+            itemprop="url">
+        <img
                 src="<?php echo esc_url( $logo_url ); ?>"
-                alt="<?php echo esc_attr( $logo_alt ); ?>"
-            />
-        </a>
+                alt="<?php echo esc_attr( $logo_alt ); ?>"/>
+    </a>
 
     <?php
 }
 
 if ( !function_exists( 'get_layout_title' ) ) {
-    /*
-     *  get_layout_title()
+    /**
      *  This function will return a string representation of the current layout title within a 'have_rows' loop
      *
-     *  @return string
+     * @return string
      */
     function get_layout_title() {
-
-        // vars
-        $row          = get_row();
         $layout_title = false;
 
-        if ( empty( $row ) ) {
+        // Get row
+        $row = get_row();
+        if ( !$row ) {
             return $layout_title;
         }
 
+        // Browse row
         foreach ( $row as $key => $value ) {
+            // If no title, skip
             if ( mb_stripos( $key, '_title' ) === false ) {
                 continue;
             }
 
+            // Store value
             $layout_title = $value;
         }
 
-        // return
+        // Return title
         return $layout_title;
 
     }
 }
 
+/**
+ *  Helper to upload a remote file (not only images) to the WP media library
+ *  (fork of "media_sideload_image")
+ *
+ *  Example for setting post thumbnail from img URL:
+ *  $upload_img_id = pip_upload_file( $url_img_file, $wp_post_id, null, 'id' );
+ *  set_post_thumbnail( $wp_post_id, $upload_img_id );
+ *
+ * @param string  $file
+ * @param integer $post_id
+ * @param string  $desc
+ * @param string  $return
+ *
+ * @return bool|int|string|WP_Error
+ */
+function pip_upload_file( $file = '', $post_id = 0, $desc = null, $return = 'src' ) {
 
-if ( !function_exists( 'pip_upload_file' ) ) {
-    
-    /**
-     *  Helper to upload a remote file (not only images) to the WP media library
-     *  (fork of "media_sideload_image")
-     *
-     *  Example for setting post thumbnail from img URL:
-     *  $upload_img_id = pip_upload_file( $url_img_file, $wp_post_id, null, 'id' );
-     *  set_post_thumbnail( $wp_post_id, $upload_img_id );
-     *
-     *  @param string $file
-     *  @param integer $post_id
-     *  @param string $desc
-     *  @param string $return
-     *  @return void
-     */
-    
-    function pip_upload_file( $file = '', $post_id = 0, $desc = null, $return = 'src' ) {
+    // Add admin required files
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        /** Add admin required files */
-        require_once ABSPATH . 'wp-admin/includes/media.php';
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-        require_once ABSPATH . 'wp-admin/includes/image.php';
+    if ( !empty( $file ) ) {
 
-        if ( !empty( $file ) ) {
+        $file_array         = array();
+        $file_array['name'] = wp_basename( $file );
 
-            $file_array         = array();
-            $file_array['name'] = wp_basename( $file );
+        // Download file to temp location.
+        $file_array['tmp_name'] = download_url( $file );
 
-            // Download file to temp location.
-            $file_array['tmp_name'] = download_url( $file );
-
-            // If error storing temporarily, return the error.
-            if ( is_wp_error( $file_array['tmp_name'] ) ) {
-                return $file_array['tmp_name'];
-            }
-
-            // Do the validation and storage stuff.
-            $id = media_handle_sideload( $file_array, $post_id, $desc );
-
-            // If error storing permanently, unlink.
-            if ( is_wp_error( $id ) ) {
-                @unlink( $file_array['tmp_name'] );
-                return $id;
-                // If attachment id was requested, return it early.
-            } elseif ( $return === 'id' ) {
-                return $id;
-            }
-
-            $src = wp_get_attachment_url( $id );
+        // If error storing temporarily, return the error.
+        if ( is_wp_error( $file_array['tmp_name'] ) ) {
+            return $file_array['tmp_name'];
         }
 
-        // Finally, check to make sure the file has been saved, then return the HTML.
-        if ( !empty( $src ) ) {
-            if ( $return === 'src' ) {
-                return $src;
+        // Do the validation and storage stuff.
+        $id = media_handle_sideload( $file_array, $post_id, $desc );
+
+        // If error storing permanently, unlink.
+        if ( is_wp_error( $id ) ) {
+            @unlink( $file_array['tmp_name'] );
+
+            return $id;
+            // If attachment id was requested, return it early.
+        } elseif ( $return === 'id' ) {
+            return $id;
+        }
+
+        $src = wp_get_attachment_url( $id );
+    }
+
+    // Finally, check to make sure the file has been saved, then return the HTML.
+    if ( !empty( $src ) ) {
+        if ( $return === 'src' ) {
+            return $src;
+        }
+    } else {
+        return new WP_Error( 'image_sideload_failed' );
+    }
+}
+
+/**
+ * Get responsive class
+ *
+ * @param      $container_width
+ * @param bool $advanced_mode
+ * @param null $class_prefix
+ *
+ * @return string
+ */
+function pip_get_responsive_class( $container_width, $advanced_mode = false, $class_prefix = null ) {
+    $content_width = '';
+
+    // If no container width, return
+    if ( !$container_width ) {
+        return $content_width;
+    }
+
+    // Browse container widths
+    foreach ( $container_width as $screen => $nb_items ) {
+        if ( $advanced_mode ) {
+            if ( !strstr( $screen, '_advanced' ) ) {
+                continue;
             }
         } else {
-            return new WP_Error( 'image_sideload_failed' );
+            if ( strstr( $screen, '_advanced' ) ) {
+                continue;
+            }
+        }
+
+        // Remove "_advanced" from screen size
+        $screen = str_replace( '_advanced', '', $screen );
+
+        // Build responsive class
+        switch ( $screen ) {
+            case 'default':
+                $content_width .= ' ' . $class_prefix . $nb_items;
+                break;
+            default:
+                $content_width .= ' ' . $screen . ':' . $class_prefix . $nb_items;
+                break;
         }
     }
+
+    return $content_width;
 }

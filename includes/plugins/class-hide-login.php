@@ -6,10 +6,21 @@ if ( !defined( 'ABSPATH' ) ) {
 
 if ( !class_exists( 'PIP_Addon_Hide_Login' ) ) {
 
+    /**
+     * Class PIP_Addon_Hide_Login
+     */
     class PIP_Addon_Hide_Login {
 
+        /**
+         * WP Login PHP
+         *
+         * @var $wp_login_php
+         */
         private $wp_login_php;
 
+        /**
+         * PIP_Addon_Hide_Login constructor.
+         */
         public function __construct() {
             add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ), 9999 );
             add_action( 'wp_loaded', array( $this, 'wp_loaded' ) );
@@ -132,12 +143,16 @@ if ( !class_exists( 'PIP_Addon_Hide_Login' ) ) {
                 $key        = sanitize_text_field( wp_unslash( $_GET['confirm_key'] ) );
                 $result     = wp_validate_user_request_key( $request_id, $key );
                 if ( !is_wp_error( $result ) ) {
-                    wp_redirect( add_query_arg( array(
-                        'action'      => 'confirmaction',
-                        'request_id'  => $_GET['request_id'],
-                        'confirm_key' => $_GET['confirm_key'],
-                    ), $this->new_login_url()
-                    ) );
+                    wp_redirect(
+                        add_query_arg(
+                            array(
+                                'action'      => 'confirmaction',
+                                'request_id'  => $_GET['request_id'],
+                                'confirm_key' => $_GET['confirm_key'],
+                            ),
+                            $this->new_login_url()
+                        )
+                    );
                     exit();
                 }
             }
