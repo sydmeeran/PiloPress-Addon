@@ -99,6 +99,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                     'choices'           => array(),
                     'default_value'     => '',
+                    'class_output'      => 'text',
                     'allow_null'        => 1,
                     'multiple'          => 0,
                     'ui'                => 0,
