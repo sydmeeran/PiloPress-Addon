@@ -84,17 +84,17 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             <link href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"></link>
             <script>
                 jQuery( document ).ready( function ( $ ) {
-                    var $galleries = $( '.gallery' )
+                    var $galleries = $( '.gallery' );
                     if ( !$galleries.length ) {
-                        return
+                        return;
                     }
 
                     $galleries.each( function ( index ) {
                         var $gallery      = $( this ),
-                            $gallery_imgs = $gallery.find( '.gallery-item a' )
-                        $gallery_imgs.attr( 'data-lightbox', 'gallery' + index )
-                    } )
-                } )
+                            $gallery_imgs = $gallery.find( '.gallery-item a' );
+                        $gallery_imgs.attr( 'data-lightbox', 'gallery' + index );
+                    } );
+                } );
             </script>
             <?php
             $output .= ob_get_clean();
@@ -141,14 +141,15 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         public function pip_flexible_locations( $locations ) {
 
             // Post type archive (ACFE)
-            // TODO: Uncomment after ACFE fix
-            // $locations[] = array(
-            //     array(
-            //         'param'    => 'post_type_archive',
-            //         'operator' => '==',
-            //         'value'    => 'all',
-            //     ),
-            // );
+            if ( version_compare( ACFE_VERSION, '0.8.7.5', '>=' ) ) {
+                $locations[] = array(
+                    array(
+                        'param'    => 'post_type_archive',
+                        'operator' => '==',
+                        'value'    => 'all',
+                    ),
+                );
+            }
 
             // Menu items
             $locations[] = array(
@@ -497,16 +498,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                 ?>
                 <script>(
                         function ( w, d, s, l, i ) {
-                            w[l] = w[l] || []
-                            w[l].push( { 'gtm.start': new Date().getTime(), event: 'gtm.js' } )
+                            w[l] = w[l] || [];
+                            w[l].push( { 'gtm.start': new Date().getTime(), event: 'gtm.js' } );
                             var f                            = d.getElementsByTagName( s )[0],
-                                j = d.createElement( s ), dl = l != 'dataLayer' ? '&l=' + l : ''
-                            j.async                          = true
+                                j = d.createElement( s ), dl = l != 'dataLayer' ? '&l=' + l : '';
+                            j.async                          = true;
                             j.src                            =
-                                'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-                            f.parentNode.insertBefore( j, f )
+                                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                            f.parentNode.insertBefore( j, f );
                         }
-                    )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' )
+                    )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' );
                 </script>
             <?php
             endif;
