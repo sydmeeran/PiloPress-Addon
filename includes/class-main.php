@@ -722,6 +722,13 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
          *  Update GDPR Add-On String
          */
         public function pip_update_gdpr_content() {
+
+            $is_firstload = get_option( 'pip_addon_gdpr_has_replaced' );
+
+            if ( $is_firstload ) :
+                return;
+            endif;
+
             // Buttons
             update_option(
                 'CookieLawInfo-0.9',
@@ -763,6 +770,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     'privacy_overview_content' => '<a href="' . $privacy_page_url . '">Politique de confidentialité</a>',
                 )
             );
+
+            add_option( 'pip_addon_gdpr_has_replaced', true, '', true );
         }
 
         /**
