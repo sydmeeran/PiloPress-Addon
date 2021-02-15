@@ -74,9 +74,9 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             }
 
             // Set default heading values
-            $new_values[0]['field_typography_classes'] = 'font-primary leading-tight uppercase font-semibold text-black text-4xl';
-            $new_values[1]['field_typography_classes'] = 'font-primary leading-tight uppercase font-semibold text-black text-2xl';
-            $new_values[2]['field_typography_classes'] = 'font-primary leading-tight uppercase font-semibold text-black text-xl';
+            $new_values[0]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-4xl';
+            $new_values[1]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-2xl';
+            $new_values[2]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-xl';
             $new_values[3]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-xl';
             $new_values[4]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-lg';
             $new_values[5]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-base';
@@ -295,7 +295,7 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
                 array(
                     'field_custom_button_label'         => 'Bouton principal',
                     'field_custom_button_class'         => 'btn-primary',
-                    'field_custom_button_classes'       => 'relative inline-flex items-center justify-center text-sm text-white uppercase px-4 py-2 leading-none font-primary font-bold bg-primary border-2 border-solid border-primary mr-2 mb-2',
+                    'field_custom_button_classes'       => 'relative transition-all duration-300 inline-flex items-center justify-center text-sm text-white uppercase px-4 py-2 leading-none font-primary font-bold bg-primary border-2 border-solid border-primary mr-2 mb-2',
                     'field_custom_button_add_to_editor' => '1',
                     'field_custom_button_states'        => array(
                         array(
@@ -311,7 +311,7 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
                 array(
                     'field_custom_button_label'         => 'Bouton secondaire',
                     'field_custom_button_class'         => 'btn-secondary',
-                    'field_custom_button_classes'       => 'relative inline-flex items-center justify-center text-sm text-white uppercase px-4 py-2 leading-none font-primary font-bold bg-primary border-2 border-solid border-primary mr-2 mb-2',
+                    'field_custom_button_classes'       => 'relative transition-all duration-300 inline-flex items-center justify-center text-sm text-white uppercase px-4 py-2 leading-none font-secondary font-bold bg-secondary border-2 border-solid border-secondary mr-2 mb-2',
                     'field_custom_button_add_to_editor' => '1',
                     'field_custom_button_states'        => array(
                         array(
