@@ -23,6 +23,7 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             add_filter( 'acf/load_value/name=pip_container', array( $this, 'tw_container' ), 20, 1 );
             add_filter( 'acf/load_value/name=pip_tailwind_style_components', array( $this, 'tw_style_components' ), 20, 1 );
 
+            // PILO_TODO: Add more tests => check if site has styles values
             $has_tailwind_pre_config = get_option( 'pipaddon_tailwind_pre_config' );
             if ( $has_tailwind_pre_config === '1' ) {
                 return;
@@ -41,17 +42,28 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
 
         }
 
-        // Body Classes
+        /**
+         * Body Classes
+         *
+         * @param $value
+         *
+         * @return string
+         */
         public function tw_body_class( $value ) {
             if ( $value ) {
                 return $value;
             }
 
-            $default_body_classes = 'text-base text-black font-primary antialiased overflow-x-hidden';
-            return $default_body_classes;
+            return 'text-base text-black font-primary antialiased overflow-x-hidden';
         }
 
-        // Typography
+        /**
+         * Typography
+         *
+         * @param $value
+         *
+         * @return array
+         */
         public function tw_typography( $value ) {
 
             // If value has been modified, return
@@ -65,7 +77,7 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
 
             // Add default values
             $new_values = array();
-            for ( $i = 1; $i <= 6; $i++ ) {
+            for ( $i = 1; $i <= 6; $i ++ ) {
                 $new_values[] = array(
                     'field_typography_label'            => __( 'Titre', 'pilopress' ) . ' ' . $i,
                     'field_typography_class_name'       => 'h' . $i,
@@ -75,8 +87,8 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
 
             // Set default heading values
             $new_values[0]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-4xl';
-            $new_values[1]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-2xl';
-            $new_values[2]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-xl';
+            $new_values[1]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-3xl';
+            $new_values[2]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-2xl';
             $new_values[3]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-xl';
             $new_values[4]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-lg';
             $new_values[5]['field_typography_classes'] = 'font-primary leading-tight font-semibold text-black text-base';
@@ -85,7 +97,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             return $new_values;
         }
 
-        // Colors - Simple
+        /**
+         * Colors - Simple
+         *
+         * @param $value
+         *
+         * @return string[][]
+         */
         public function tw_simple_colors( $value ) {
 
             // If value has been modified, return
@@ -129,7 +147,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             return $new_values;
         }
 
-        // Colors - Variants
+        /**
+         * Colors - Variants
+         *
+         * @param $value
+         *
+         * @return array[]
+         */
         public function tw_color_variants( $value ) {
 
             // If value has been modified, return value
@@ -278,7 +302,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             return $new_values;
         }
 
-        // Buttons
+        /**
+         * Buttons
+         *
+         * @param $value
+         *
+         * @return array[]
+         */
         public function tw_buttons( $value ) {
 
             // If value has been modified, return
@@ -332,7 +362,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             return $new_values;
         }
 
-        // Container
+        /**
+         * Container
+         *
+         * @param $value
+         *
+         * @return array
+         */
         public function tw_container( $value ) {
 
             // If value has been modified, return
@@ -351,11 +387,11 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
                 'field_container_padding_values'    => array(
                     array(
                         'field_container_padding_breakpoint' => 'DEFAULT',
-                        'field_container_padding_value' => '2rem',
+                        'field_container_padding_value'      => '2rem',
                     ),
                     array(
                         'field_container_padding_breakpoint' => 'lg',
-                        'field_container_padding_value' => '0',
+                        'field_container_padding_value'      => '0',
                     ),
                 ),
             );
@@ -364,7 +400,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             return $new_values;
         }
 
-        // TailwindCSS - CSS - Components import
+        /**
+         * TailwindCSS - CSS - Components import
+         *
+         * @param $value
+         *
+         * @return string[]
+         */
         public function tw_style_components( $value ) {
 
             // If value has been modified, return
@@ -376,104 +418,105 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
                 }
             }
 
+            // PILO_TODO: get CSS from external file to make edit easier
             // Add default values
             $new_values = array(
                 'field_add_components_import'           => '1',
                 'field_tailwind_style_after_components' => '
 body {
-max-width: 100vw;
+    max-width: 100vw;
 }
 
 button:focus {
-outline: none;
+    outline: none;
 }
 
-ul {
-@apply list-disc list-inside;
+ul:not([class]) {
+    @apply list-disc list-inside;
 }
 
-ol {
-@apply list-decimal list-inside;
+ol:not([class]) {
+    @apply list-decimal list-inside;
 }
 
 ul[class],
 ol[class] {
-@apply list-none;
+    @apply list-none;
 }
 
 /** Images */
 picture {
-@apply block align-middle;
-
-& > img {
-    all: inherit;
-}
-
-/** Fix when img are replaced with picture */
-&:not([class*="wp-image"]) > img {
-    @apply w-full h-full object-cover;
-}
+    @apply block align-middle;
+    
+    & > img {
+        all: inherit;
+    }
+    
+    /** Fix when img are replaced with picture */
+    &:not([class*="wp-image"]) > img {
+        @apply w-full h-full object-cover;
+    }
 }
 
 /** Headings */
 h1 {
-@apply h1;
-
-/* Desktop size */
-@screen lg {
-    @apply text-5xl;
-}
+    @apply h1;
+    
+    /* Desktop size */
+    @screen lg {
+        @apply text-5xl;
+    }
 }
 
 .h1 {
-/* Desktop size */
-@screen lg {
-    @apply text-5xl;
-}
+    /* Desktop size */
+    @screen lg {
+        @apply text-5xl;
+    }
 }
 
 h2 {
-@apply h2;
-
-/* Desktop size */
-@screen lg {
-    @apply text-3xl;
-}
+    @apply h2;
+    
+    /* Desktop size */
+    @screen lg {
+        @apply text-3xl;
+    }
 }
 
 .h2 {
-/* Desktop size */
-@screen lg {
-    @apply text-3xl;
-}
+    /* Desktop size */
+    @screen lg {
+        @apply text-3xl;
+    }
 }
 
 h3 {
-@apply h3;
-
-/* Desktop size */
-@screen lg {
-    @apply text-2xl;
-}
+    @apply h3;
+    
+    /* Desktop size */
+    @screen lg {
+        @apply text-2xl;
+    }
 }
 
 .h3 {
-/* Desktop size */
-@screen lg {
-    @apply text-2xl;
-}
+    /* Desktop size */
+    @screen lg {
+        @apply text-2xl;
+    }
 }
 
 h4 {
-@apply h4;
+    @apply h4;
 }
 
 h5 {
-@apply h5;
+    @apply h5;
 }
 
 h6 {
-@apply h6;
+    @apply h6;
 }
 
 /* Inputs */
@@ -485,66 +528,66 @@ input[type="number"],
 select,
 textarea,
 .select2 > .selection > .select2-selection {
-@apply h-auto text-sm border-2 border-gray-500 rounded p-3 !important;
+    @apply h-auto text-sm border-2 border-gray-500 rounded p-3 !important;
 }
 
 /* Select2 - Fix margin */
 .select2 > .selection > .select2-selection {
-@apply m-0 !important;
+    @apply m-0 !important;
 }
 
 /* Select2 - Fix arrow position */
 .select2 > .selection > .select2-selection > .select2-selection__arrow {
-top: 50%;
-right: 1%;
-transform: translateY(-50%);
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
 }
 
 /* Select2 - Fix clear icon position */
 .select2 > .selection .select2-selection__clear {
-@apply px-2 py-0 !important;
-margin-right: calc(1% + 1em) !important;
+    @apply px-2 py-0 !important;
+    margin-right: calc(1% + 1em) !important;
 }
 
 /* Select2 - Fix select style */
 .select2 > .selection > .select2-selection > .select2-selection__rendered {
-@apply p-0 !important;
-line-height: inherit !important;
+    @apply p-0 !important;
+    line-height: inherit !important;
 }
 
 /** Select2 - Dropdown - Option selected - Hover */
 .select2-results > .select2-results__options > .select2-results__option--highlighted[aria-selected],
 .select2-results > .select2-results__options > .select2-results__option--highlighted[data-selected] {
-/* @apply bg-secondary !important; */
+    /* @apply bg-secondary !important; */
 }
 
 /** WYSIWYG alignment styles */
 .aligncenter {
-@apply mx-auto;
+    @apply mx-auto;
 }
 
 .alignleft {
-@apply mr-auto;
+    @apply mr-auto;
 }
 
 .alignright {
-@apply ml-auto;
+    @apply ml-auto;
 }
 
 /* Pagination */
 .pagination {
-@apply flex items-center justify-center text-black w-full pt-6 border-t border-gray-500;
-
-.page-numbers {
-    @apply px-1 mr-1;
-}
-
-/* Hover, current */
-.page-numbers.current,
-.prev:hover,
-.next:hover {
-    @apply text-primary;
-}
+    @apply flex items-center justify-center text-black w-full pt-6 border-t border-gray-500;
+    
+    .page-numbers {
+        @apply px-1 mr-1;
+    }
+    
+    /* Hover, current */
+    .page-numbers.current,
+    .prev:hover,
+    .next:hover {
+        @apply text-primary;
+    }
 }
 
 /**
@@ -552,38 +595,38 @@ line-height: inherit !important;
 * (extend it to create your buttons)
 */
 .btn-base {
-@apply relative inline-flex items-center justify-center text-sm text-black uppercase;
-@apply px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
-
-&:hover {
-    @apply bg-gray-700 border-gray-700;
-}
+    @apply relative inline-flex items-center justify-center text-sm text-black uppercase;
+    @apply px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
+    
+    &:hover {
+        @apply bg-gray-700 border-gray-700;
+    }
 }
 
 /** Icon Font Awesome - Left position */
 .icon-left {
-&::before {
-    content: "";
-    display: inline-block;
-    font-family: "Font Awesome 5 Pro";
-    font-weight: 400;
-    color: currentcolor;
-    margin-right: 12px;
-    text-align: center;
-}
+    &::before {
+        content: "";
+        display: inline-block;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 400;
+        color: currentcolor;
+        margin-right: 12px;
+        text-align: center;
+    }
 }
 
 /** Icon Font Awesome - Right position */
 .icon-right {
-&::after {
-    content: "";
-    display: inline-block;
-    font-family: "Font Awesome 5 Pro";
-    font-weight: 400;
-    color: currentcolor;
-    margin-left: 12px;
-    text-align: center;
-}
+    &::after {
+        content: "";
+        display: inline-block;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 400;
+        color: currentcolor;
+        margin-left: 12px;
+        text-align: center;
+    }
 }
 
 /** ----------------------------------
