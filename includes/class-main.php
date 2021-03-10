@@ -682,6 +682,18 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     return $template;
                 }
 
+                // Check if template for specific taxonomy exists in theme
+                $taxonomies = get_taxonomies();
+                if ( $taxonomies ) {
+
+                    foreach ( $taxonomies as $taxonomy_name ) {
+                        // In theme
+                        if ( file_exists( get_stylesheet_directory() . '/taxonomy-' . $taxonomy_name . '.php' ) ) {
+                            return $template;
+                        }
+                    }
+                }
+
                 // In plugin
                 if ( file_exists( PIP_ADDON_PATH . 'templates/taxonomy.php' ) ) {
                     return PIP_ADDON_PATH . 'templates/taxonomy.php';
