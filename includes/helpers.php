@@ -47,34 +47,46 @@ function pip_pagination( $num_pages = '', $page_range = '', $paged = '', $query 
         return;
     }
 
+    $pagination_prev_data = array(
+        'pagination_title' => __( 'Page précédente', 'pilot-in' ),
+        'icon_classes'     => 'far fa-sm fa-arrow-left mr-1',
+    );
+
+    $pagination_next_data = array(
+        'pagination_title' => __( 'Page suivante', 'pilot-in' ),
+        'icon_classes'     => 'far fa-sm fa-arrow-right ml-1',
+    );
+
+    $pagination_prev_data           = apply_filters( 'pip_addon/pagination/prev', $pagination_prev_data );
+    $pagination_next_data           = apply_filters( 'pip_addon/pagination/next', $pagination_next_data );
+    $pagination_hide_on_extremities = apply_filters( 'pip_addon/pagination/hide_on_extremities', true );
+
     // Display pagination links
     ob_start(); ?>
-    <div class="pagination relative flex items-center justify-center w-full">
+    <div class="relative flex items-center justify-center w-full pagination">
 
         <?php // Previous page link ?>
-        <?php if ( $paged > 1 ) : ?>
-            <a
-                    class="pagination-previous mr-auto hidden md:block"
-                    href="<?php echo get_pagenum_link( $paged - 1 ); ?>">
-                <span class="far fa-sm fa-arrow-left mr-1"></span>
-                <?php _e( 'Page précédente', 'pilot-in' ); ?>
-            </a>
-        <?php endif; ?>
+        <a
+            class="hidden mr-auto pagination-previous <?php echo ( $paged > 1 ? 'md:block' : ( $pagination_hide_on_extremities ? '' : 'md:block opacity-25 pointer-events-none' ) ); ?>"
+            href="<?php echo get_pagenum_link( $paged - 1 ); ?>"
+        >
+            <span class="<?php echo acf_maybe_get( $pagination_prev_data, 'icon_classes' ); ?>"></span>
+            <?php echo acf_maybe_get( $pagination_prev_data, 'pagination_title' ); ?>
+        </a>
 
         <?php // Numbers ?>
-        <div class="pagination-numbers absolute inset-auto">
+        <div class="absolute inset-auto pagination-numbers">
             <?php echo $pagination_numbers; ?>
         </div>
 
         <?php // Next page link ?>
-        <?php if ( $paged < $num_pages ) : ?>
-            <a
-                    class="pagination-next ml-auto hidden md:block"
-                    href="<?php echo get_pagenum_link( $paged + 1 ); ?>">
-                <?php _e( 'Page suivante', 'pilot-in' ); ?>
-                <span class="far fa-sm fa-arrow-right ml-1"></span>
-            </a>
-        <?php endif; ?>
+        <a
+            class="hidden ml-auto pagination-next <?php echo ( $paged < $num_pages ? 'md:block' : ( $pagination_hide_on_extremities ? '' : 'md:block opacity-25 pointer-events-none' ) ); ?>"
+            href="<?php echo get_pagenum_link( $paged + 1 ); ?>"
+        >
+            <?php echo acf_maybe_get( $pagination_next_data, 'pagination_title' ); ?>
+            <span class="<?php echo acf_maybe_get( $pagination_next_data, 'icon_classes' ); ?>"></span>
+        </a>
 
     </div>
     <?php
