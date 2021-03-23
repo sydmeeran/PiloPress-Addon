@@ -447,11 +447,11 @@ ol[class] {
 /** Images */
 picture {
     @apply block align-middle;
-    
+
     & > img {
         all: inherit;
     }
-    
+
     /** Fix when img are replaced with picture */
     &:not([class*="wp-image"]) > img {
         @apply w-full h-full object-cover;
@@ -461,7 +461,7 @@ picture {
 /** Headings */
 h1 {
     @apply h1;
-    
+
     /* Desktop size */
     @screen lg {
         @apply text-5xl;
@@ -477,7 +477,7 @@ h1 {
 
 h2 {
     @apply h2;
-    
+
     /* Desktop size */
     @screen lg {
         @apply text-3xl;
@@ -493,7 +493,7 @@ h2 {
 
 h3 {
     @apply h3;
-    
+
     /* Desktop size */
     @screen lg {
         @apply text-2xl;
@@ -577,11 +577,11 @@ textarea,
 /* Pagination */
 .pagination {
     @apply flex items-center justify-center text-black w-full pt-6 border-t border-gray-500;
-    
+
     .page-numbers {
         @apply px-1 mr-1;
     }
-    
+
     /* Hover, current */
     .page-numbers.current,
     .prev:hover,
@@ -597,7 +597,7 @@ textarea,
 .btn-base {
     @apply relative inline-flex items-center justify-center text-sm text-black uppercase;
     @apply px-4 py-2 leading-none font-primary font-bold bg-gray-300 border-2 border-solid border-gray-300 mr-2 mb-2;
-    
+
     &:hover {
         @apply bg-gray-700 border-gray-700;
     }
@@ -627,6 +627,11 @@ textarea,
         margin-left: 12px;
         text-align: center;
     }
+}
+
+/** Blockquote */
+blockquote{
+    @apply border-l-4 border-secondary px-16 my-16 ml-6 text-primary text-2xl leading-9;
 }
 
 /** ----------------------------------
