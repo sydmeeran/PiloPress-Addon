@@ -20,6 +20,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'init', array( $this, 'init_hook' ) );
             add_action( 'init', array( $this, 'pip_update_gdpr_content' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'front_assets' ) );
+            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin' ) );
             add_action( 'wp_head', array( $this, 'enqueue_gtm' ) );
             add_action( 'wp_body_open', array( $this, 'enqueue_gtm_noscript' ) );
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
@@ -48,6 +49,16 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             // PIP hooks
             add_filter( 'pip/builder/parameters', array( $this, 'pip_flexible_args' ) );
             add_filter( 'pip/builder/locations', array( $this, 'pip_flexible_locations' ) );
+
+        }
+
+        /**
+         * Enqueue styles and scripts in admin
+         */
+        public function enqueue_admin() {
+
+            // Copy vars shortcut for Notion
+            wp_enqueue_script( 'pip-layout-copy-vars', PIP_ADDON_URL . 'assets/js/pip-layout-copy-vars.js', array( 'jquery' ), 1.0, true );
 
         }
 
@@ -511,7 +522,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' );
                 </script>
-            <?php
+                <?php
             endif;
         }
 
@@ -526,7 +537,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-            <?php
+                <?php
             endif;
         }
 
