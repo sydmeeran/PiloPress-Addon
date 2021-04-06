@@ -411,8 +411,7 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
 
             // If value has been modified, return
             if ( $value ) {
-                $first_style_components_row = reset( $value );
-                $first_style_components_url = acf_maybe_get( $first_style_components_row, 'field_tailwind_style_after_components', '' );
+                $first_style_components_url = acf_maybe_get( $value, 'field_tailwind_style_after_components', '' );
                 if ( $first_style_components_url ) {
                     return $value;
                 }
