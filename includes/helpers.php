@@ -236,13 +236,18 @@ function pip_layout_configuration( $layout_name = null ) {
     $section_class  = $layout_name . ' relative w-full ' . $bg_color . ' ' . $vertical_space;
 
     // Return layout configuration data
-    return array(
-        'layout_name'    => $layout_name,
-        'section_class'  => $section_class,
-        'section_id'     => $section_id,
-        'bg_color'       => $bg_color,
-        'vertical_space' => $vertical_space,
-        'css_vars'       => $css_vars,
+    return apply_filters(
+        'pip_addon/layout/config',
+        array(
+            'layout_name'    => $layout_name,
+            'section_class'  => $section_class,
+            'section_id'     => $section_id,
+            'bg_color'       => $bg_color,
+            'vertical_space' => $vertical_space,
+            'css_vars'       => $css_vars,
+        ),
+        $layout_object,
+        $layout_name
     );
 }
 
