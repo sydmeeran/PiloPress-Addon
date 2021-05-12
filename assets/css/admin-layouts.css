@@ -52,3 +52,18 @@
 .acf-field.acf-field-flexible-content[data-name="pip_flexible"] > .acf-input > .acf-flexible-content:not(.empty) > .values > .layout > .acf-fields {
     border-color: transparent !important;
 }
+
+/* Improve readability for hidden layout */
+.layout.acfe-flexible-layout-hidden>.acfe-fc-placeholder{
+    filter: grayscale(1) !important;
+}
+.layout.acfe-flexible-layout-hidden>.acfe-fc-placeholder::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    z-index: 99;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient( -45deg,lightgray, lightgray 4px, #ffffff -1px, #ffffff 23px ) !important;
+}
