@@ -347,7 +347,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     'menu_title'  => __( 'Settings', 'pip-addon' ),
                     'menu_slug'   => 'pip_addon_settings',
                     'capability'  => $capability,
-                    'position'    => '',
+                    'position'    => null,
                     'parent_slug' => 'pilopress',
                     'icon_url'    => '',
                     'redirect'    => true,
