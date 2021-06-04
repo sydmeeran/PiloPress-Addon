@@ -17,12 +17,12 @@ jQuery(document).ready(function ($) {
     // Create button
     $('<li><a id="copy-vars" href="#" style="background: #135e96;color: white;">Copy variables</a><textarea style="position:absolute;top:-9999px;left:-9999px;" id="paste-vars"></textarea></li>').appendTo('#pip_layout_settings .acf-tab-group');
 
+    let $copy_btn = $('#copy-vars'),
+    $paste_btn = $('#paste-vars');
+
     if ($copy_btn.length === 0 || $paste_btn.length === 0){
         return;
     }
-
-    $copy_btn = $('#copy-vars');
-    $paste_btn = $('#paste-vars');
 
     $css_vars.each(function () {
         var $this = $(this);
