@@ -26,7 +26,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_filter( 'ACFFA_get_fa_url', array( $this, 'dequeue_font_awesome_free' ) );
-            add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_action( 'wp_head', array( $this, 'enqueue_font_awesome_pro' ), 1 );
             add_action( 'customize_register', array( $this, 'pip_add_logo_versions_to_customizer' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
@@ -522,7 +522,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' );
                 </script>
-                <?php
+            <?php
             endif;
         }
 
@@ -537,7 +537,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-                <?php
+            <?php
             endif;
         }
 
