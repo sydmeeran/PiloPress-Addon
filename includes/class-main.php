@@ -280,6 +280,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             );
             wp_localize_script( 'jquery', 'pipAddon', $pip_js_object );
 
+            wp_enqueue_script( 'pip-addon-helpers', PIP_ADDON_URL . '/assets/js/pip-addon-helpers.js', array( 'jQuery' ), false, true );
+
         }
 
         /**
