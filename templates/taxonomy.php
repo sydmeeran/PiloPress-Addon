@@ -15,7 +15,19 @@ if ( function_exists( 'the_pip_content' ) ) {
         $current_taxo_name  = pip_maybe_get( $current_term, 'taxonomy' );
         $current_taxo       = $current_taxo_name ? get_taxonomy( $current_taxo_name ) : '';
         $posts_type_related = pip_maybe_get( $current_taxo, 'object_type' );
-        $post_type_related  = !empty( $posts_type_related ) ? reset( $posts_type_related ) : '';
+
+        // Attempts to get the related post-type archive
+        $post_type_related = get_post_type();
+        if ( !$post_type_related ) {
+
+            global $wp_query;
+            $current_query     = pip_maybe_get( $wp_query, 'query' );
+            $post_type_related = pip_maybe_get( $current_query, 'post_type' );
+            if ( !$post_type_related ) {
+                $post_type_related = !empty( $posts_type_related ) ? reset( $posts_type_related ) : '';
+            }
+
+        }
 
         // If 3rd party want to choose which archive post-type should be used
         $post_type_related = apply_filters( 'pip_tax_post_type', $post_type_related, $posts_type_related, $current_taxo );
