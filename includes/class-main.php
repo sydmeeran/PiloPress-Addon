@@ -26,7 +26,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             add_action( 'sanitize_file_name', array( $this, 'sanitize_file_name' ) );
             add_action( 'upload_mimes', array( $this, 'upload_mime_types' ) );
             add_filter( 'ACFFA_get_fa_url', array( $this, 'dequeue_font_awesome_free' ) );
-            add_action( 'wp_footer', array( $this, 'enqueue_font_awesome_pro' ) );
+            add_action( 'wp_head', array( $this, 'enqueue_font_awesome_pro' ), 1 );
             add_action( 'customize_register', array( $this, 'pip_add_logo_versions_to_customizer' ) );
             add_filter( 'template_include', array( $this, 'pip_addon_templates' ), 20 );
             add_filter( 'option_image_default_link_type', array( $this, 'attachment_media_url_by_default' ), 99 );
@@ -280,6 +280,8 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
             );
             wp_localize_script( 'jquery', 'pipAddon', $pip_js_object );
 
+            wp_enqueue_script( 'pip-addon-helpers', PIP_ADDON_URL . '/assets/js/pip-addon-helpers.js', array( 'jQuery' ), false, true );
+
         }
 
         /**
@@ -347,7 +349,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     'menu_title'  => __( 'Settings', 'pip-addon' ),
                     'menu_slug'   => 'pip_addon_settings',
                     'capability'  => $capability,
-                    'position'    => '',
+                    'position'    => null,
                     'parent_slug' => 'pilopress',
                     'icon_url'    => '',
                     'redirect'    => true,
@@ -522,7 +524,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                         }
                     )( window, document, 'script', 'dataLayer', '<?php echo $gtm; ?>' );
                 </script>
-                <?php
+            <?php
             endif;
         }
 
@@ -537,7 +539,7 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
                     <iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm; ?>"
                             height="0" width="0" style="display:none;visibility:hidden"></iframe>
                 </noscript>
-                <?php
+            <?php
             endif;
         }
 
@@ -570,45 +572,61 @@ if ( !class_exists( 'PIP_Addon_Main' ) ) {
         }
 
         /**
-         *  Icon - Font Awesome
+         * Icon - Font Awesome
+         *
+         * @param      $attrs
+         * @param null $content
+         *
+         * @return string
          */
-        public function shortcode_icon_fa( $atts, $content = null ) {
+        public function shortcode_icon_fa( $attrs, $content = null ) {
 
             /**
              * Extract variables from shortcodes attributes
              *
-             * @var string $s Style class (ex: far)
-             * @var string $i Icon class (ex: fa-paper-plane)
-             * @var string $u Utility classes (ex: fa-fw fa-2x)
-             * @var string $l Link url
+             * @var string $style  Style class (ex: far)
+             * @var string $icon   Icon class (ex: fa-paper-plane)
+             * @var string $class  Utility classes (ex: fa-fw fa-2x)
+             * @var string $link   Link url
+             * @var string $target Link target
+             * @var string $s      Style class (ex: far) - @deprecated
+             * @var string $i      Icon class (ex: fa-paper-plane) - @deprecated
+             * @var string $u      Utility classes (ex: fa-fw fa-2x) - @deprecated
+             * @var string $l      Link url - @deprecated
              */
             extract( // phpcs:ignore
                 shortcode_atts(
                     array(
-                        's' => '', // Style class (ex: far)
-                        'i' => '', // Icon class (ex: fa-paper-plane)
-                        'u' => '', // Utility classes (ex: fa-fw fa-2x)
-                        'l' => '', // Link url
+                        'style'  => '', // Style class (ex: far)
+                        'icon'   => '', // Icon class (ex: fa-paper-plane)
+                        'class'  => '', // Classes (ex: fa-fw fa-2x text-primary)
+                        'link'   => '', // Link url
+                        'target' => '', // Link target
+                        's'      => '', // Style class (ex: far)
+                        'i'      => '', // Icon class (ex: fa-paper-plane)
+                        'u'      => '', // Classes (ex: fa-fw fa-2x text-primary)
+                        'l'      => '', // Link url
                     ),
-                    $atts
+                    $attrs
                 )
             );
 
-            ob_start(); ?>
-            <i class="<?php echo "pip-shortcode-icon $s $i $u"; ?>"></i>
-            <?php
-            $render_icon = ob_get_clean();
+            // Retro-compatibility
+            $link  = $l ? $l : $link;
+            $style = $s ? $s : $style;
+            $icon  = $i ? $i : $icon;
+            $class = $u ? $u : $class;
 
-            if ( $l ) :
-                ob_start(); ?>
-                <a href="<?php echo $l; ?>">
-                    <?php echo $render_icon; ?>
-                </a>
-                <?php
-                $render_icon = ob_get_clean();
-            endif;
+            // Maybe add link
+            $html = $link || $l ? '<a href="' . $link . '" target="' . $target . '">' : '';
 
-            return $render_icon;
+            // Icon
+            $html .= '<i class="pip-shortcode-icon ' . $style . ' ' . $icon . ' ' . $class . '"></i>';
+
+            // Maybe close link
+            $html .= $link ? '</a>' : '';
+
+            return $html;
         }
 
         /**

@@ -32,13 +32,13 @@ if ( !class_exists( 'PIP_Addon_Tailwind' ) ) {
             update_option( 'pipaddon_tailwind_pre_config', '1' );
 
             // Default override colors
-            update_field( 'override_colors', '1', 'pip_styles_configuration' );
+            update_field( 'override_colors', true, 'pip_styles_configuration' );
 
             // TailwindCSS - CSS - Base import
-            update_field( 'add_base_import', '1', 'pip_styles_configuration' );
+            update_field( 'add_base_import', true, 'pip_styles_configuration' );
 
             // TailwindCSS - CSS - Utilities import
-            update_field( 'add_utilities_import', '1', 'pip_styles_configuration' );
+            update_field( 'add_utilities_import', true, 'pip_styles_configuration' );
 
         }
 
